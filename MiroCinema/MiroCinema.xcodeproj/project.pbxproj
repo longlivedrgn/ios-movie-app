@@ -11,14 +11,17 @@
 		808232DCC0B16E1751DFBD64 /* Pods_MiroCinema_MiroCinemaUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0B0B66B41DC6BBD2EC131A53 /* Pods_MiroCinema_MiroCinemaUITests.framework */; };
 		8704A4912A14DD68000AB7F5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8704A4902A14DD68000AB7F5 /* AppDelegate.swift */; };
 		8704A4932A14DD68000AB7F5 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8704A4922A14DD68000AB7F5 /* SceneDelegate.swift */; };
-		8704A4952A14DD68000AB7F5 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8704A4942A14DD68000AB7F5 /* ViewController.swift */; };
-		8704A4982A14DD68000AB7F5 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8704A4962A14DD68000AB7F5 /* Main.storyboard */; };
+		8704A4952A14DD68000AB7F5 /* MiroCinemaViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8704A4942A14DD68000AB7F5 /* MiroCinemaViewController.swift */; };
 		8704A49B2A14DD68000AB7F5 /* MiroCinema.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 8704A4992A14DD68000AB7F5 /* MiroCinema.xcdatamodeld */; };
 		8704A49D2A14DD69000AB7F5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8704A49C2A14DD69000AB7F5 /* Assets.xcassets */; };
 		8704A4A02A14DD69000AB7F5 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8704A49E2A14DD69000AB7F5 /* LaunchScreen.storyboard */; };
 		8704A4AB2A14DD69000AB7F5 /* MiroCinemaTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8704A4AA2A14DD69000AB7F5 /* MiroCinemaTests.swift */; };
 		8704A4B52A14DD69000AB7F5 /* MiroCinemaUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8704A4B42A14DD69000AB7F5 /* MiroCinemaUITests.swift */; };
 		8704A4B72A14DD69000AB7F5 /* MiroCinemaUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8704A4B62A14DD69000AB7F5 /* MiroCinemaUITestsLaunchTests.swift */; };
+		870C771A2A15DF29009ACD92 /* MovieRankHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 870C77192A15DF29009ACD92 /* MovieRankHeaderView.swift */; };
+		870C771C2A15DF46009ACD92 /* MovieRankCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 870C771B2A15DF46009ACD92 /* MovieRankCollectionViewCell.swift */; };
+		870C771E2A160DE2009ACD92 /* MovieGenresCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 870C771D2A160DE2009ACD92 /* MovieGenresCollectionViewCell.swift */; };
+		870C77202A160DF5009ACD92 /* MovieGenresHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 870C771F2A160DF4009ACD92 /* MovieGenresHeaderView.swift */; };
 		AF480D76A88F779AE0314B8D /* Pods_MiroCinemaTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0AAA9419009FD66D5E0FB5D0 /* Pods_MiroCinemaTests.framework */; };
 /* End PBXBuildFile section */
 
@@ -49,8 +52,7 @@
 		8704A48D2A14DD68000AB7F5 /* MiroCinema.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MiroCinema.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8704A4902A14DD68000AB7F5 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		8704A4922A14DD68000AB7F5 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		8704A4942A14DD68000AB7F5 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		8704A4972A14DD68000AB7F5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		8704A4942A14DD68000AB7F5 /* MiroCinemaViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiroCinemaViewController.swift; sourceTree = "<group>"; };
 		8704A49A2A14DD68000AB7F5 /* MiroCinema.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = MiroCinema.xcdatamodel; sourceTree = "<group>"; };
 		8704A49C2A14DD69000AB7F5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		8704A49F2A14DD69000AB7F5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -60,6 +62,10 @@
 		8704A4B02A14DD69000AB7F5 /* MiroCinemaUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MiroCinemaUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		8704A4B42A14DD69000AB7F5 /* MiroCinemaUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiroCinemaUITests.swift; sourceTree = "<group>"; };
 		8704A4B62A14DD69000AB7F5 /* MiroCinemaUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiroCinemaUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		870C77192A15DF29009ACD92 /* MovieRankHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieRankHeaderView.swift; sourceTree = "<group>"; };
+		870C771B2A15DF46009ACD92 /* MovieRankCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieRankCollectionViewCell.swift; sourceTree = "<group>"; };
+		870C771D2A160DE2009ACD92 /* MovieGenresCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieGenresCollectionViewCell.swift; sourceTree = "<group>"; };
+		870C771F2A160DF4009ACD92 /* MovieGenresHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieGenresHeaderView.swift; sourceTree = "<group>"; };
 		A3C934225B212D6A87349911 /* Pods-MiroCinemaTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MiroCinemaTests.debug.xcconfig"; path = "Target Support Files/Pods-MiroCinemaTests/Pods-MiroCinemaTests.debug.xcconfig"; sourceTree = "<group>"; };
 		C2DC74EB7F1A4FA758EC75FE /* Pods-MiroCinema-MiroCinemaUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MiroCinema-MiroCinemaUITests.release.xcconfig"; path = "Target Support Files/Pods-MiroCinema-MiroCinemaUITests/Pods-MiroCinema-MiroCinemaUITests.release.xcconfig"; sourceTree = "<group>"; };
 		E92049CBF5E906559EC07E40 /* Pods-MiroCinema.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MiroCinema.debug.xcconfig"; path = "Target Support Files/Pods-MiroCinema/Pods-MiroCinema.debug.xcconfig"; sourceTree = "<group>"; };
@@ -103,7 +109,6 @@
 				A3C934225B212D6A87349911 /* Pods-MiroCinemaTests.debug.xcconfig */,
 				864256051838767F7A93B860 /* Pods-MiroCinemaTests.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -134,8 +139,11 @@
 			children = (
 				8704A4902A14DD68000AB7F5 /* AppDelegate.swift */,
 				8704A4922A14DD68000AB7F5 /* SceneDelegate.swift */,
-				8704A4942A14DD68000AB7F5 /* ViewController.swift */,
-				8704A4962A14DD68000AB7F5 /* Main.storyboard */,
+				8704A4942A14DD68000AB7F5 /* MiroCinemaViewController.swift */,
+				870C771D2A160DE2009ACD92 /* MovieGenresCollectionViewCell.swift */,
+				870C771F2A160DF4009ACD92 /* MovieGenresHeaderView.swift */,
+				870C771B2A15DF46009ACD92 /* MovieRankCollectionViewCell.swift */,
+				870C77192A15DF29009ACD92 /* MovieRankHeaderView.swift */,
 				8704A49C2A14DD69000AB7F5 /* Assets.xcassets */,
 				8704A49E2A14DD69000AB7F5 /* LaunchScreen.storyboard */,
 				8704A4A12A14DD69000AB7F5 /* Info.plist */,
@@ -282,7 +290,6 @@
 			files = (
 				8704A4A02A14DD69000AB7F5 /* LaunchScreen.storyboard in Resources */,
 				8704A49D2A14DD69000AB7F5 /* Assets.xcassets in Resources */,
-				8704A4982A14DD68000AB7F5 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -410,10 +417,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8704A4952A14DD68000AB7F5 /* ViewController.swift in Sources */,
+				870C77202A160DF5009ACD92 /* MovieGenresHeaderView.swift in Sources */,
+				8704A4952A14DD68000AB7F5 /* MiroCinemaViewController.swift in Sources */,
 				8704A4912A14DD68000AB7F5 /* AppDelegate.swift in Sources */,
+				870C771E2A160DE2009ACD92 /* MovieGenresCollectionViewCell.swift in Sources */,
 				8704A4932A14DD68000AB7F5 /* SceneDelegate.swift in Sources */,
 				8704A49B2A14DD68000AB7F5 /* MiroCinema.xcdatamodeld in Sources */,
+				870C771A2A15DF29009ACD92 /* MovieRankHeaderView.swift in Sources */,
+				870C771C2A15DF46009ACD92 /* MovieRankCollectionViewCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -450,14 +461,6 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		8704A4962A14DD68000AB7F5 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				8704A4972A14DD68000AB7F5 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		8704A49E2A14DD69000AB7F5 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -595,7 +598,7 @@
 				INFOPLIST_FILE = MiroCinema/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UIStatusBarStyle = "";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -623,7 +626,7 @@
 				INFOPLIST_FILE = MiroCinema/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UIStatusBarStyle = "";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
