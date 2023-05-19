@@ -51,7 +51,7 @@ final class MiroCinemaViewController: UIViewController {
         configureCollectionViewDataSource()
         applySnapShot()
     }
-    // MARK: apply 메소드
+
     private func applySnapShot() {
         var snapShot = SnapShot()
         snapShot.appendSections([.rank])
@@ -65,7 +65,6 @@ final class MiroCinemaViewController: UIViewController {
         self.datasource?.apply(snapShot)
     }
 
-    // MARK: configureCOllectionView 메소드
     private func configureCollectionView() {
         view.addSubview(collectionView)
         collectionView.register(
@@ -88,7 +87,6 @@ final class MiroCinemaViewController: UIViewController {
         )
     }
 
-    // MARK: configureCollectionView 메소드
     private func configureCollectionViewDataSource() {
         datasource = UICollectionViewDiffableDataSource(collectionView: collectionView)
         { collectionView, indexPath, movie in
@@ -112,8 +110,6 @@ final class MiroCinemaViewController: UIViewController {
         datasource?.supplementaryViewProvider = {
             (collectionView, kind, indexPath) in
 
-            print("렝크다~")
-            
             let sectionType = Section.allCases[indexPath.section]
 
             switch sectionType {
@@ -145,7 +141,6 @@ final class MiroCinemaViewController: UIViewController {
 
     private func createLayout() -> UICollectionViewCompositionalLayout {
         let layout = UICollectionViewCompositionalLayout { sectionIndex, layoutEnvironment in
-
             let section = Section.allCases[sectionIndex]
 
             switch section {
@@ -206,7 +201,7 @@ final class MiroCinemaViewController: UIViewController {
 
         let movieGenreItemSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1/3),
-            heightDimension: .fractionalWidth(0.3)
+            heightDimension: .fractionalWidth(0.35)
         )
 
         let movieGenreItem = NSCollectionLayoutItem(layoutSize: movieGenreItemSize)
@@ -223,8 +218,12 @@ final class MiroCinemaViewController: UIViewController {
             subitems: [movieGenreItem, movieGenreItem, movieGenreItem]
         )
 
-        movieGenresGroup.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 20)
-
+        movieGenresGroup.contentInsets = NSDirectionalEdgeInsets(
+            top: 0,
+            leading: 0,
+            bottom: 0,
+            trailing: 20
+        )
 
         let movieGenresHeaderSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1.0),
@@ -243,6 +242,7 @@ final class MiroCinemaViewController: UIViewController {
     }
 
     private func configureNavigationBar() {
+        navigationController?.navigationBar.barTintColor = .black
         configureNavigationTitle()
         configureNavigationButton()
     }

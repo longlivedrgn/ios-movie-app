@@ -32,7 +32,7 @@ class MovieRankCollectionViewCell: UICollectionViewCell {
         label.text = "존윅 4"
         label.font = UIFont.systemFont(ofSize: 15)
         label.textAlignment = .center
-        label.textColor = .systemBackground
+        label.textColor = .lightGray
 
         return label
     }()

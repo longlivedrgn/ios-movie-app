@@ -44,7 +44,10 @@ class MovieGenresHeaderView: UICollectionReusableView {
             containerView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
             containerView.trailingAnchor.constraint(equalTo: trailingAnchor),
             containerView.topAnchor.constraint(equalTo: topAnchor),
-            containerView.bottomAnchor.constraint(equalTo: bottomAnchor)
+            containerView.bottomAnchor.constraint(equalTo: bottomAnchor),
+
+            movieGenresLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
+            movieGenresLabel.centerYAnchor.constraint(equalTo: containerView.centerYAnchor)
         ])
     }
 
