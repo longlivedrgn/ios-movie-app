@@ -114,11 +114,17 @@ final class MiroCinemaViewController: UIViewController {
 
             switch sectionType {
             case .rank:
-                let supplementaryView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: MovieRankHeaderView.identifier, for: indexPath) as? MovieRankHeaderView
+                let supplementaryView = collectionView.dequeueReusableSupplementaryView(
+                    ofKind: kind,
+                    withReuseIdentifier: MovieRankHeaderView.identifier,
+                    for: indexPath) as? MovieRankHeaderView
 
                 return supplementaryView
             case .genre:
-                let supplementaryView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: MovieGenresHeaderView.identifier, for: indexPath) as? MovieGenresHeaderView
+                let supplementaryView = collectionView.dequeueReusableSupplementaryView(
+                    ofKind: kind,
+                    withReuseIdentifier: MovieGenresHeaderView.identifier,
+                    for: indexPath) as? MovieGenresHeaderView
 
                 return supplementaryView
             }
@@ -206,7 +212,12 @@ final class MiroCinemaViewController: UIViewController {
 
         let movieGenreItem = NSCollectionLayoutItem(layoutSize: movieGenreItemSize)
 
-        movieGenreItem.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10)
+        movieGenreItem.contentInsets = NSDirectionalEdgeInsets(
+            top: 10,
+            leading: 10,
+            bottom: 10,
+            trailing: 10
+        )
 
         let movieGenresGroupSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1),
@@ -255,22 +266,30 @@ final class MiroCinemaViewController: UIViewController {
         let ticketButtonIcon = UIImage(named: "ticketButtonIcon")
         let ticketButtonIconItem = UIBarButtonItem(customView: UIImageView(image: ticketButtonIcon))
 
-        let playButtonIcon = UIImage(named: "playButtonIcon")
-        let playButtonIconItem = UIBarButtonItem(customView: UIImageView(image: playButtonIcon))
+
+        let mapButtonColor = UIColor(red: 0.8, green: 0.8, blue: 0.8, alpha: 1)
+        let mapButtonIcon = UIImage(systemName: "map")?.withTintColor(
+            mapButtonColor,
+            renderingMode: .alwaysOriginal
+        )
+        let mapButtonIconItem = UIBarButtonItem(customView: UIImageView(image: mapButtonIcon))
 
         let hamburgerButtonIcon = UIImage(named: "hamburgerButtonIcon")
-        let hamburgerButtonIconItem = UIBarButtonItem(customView: UIImageView(image: hamburgerButtonIcon))
+        let hamburgerButtonIconItem = UIBarButtonItem(
+            customView: UIImageView(image: hamburgerButtonIcon)
+        )
 
         let spacer = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
         spacer.width = 16
 
         self.navigationItem.rightBarButtonItems = [
+            hamburgerButtonIconItem,
+            spacer,
+            mapButtonIconItem,
+            spacer,
             ticketButtonIconItem,
-            spacer,
-            playButtonIconItem,
-            spacer,
-            hamburgerButtonIconItem
         ]
     }
+    
 }
 
