@@ -31,8 +31,8 @@ class MovieGenresCollectionViewCell: UICollectionViewCell {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "먼데이"
+        label.textColor = .systemBackground
         label.textAlignment = .center
-        label.backgroundColor = .darkGray
 
         return label
     }()

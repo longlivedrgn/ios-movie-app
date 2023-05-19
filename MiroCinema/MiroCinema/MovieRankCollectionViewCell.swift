@@ -14,7 +14,6 @@ class MovieRankCollectionViewCell: UICollectionViewCell {
     private let containerView: UIView = {
         let containerView = UIView()
         containerView.translatesAutoresizingMaskIntoConstraints = false
-        containerView.backgroundColor = .gray
 
         return containerView
     }()
@@ -31,8 +30,8 @@ class MovieRankCollectionViewCell: UICollectionViewCell {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "존윅 4"
-        label.textAlignment = .left
-        label.backgroundColor = .darkGray
+        label.font = UIFont.systemFont(ofSize: 15)
+        label.textAlignment = .center
         label.textColor = .systemBackground
 
         return label
@@ -48,7 +47,6 @@ class MovieRankCollectionViewCell: UICollectionViewCell {
     }
 
     private func configure() {
-        self.backgroundColor = .brown
         addSubview(containerView)
         containerView.addSubview(movieImageView)
         containerView.addSubview(movieNameLabel)

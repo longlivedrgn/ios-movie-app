@@ -24,7 +24,7 @@ class MovieRankHeaderView: UICollectionReusableView {
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle("영화 개봉순", for: .normal)
         button.layer.cornerRadius = 20
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .bold)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 15, weight: .bold)
         button.backgroundColor = UIColor(red: 0.902, green: 0.286, blue: 0.502, alpha: 1)
 
         return button
@@ -33,10 +33,9 @@ class MovieRankHeaderView: UICollectionReusableView {
     private let sortedByReservationRateButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.backgroundColor = .darkGray
         button.setTitle("예매율순", for: .normal)
         button.layer.cornerRadius = 20
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .bold)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 15, weight: .bold)
         button.layer.borderWidth = 1
         button.backgroundColor = .black
         button.layer.borderColor = UIColor.gray.cgColor

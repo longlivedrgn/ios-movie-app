@@ -30,7 +30,6 @@ class MovieGenresHeaderView: UICollectionReusableView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        self.backgroundColor = .blue
         configure()
     }
 

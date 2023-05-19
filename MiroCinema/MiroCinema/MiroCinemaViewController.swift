@@ -162,11 +162,16 @@ final class MiroCinemaViewController: UIViewController {
 
         let movieItemSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1.0),
-            heightDimension: .fractionalWidth(1.8)
+            heightDimension: .fractionalWidth(1.7)
         )
         let movieItem = NSCollectionLayoutItem(layoutSize: movieItemSize)
 
-        movieItem.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10)
+        movieItem.contentInsets = NSDirectionalEdgeInsets(
+            top: 10,
+            leading: 10,
+            bottom: 10,
+            trailing: 10
+        )
 
         let movieGroupSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(0.4),
