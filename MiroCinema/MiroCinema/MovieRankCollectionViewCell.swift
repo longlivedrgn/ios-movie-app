@@ -23,16 +23,17 @@ class MovieRankCollectionViewCell: UICollectionViewCell {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.image = UIImage(named: "Dream")
-        imageView.contentMode = .scaleAspectFill
+        imageView.contentMode = .scaleAspectFit
         return imageView
     }()
 
     let movieNameLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "드림"
+        label.text = "존윅 4"
         label.textAlignment = .left
         label.backgroundColor = .darkGray
+        label.textColor = .systemBackground
 
         return label
     }()

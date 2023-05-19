@@ -11,11 +11,19 @@ class MovieGenresHeaderView: UICollectionReusableView {
 
     static let identifier = String(describing: MovieGenresHeaderView.self)
 
+    private let containerView: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+
+        return view
+    }()
+
     private let movieGenresLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "장르별 영화"
-        label.font = label.font.withSize(18)
+        label.font = UIFont.systemFont(ofSize: 25, weight: .bold)
+        label.textColor = .systemBackground
 
         return label
     }()
@@ -31,7 +39,14 @@ class MovieGenresHeaderView: UICollectionReusableView {
     }
 
     private func configure() {
-        addSubview(movieGenresLabel)
+        addSubview(containerView)
+        containerView.addSubview(movieGenresLabel)
+        NSLayoutConstraint.activate([
+            containerView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
+            containerView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            containerView.topAnchor.constraint(equalTo: topAnchor),
+            containerView.bottomAnchor.constraint(equalTo: bottomAnchor)
+        ])
     }
 
 }

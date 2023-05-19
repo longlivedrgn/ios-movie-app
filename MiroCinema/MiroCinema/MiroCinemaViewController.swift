@@ -50,7 +50,6 @@ final class MiroCinemaViewController: UIViewController {
         configureCollectionViewLayout()
         configureCollectionViewDataSource()
         applySnapShot()
-
     }
     // MARK: apply 메소드
     private func applySnapShot() {
@@ -167,6 +166,8 @@ final class MiroCinemaViewController: UIViewController {
         )
         let movieItem = NSCollectionLayoutItem(layoutSize: movieItemSize)
 
+        movieItem.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10)
+
         let movieGroupSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(0.4),
             heightDimension: .fractionalWidth(0.8)
@@ -179,7 +180,7 @@ final class MiroCinemaViewController: UIViewController {
 
         let movieRankHeaderSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1.0),
-            heightDimension: .absolute(40)
+            heightDimension: .absolute(44)
         )
 
         let movieRankHeader = NSCollectionLayoutBoundarySupplementaryItem(
@@ -204,6 +205,8 @@ final class MiroCinemaViewController: UIViewController {
         )
 
         let movieGenreItem = NSCollectionLayoutItem(layoutSize: movieGenreItemSize)
+
+        movieGenreItem.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10)
 
         let movieGenresGroupSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1),
