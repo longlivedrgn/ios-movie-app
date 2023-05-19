@@ -13,14 +13,12 @@ class MovieGenresCollectionViewCell: UICollectionViewCell {
 
     private let containerView: UIView = {
         let containerView = UIView()
-        containerView.translatesAutoresizingMaskIntoConstraints = false
 
         return containerView
     }()
 
     private let movieGenreImageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.image = UIImage(named: "Monday")
         imageView.contentMode = .scaleAspectFit
 
@@ -29,7 +27,6 @@ class MovieGenresCollectionViewCell: UICollectionViewCell {
 
     let movieGenreNameLabel: UILabel = {
         let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "먼데이"
         label.textColor = .lightGray
         label.textAlignment = .center
@@ -48,27 +45,22 @@ class MovieGenresCollectionViewCell: UICollectionViewCell {
 
     private func configure() {
         addSubview(containerView)
-        containerView.addSubview(movieGenreImageView)
         containerView.addSubview(movieGenreNameLabel)
+        containerView.addSubview(movieGenreImageView)
 
-        NSLayoutConstraint.activate([
-            containerView.topAnchor.constraint(equalTo: topAnchor),
-            containerView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            containerView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            containerView.bottomAnchor.constraint(equalTo: bottomAnchor),
+        containerView.snp.makeConstraints {
+            $0.edges.equalToSuperview()
+        }
 
-            movieGenreImageView.topAnchor.constraint(equalTo: containerView.topAnchor),
-            movieGenreImageView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
-            movieGenreImageView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
-            movieGenreImageView.heightAnchor.constraint(equalTo: widthAnchor, multiplier: 0.617),
+        movieGenreImageView.snp.makeConstraints {
+            $0.top.leading.trailing.equalToSuperview()
+            $0.height.equalTo(movieGenreImageView.snp.width).multipliedBy(0.617)
+        }
 
-            movieGenreNameLabel.topAnchor.constraint(equalTo: movieGenreImageView.bottomAnchor),
-            movieGenreNameLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
-            movieGenreNameLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
-            movieGenreNameLabel.bottomAnchor.constraint(equalTo: containerView.bottomAnchor)
-        ])
+        movieGenreNameLabel.snp.makeConstraints {
+            $0.leading.trailing.bottom.equalToSuperview()
+            $0.top.equalTo(movieGenreImageView.snp.bottom)
+        }
     }
-
-
 
 }

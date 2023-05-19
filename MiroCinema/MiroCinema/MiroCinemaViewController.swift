@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SnapKit
 
 final class MiroCinemaViewController: UIViewController {
 
@@ -135,14 +136,11 @@ final class MiroCinemaViewController: UIViewController {
 
     private func configureCollectionViewLayout() {
         let safeAreaGuide = view.safeAreaLayoutGuide
-        collectionView.leadingAnchor.constraint(
-            equalTo: view.leadingAnchor, constant: 20).isActive = true
-        collectionView.trailingAnchor.constraint(
-            equalTo: view.trailingAnchor).isActive = true
-        collectionView.topAnchor.constraint(
-            equalTo: safeAreaGuide.topAnchor, constant: 30).isActive = true
-        collectionView.bottomAnchor.constraint(
-            equalTo: view.bottomAnchor).isActive = true
+        collectionView.snp.makeConstraints {
+            $0.trailing.bottom.equalToSuperview()
+            $0.leading.equalToSuperview().offset(20)
+            $0.top.equalTo(safeAreaGuide.snp.top).offset(30)
+        }
     }
 
     private func createLayout() -> UICollectionViewCompositionalLayout {
@@ -290,6 +288,6 @@ final class MiroCinemaViewController: UIViewController {
             ticketButtonIconItem,
         ]
     }
-    
+
 }
 
