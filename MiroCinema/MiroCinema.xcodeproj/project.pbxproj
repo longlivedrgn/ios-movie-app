@@ -22,6 +22,8 @@
 		870C771C2A15DF46009ACD92 /* MovieRankCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 870C771B2A15DF46009ACD92 /* MovieRankCollectionViewCell.swift */; };
 		870C771E2A160DE2009ACD92 /* MovieGenresCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 870C771D2A160DE2009ACD92 /* MovieGenresCollectionViewCell.swift */; };
 		870C77202A160DF5009ACD92 /* MovieGenresHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 870C771F2A160DF4009ACD92 /* MovieGenresHeaderView.swift */; };
+		8737A9BF2A1A3BC90056C6A3 /* Movies.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8737A9BE2A1A3BC90056C6A3 /* Movies.swift */; };
+		8737A9C32A1A41110056C6A3 /* Movie.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8737A9C22A1A41110056C6A3 /* Movie.swift */; };
 		AF480D76A88F779AE0314B8D /* Pods_MiroCinemaTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0AAA9419009FD66D5E0FB5D0 /* Pods_MiroCinemaTests.framework */; };
 /* End PBXBuildFile section */
 
@@ -66,6 +68,8 @@
 		870C771B2A15DF46009ACD92 /* MovieRankCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieRankCollectionViewCell.swift; sourceTree = "<group>"; };
 		870C771D2A160DE2009ACD92 /* MovieGenresCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieGenresCollectionViewCell.swift; sourceTree = "<group>"; };
 		870C771F2A160DF4009ACD92 /* MovieGenresHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieGenresHeaderView.swift; sourceTree = "<group>"; };
+		8737A9BE2A1A3BC90056C6A3 /* Movies.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Movies.swift; sourceTree = "<group>"; };
+		8737A9C22A1A41110056C6A3 /* Movie.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Movie.swift; sourceTree = "<group>"; };
 		A3C934225B212D6A87349911 /* Pods-MiroCinemaTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MiroCinemaTests.debug.xcconfig"; path = "Target Support Files/Pods-MiroCinemaTests/Pods-MiroCinemaTests.debug.xcconfig"; sourceTree = "<group>"; };
 		C2DC74EB7F1A4FA758EC75FE /* Pods-MiroCinema-MiroCinemaUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MiroCinema-MiroCinemaUITests.release.xcconfig"; path = "Target Support Files/Pods-MiroCinema-MiroCinemaUITests/Pods-MiroCinema-MiroCinemaUITests.release.xcconfig"; sourceTree = "<group>"; };
 		E92049CBF5E906559EC07E40 /* Pods-MiroCinema.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MiroCinema.debug.xcconfig"; path = "Target Support Files/Pods-MiroCinema/Pods-MiroCinema.debug.xcconfig"; sourceTree = "<group>"; };
@@ -137,13 +141,9 @@
 		8704A48F2A14DD68000AB7F5 /* MiroCinema */ = {
 			isa = PBXGroup;
 			children = (
+				8737A9B72A1A3B210056C6A3 /* Scenes */,
 				8704A4902A14DD68000AB7F5 /* AppDelegate.swift */,
 				8704A4922A14DD68000AB7F5 /* SceneDelegate.swift */,
-				8704A4942A14DD68000AB7F5 /* MiroCinemaViewController.swift */,
-				870C771D2A160DE2009ACD92 /* MovieGenresCollectionViewCell.swift */,
-				870C771F2A160DF4009ACD92 /* MovieGenresHeaderView.swift */,
-				870C771B2A15DF46009ACD92 /* MovieRankCollectionViewCell.swift */,
-				870C77192A15DF29009ACD92 /* MovieRankHeaderView.swift */,
 				8704A49C2A14DD69000AB7F5 /* Assets.xcassets */,
 				8704A49E2A14DD69000AB7F5 /* LaunchScreen.storyboard */,
 				8704A4A12A14DD69000AB7F5 /* Info.plist */,
@@ -167,6 +167,68 @@
 				8704A4B62A14DD69000AB7F5 /* MiroCinemaUITestsLaunchTests.swift */,
 			);
 			path = MiroCinemaUITests;
+			sourceTree = "<group>";
+		};
+		8737A9B72A1A3B210056C6A3 /* Scenes */ = {
+			isa = PBXGroup;
+			children = (
+				8737A9B92A1A3B480056C6A3 /* MovieDetail */,
+				8737A9B82A1A3B390056C6A3 /* Home */,
+			);
+			path = Scenes;
+			sourceTree = "<group>";
+		};
+		8737A9B82A1A3B390056C6A3 /* Home */ = {
+			isa = PBXGroup;
+			children = (
+				8737A9BD2A1A3BB40056C6A3 /* Model */,
+				8737A9BC2A1A3B980056C6A3 /* View */,
+				8737A9BB2A1A3B7F0056C6A3 /* Cell */,
+				8737A9BA2A1A3B5B0056C6A3 /* Controller */,
+			);
+			path = Home;
+			sourceTree = "<group>";
+		};
+		8737A9B92A1A3B480056C6A3 /* MovieDetail */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = MovieDetail;
+			sourceTree = "<group>";
+		};
+		8737A9BA2A1A3B5B0056C6A3 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				8704A4942A14DD68000AB7F5 /* MiroCinemaViewController.swift */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		8737A9BB2A1A3B7F0056C6A3 /* Cell */ = {
+			isa = PBXGroup;
+			children = (
+				870C771D2A160DE2009ACD92 /* MovieGenresCollectionViewCell.swift */,
+				870C771B2A15DF46009ACD92 /* MovieRankCollectionViewCell.swift */,
+			);
+			path = Cell;
+			sourceTree = "<group>";
+		};
+		8737A9BC2A1A3B980056C6A3 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				870C77192A15DF29009ACD92 /* MovieRankHeaderView.swift */,
+				870C771F2A160DF4009ACD92 /* MovieGenresHeaderView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		8737A9BD2A1A3BB40056C6A3 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				8737A9BE2A1A3BC90056C6A3 /* Movies.swift */,
+				8737A9C22A1A41110056C6A3 /* Movie.swift */,
+			);
+			path = Model;
 			sourceTree = "<group>";
 		};
 		F96B7E6861C4370F8639410A /* Frameworks */ = {
@@ -419,7 +481,9 @@
 			files = (
 				870C77202A160DF5009ACD92 /* MovieGenresHeaderView.swift in Sources */,
 				8704A4952A14DD68000AB7F5 /* MiroCinemaViewController.swift in Sources */,
+				8737A9BF2A1A3BC90056C6A3 /* Movies.swift in Sources */,
 				8704A4912A14DD68000AB7F5 /* AppDelegate.swift in Sources */,
+				8737A9C32A1A41110056C6A3 /* Movie.swift in Sources */,
 				870C771E2A160DE2009ACD92 /* MovieGenresCollectionViewCell.swift in Sources */,
 				8704A4932A14DD68000AB7F5 /* SceneDelegate.swift in Sources */,
 				8704A49B2A14DD68000AB7F5 /* MiroCinema.xcdatamodeld in Sources */,
