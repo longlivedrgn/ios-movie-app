@@ -13,7 +13,6 @@ class MovieRankHeaderView: UICollectionReusableView {
 
     private let containerView: UIView = {
         let view = UIView()
-        view.translatesAutoresizingMaskIntoConstraints = false
 
         return view
     }()
@@ -21,7 +20,6 @@ class MovieRankHeaderView: UICollectionReusableView {
 
     private let sortedByOpenDateButton: UIButton = {
         let button = UIButton()
-        button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle("영화 개봉순", for: .normal)
         button.layer.cornerRadius = 20
         button.titleLabel?.font = UIFont.systemFont(ofSize: 15, weight: .bold)
@@ -32,7 +30,6 @@ class MovieRankHeaderView: UICollectionReusableView {
 
     private let sortedByReservationRateButton: UIButton = {
         let button = UIButton()
-        button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle("예매율순", for: .normal)
         button.layer.cornerRadius = 20
         button.titleLabel?.font = UIFont.systemFont(ofSize: 15, weight: .bold)
@@ -73,17 +70,15 @@ class MovieRankHeaderView: UICollectionReusableView {
     }
 
     private func configureLayout() {
-        NSLayoutConstraint.activate([
-            containerView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
-            containerView.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 0.5),
-            containerView.topAnchor.constraint(equalTo: topAnchor),
-            containerView.bottomAnchor.constraint(equalTo: bottomAnchor),
+        containerView.snp.makeConstraints {
+            $0.leading.equalToSuperview().inset(10)
+            $0.width.equalToSuperview().multipliedBy(0.5)
+            $0.top.bottom.equalToSuperview()
+        }
 
-            movieRankHorizontalStackView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
-            movieRankHorizontalStackView.topAnchor.constraint(equalTo: containerView.topAnchor),
-            movieRankHorizontalStackView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
-            movieRankHorizontalStackView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor)
-        ])
+        movieRankHorizontalStackView.snp.makeConstraints {
+            $0.edges.equalToSuperview()
+        }
     }
 
 }

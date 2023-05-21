@@ -13,14 +13,12 @@ class MovieRankCollectionViewCell: UICollectionViewCell {
 
     private let containerView: UIView = {
         let containerView = UIView()
-        containerView.translatesAutoresizingMaskIntoConstraints = false
 
         return containerView
     }()
 
     private let movieImageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.image = UIImage(named: "Dream")
         imageView.contentMode = .scaleAspectFit
         return imageView
@@ -28,7 +26,6 @@ class MovieRankCollectionViewCell: UICollectionViewCell {
 
     let movieNameLabel: UILabel = {
         let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "존윅 4"
         label.font = UIFont.systemFont(ofSize: 15)
         label.textAlignment = .center
@@ -51,23 +48,19 @@ class MovieRankCollectionViewCell: UICollectionViewCell {
         containerView.addSubview(movieImageView)
         containerView.addSubview(movieNameLabel)
 
-        NSLayoutConstraint.activate([
-            containerView.topAnchor.constraint(equalTo: topAnchor),
-            containerView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            containerView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            containerView.bottomAnchor.constraint(equalTo: bottomAnchor),
+        containerView.snp.makeConstraints {
+            $0.edges.equalToSuperview()
+        }
 
-            movieImageView.topAnchor.constraint(equalTo: containerView.topAnchor),
-            movieImageView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
-            movieImageView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
-            movieImageView.heightAnchor.constraint(equalTo: widthAnchor, multiplier: 1.6),
+        movieImageView.snp.makeConstraints {
+            $0.top.leading.trailing.equalToSuperview()
+            $0.height.equalTo(containerView.snp.width).multipliedBy(1.6)
+        }
 
-            movieNameLabel.topAnchor.constraint(equalTo: movieImageView.bottomAnchor),
-            movieNameLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
-            movieNameLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
-            movieNameLabel.bottomAnchor.constraint(equalTo: containerView.bottomAnchor)
-        ])
-
+        movieNameLabel.snp.makeConstraints {
+            $0.leading.trailing.bottom.equalToSuperview()
+            $0.top.equalTo(movieImageView.snp.bottom)
+        }
     }
 
 }
