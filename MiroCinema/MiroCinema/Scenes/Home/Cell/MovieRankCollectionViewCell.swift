@@ -43,6 +43,10 @@ class MovieRankCollectionViewCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
+    func configure(with movie: Movie) {
+        movieNameLabel.text = movie.koreanTitle
+    }
+
     private func configure() {
         addSubview(containerView)
         containerView.addSubview(movieImageView)

@@ -18,12 +18,16 @@ final class MiroCinemaViewController: UIViewController {
         case genre
     }
 
-    private typealias DataSource = UICollectionViewDiffableDataSource<Section, String>
-    private typealias SnapShot = NSDiffableDataSourceSnapshot<Section, String>
+    private typealias DataSource = UICollectionViewDiffableDataSource<Section, Movie>
+    private typealias SnapShot = NSDiffableDataSourceSnapshot<Section, Movie>
 
     private var datasource: DataSource?
 
-    private var movies = ["1","2","3","4","5","6","7","8","9","10"]
+    private var movies = [Movie]() {
+        didSet {
+            applySnapShot()
+        }
+    }
     private var ranks = ["11","12","13","14","15","16","17","18","19","20"]
     private let movieNetworkManager = NetworkAPIManager()
 
@@ -64,22 +68,36 @@ final class MiroCinemaViewController: UIViewController {
                     endPoint: movieRankEndPoint
                 )
                 guard let movieRank = decodedData as? Movies else { return }
-                print(movieRank)
+                // 영화 개봉순으로 정렬하기 알고리즘 추가하기
+                movies = movieRank.movies
             } catch {
                 print(error)
             }
         }
+
+        let genreEndPoint = MovieGenreEndPoint(genreCode: 28)
+
+        Task {
+            do {
+                let decodedData = try await movieNetworkManager.fetchData(
+                    to: Movies.self,
+                    endPoint: genreEndPoint
+                )
+                guard let movieRank = decodedData as? Movies else { return }
+            } catch {
+                print(error)
+            }
+        }
+
     }
 
     private func applySnapShot() {
         var snapShot = SnapShot()
         snapShot.appendSections([.rank])
         snapShot.appendItems(movies)
-        print(movies)
 
         snapShot.appendSections([.genre])
-        snapShot.appendItems(ranks)
-        print(ranks)
+//        snapShot.appendItems(ranks)
 
         self.datasource?.apply(snapShot)
     }
@@ -117,6 +135,7 @@ final class MiroCinemaViewController: UIViewController {
                 let cell = collectionView.dequeueReusableCell(
                     withReuseIdentifier: MovieRankCollectionViewCell.identifier,
                     for: indexPath) as? MovieRankCollectionViewCell
+                cell?.configure(with: movie)
                 return cell
             case .genre:
                 let cell = collectionView.dequeueReusableCell(

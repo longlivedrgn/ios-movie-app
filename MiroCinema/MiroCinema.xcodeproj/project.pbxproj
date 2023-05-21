@@ -18,6 +18,7 @@
 		8704A4AB2A14DD69000AB7F5 /* MiroCinemaTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8704A4AA2A14DD69000AB7F5 /* MiroCinemaTests.swift */; };
 		8704A4B52A14DD69000AB7F5 /* MiroCinemaUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8704A4B42A14DD69000AB7F5 /* MiroCinemaUITests.swift */; };
 		8704A4B72A14DD69000AB7F5 /* MiroCinemaUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8704A4B62A14DD69000AB7F5 /* MiroCinemaUITestsLaunchTests.swift */; };
+		8704E9CE2A1A579B002A7D22 /* MovieGenreEndPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8704E9CD2A1A579B002A7D22 /* MovieGenreEndPoint.swift */; };
 		870C771A2A15DF29009ACD92 /* MovieRankHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 870C77192A15DF29009ACD92 /* MovieRankHeaderView.swift */; };
 		870C771C2A15DF46009ACD92 /* MovieRankCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 870C771B2A15DF46009ACD92 /* MovieRankCollectionViewCell.swift */; };
 		870C771E2A160DE2009ACD92 /* MovieGenresCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 870C771D2A160DE2009ACD92 /* MovieGenresCollectionViewCell.swift */; };
@@ -72,6 +73,7 @@
 		8704A4B02A14DD69000AB7F5 /* MiroCinemaUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MiroCinemaUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		8704A4B42A14DD69000AB7F5 /* MiroCinemaUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiroCinemaUITests.swift; sourceTree = "<group>"; };
 		8704A4B62A14DD69000AB7F5 /* MiroCinemaUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiroCinemaUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		8704E9CD2A1A579B002A7D22 /* MovieGenreEndPoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieGenreEndPoint.swift; sourceTree = "<group>"; };
 		870C77192A15DF29009ACD92 /* MovieRankHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieRankHeaderView.swift; sourceTree = "<group>"; };
 		870C771B2A15DF46009ACD92 /* MovieRankCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieRankCollectionViewCell.swift; sourceTree = "<group>"; };
 		870C771D2A160DE2009ACD92 /* MovieGenresCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieGenresCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -275,6 +277,7 @@
 			children = (
 				8737A9D02A1A41D90056C6A3 /* EndPoint.swift */,
 				8737A9D82A1A44E00056C6A3 /* MovieRankEndPoint.swift */,
+				8704E9CD2A1A579B002A7D22 /* MovieGenreEndPoint.swift */,
 			);
 			path = EndPoint;
 			sourceTree = "<group>";
@@ -553,6 +556,7 @@
 				8737A9C32A1A41110056C6A3 /* Movie.swift in Sources */,
 				8737A9D42A1A41F90056C6A3 /* APIEndPoint.swift in Sources */,
 				870C771E2A160DE2009ACD92 /* MovieGenresCollectionViewCell.swift in Sources */,
+				8704E9CE2A1A579B002A7D22 /* MovieGenreEndPoint.swift in Sources */,
 				8704A4932A14DD68000AB7F5 /* SceneDelegate.swift in Sources */,
 				8737A9D72A1A42B10056C6A3 /* URLResponse+.swift in Sources */,
 				8704A49B2A14DD68000AB7F5 /* MiroCinema.xcdatamodeld in Sources */,
