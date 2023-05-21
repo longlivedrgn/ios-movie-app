@@ -1,5 +1,5 @@
 //
-//  MovieGenreEndPoint.swift
+//  MovieRankAPIEndPoint.swift
 //  MiroCinema
 //
 //  Created by 김용재 on 2023/05/21.
@@ -7,17 +7,11 @@
 
 import Foundation
 
-struct MovieGenreEndPoint: APIEndpoint {
-
-    private let genreCode: Int
-
-    init(genreCode: Int) {
-        self.genreCode = genreCode
-    }
+struct MovieRankAPIEndPoint: APIEndpoint {
 
     private enum URLConstants {
         static let baseURL = "https://api.themoviedb.org"
-        static let URLPath = "/3/discover/movie"
+        static let URLPath = "/3/movie/popular"
     }
 
     var endPoint: EndPoint {
@@ -28,13 +22,11 @@ struct MovieGenreEndPoint: APIEndpoint {
             headers: makeHeaders())
     }
 
-    func makeQueryItems() -> [URLQueryItem] {
+    func makeQueryItems() -> [URLQueryItem]? {
         let languageQueryItem = URLQueryItem(name: "language", value: "ko-KR")
-        let pageNumberQueryItem = URLQueryItem(name: "sort_by", value: "revenue.desc")
-        let genreCodeQueryItem = URLQueryItem(name: "with_genres", value: "\(genreCode)")
+        let pageNumberQueryItem = URLQueryItem(name: "page", value: "1")
 
-
-        return [languageQueryItem, pageNumberQueryItem, genreCodeQueryItem]
+        return [languageQueryItem, pageNumberQueryItem]
     }
 
     func makeHeaders() -> [String : String]? {

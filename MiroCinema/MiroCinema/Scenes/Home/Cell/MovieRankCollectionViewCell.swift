@@ -44,7 +44,8 @@ class MovieRankCollectionViewCell: UICollectionViewCell {
     }
 
     func configure(with movie: Movie) {
-        movieNameLabel.text = movie.koreanTitle
+        movieNameLabel.text = movie.title
+        movieImageView.image = movie.posterImage
     }
 
     private func configure() {

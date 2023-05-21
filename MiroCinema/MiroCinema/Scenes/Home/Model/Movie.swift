@@ -5,23 +5,17 @@
 //  Created by 김용재 on 2023/05/21.
 //
 
-import Foundation
+import UIKit
 
-struct Movie: Decodable, Hashable {
+struct Movie: Hashable {
 
     let ID: Int
-    let originalTitle: String
-    let posterPath: String
-    let koreanTitle: String
-    let releaseDate: String
+    let title: String
     let id = UUID()
+    let posterImage: UIImage
 
-    enum CodingKeys: String, CodingKey {
-        case ID = "id"
-        case originalTitle = "original_title"
-        case posterPath = "poster_path"
-        case koreanTitle = "title"
-        case releaseDate = "release_date"
+    static func == (lhs: Movie, rhs: Movie) -> Bool {
+        return lhs.id == rhs.id
     }
 
 }

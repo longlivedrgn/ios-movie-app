@@ -30,6 +30,7 @@ final class MiroCinemaViewController: UIViewController {
     }
     private var ranks = ["11","12","13","14","15","16","17","18","19","20"]
     private let movieNetworkManager = NetworkAPIManager()
+    private let movieNetworkDispatcher = NetworkDispatcher()
 
     private let navigationTitle: UILabel = {
         let titleLabel = UILabel()
@@ -60,30 +61,45 @@ final class MiroCinemaViewController: UIViewController {
     }
 
     private func fetchData() {
-        let movieRankEndPoint = MovieRankEndPoint()
+        let movieRankEndPoint = MovieRankAPIEndPoint()
         Task {
             do {
                 let decodedData = try await movieNetworkManager.fetchData(
-                    to: Movies.self,
+                    to: MoviesDTO.self,
                     endPoint: movieRankEndPoint
                 )
-                guard let movieRank = decodedData as? Movies else { return }
+                guard let movieRank = decodedData as? MoviesDTO else { return }
                 // 영화 개봉순으로 정렬하기 알고리즘 추가하기
-                movies = movieRank.movies
+                let movieList = movieRank.movies
+
+                for movieDTO in movieList {
+                    let title = movieDTO.koreanTitle
+                    let id = movieDTO.ID
+                    let imageEndPoint = MoviePosterImageAPIEndPoint(posterURL: movieDTO.posterPath)
+                    let imageResult = try await movieNetworkDispatcher.performRequest(imageEndPoint.urlRequest)
+
+                    switch imageResult {
+                    case .success(let data):
+                        guard let posterImage = UIImage(data: data) else { return }
+                        movies.append(Movie(ID: id, title: title, posterImage: posterImage))
+                    case .failure(let error):
+                        print(error)
+                    }
+                }
             } catch {
                 print(error)
             }
         }
 
-        let genreEndPoint = MovieGenreEndPoint(genreCode: 28)
+        let genreEndPoint = MovieGenreAPIEndPoint(genreCode: 28)
 
         Task {
             do {
                 let decodedData = try await movieNetworkManager.fetchData(
-                    to: Movies.self,
+                    to: MoviesDTO.self,
                     endPoint: genreEndPoint
                 )
-                guard let movieRank = decodedData as? Movies else { return }
+                guard let movieRank = decodedData as? MoviesDTO else { return }
             } catch {
                 print(error)
             }
