@@ -25,6 +25,7 @@ final class MiroCinemaViewController: UIViewController {
 
     private var movies = ["1","2","3","4","5","6","7","8","9","10"]
     private var ranks = ["11","12","13","14","15","16","17","18","19","20"]
+    private let movieNetworkManager = NetworkAPIManager()
 
     private let navigationTitle: UILabel = {
         let titleLabel = UILabel()
@@ -46,11 +47,28 @@ final class MiroCinemaViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .black
+        fetchData()
         configureNavigationBar()
         configureCollectionView()
         configureCollectionViewLayout()
         configureCollectionViewDataSource()
         applySnapShot()
+    }
+
+    private func fetchData() {
+        let movieRankEndPoint = MovieRankEndPoint()
+        Task {
+            do {
+                let decodedData = try await movieNetworkManager.fetchData(
+                    to: Movies.self,
+                    endPoint: movieRankEndPoint
+                )
+                guard let movieRank = decodedData as? Movies else { return }
+                print(movieRank)
+            } catch {
+                print(error)
+            }
+        }
     }
 
     private func applySnapShot() {

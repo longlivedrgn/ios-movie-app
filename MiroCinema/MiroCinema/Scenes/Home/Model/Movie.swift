@@ -9,14 +9,16 @@ import Foundation
 
 struct Movie: Decodable {
 
-    let movieID: Int
-    let movieTitle: String
+    let ID: Int
+    let originalTitle: String
     let posterPath: String
+    let koreanTitle: String
 
     enum CodingKeys: String, CodingKey {
-        case movieID = "id"
-        case movieTitle = "original_title"
+        case ID = "id"
+        case originalTitle = "original_title"
         case posterPath = "poster_path"
+        case koreanTitle = "title"
     }
 
 }

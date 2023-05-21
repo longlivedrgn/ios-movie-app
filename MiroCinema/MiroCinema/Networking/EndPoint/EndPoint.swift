@@ -14,7 +14,12 @@ struct EndPoint {
     let queryItems: [URLQueryItem]?
     let headers: [String: String]?
 
-    init(baseURL: String, path: String, queryItems: [URLQueryItem]? = nil, headers: [String: String]? = nil) {
+    init(
+        baseURL: String,
+        path: String,
+        queryItems: [URLQueryItem]? = nil,
+        headers: [String: String]? = nil
+    ) {
         self.baseURL = baseURL
         self.path = path
         self.queryItems = queryItems
