@@ -58,6 +58,7 @@ final class MiroCinemaViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .black
+        collectionView.delegate = self
         fetchData()
         configureNavigationBar()
         configureCollectionView()
@@ -376,3 +377,14 @@ final class MiroCinemaViewController: UIViewController {
 
 }
 
+extension MiroCinemaViewController: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        guard let movie = datasource?.itemIdentifier(for: indexPath) else { return }
+        let movieDetailViewController = MovieDetailViewController(
+            movie: movie,
+            networkAPIManager: movieNetworkManager
+        )
+        collectionView.deselectItem(at: indexPath, animated: true)
+        navigationController?.pushViewController(movieDetailViewController, animated: true)
+    }
+}
