@@ -8,7 +8,14 @@
 import UIKit
 
 class MovieDetailViewController: UIViewController {
-    
+
+    private lazy var moviePosterImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.image = movie?.posterImage
+
+        return imageView
+    }()
+
     var movie: Movie?
     private let networkAPIManager: NetworkAPIManager
 
@@ -24,6 +31,28 @@ class MovieDetailViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.addSubview(moviePosterImageView)
+        configureLayout()
+        configureMoviePosterImageView()
+    }
+
+    private func configureLayout() {
+        moviePosterImageView.snp.makeConstraints {
+            $0.top.leading.trailing.equalToSuperview()
+            $0.height.equalTo(view.snp.height).multipliedBy(0.7)
+        }
+    }
+
+    private func configureMoviePosterImageView() {
+        view.layoutIfNeeded()
+
+        let gradientLayer = CAGradientLayer()
+        gradientLayer.frame = moviePosterImageView.bounds
+        let colors: [CGColor] = [.init(gray: 0.0, alpha: 0.5), .init(gray: 0.0, alpha: 1)]
+        gradientLayer.locations = [0.25, 0.7]
+        gradientLayer.colors = colors
+
+        moviePosterImageView.layer.addSublayer(gradientLayer)
     }
 
 }
