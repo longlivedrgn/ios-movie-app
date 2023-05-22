@@ -47,10 +47,29 @@ final class MiroCinemaViewController: UIViewController {
         return titleLabel
     }()
 
-    lazy var collectionView: UICollectionView = {
+    private lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
         collectionView.translatesAutoresizingMaskIntoConstraints = false
+        collectionView.delegate = self
         collectionView.backgroundColor = .black
+        collectionView.register(
+            MovieRankCollectionViewCell.self,
+            forCellWithReuseIdentifier: MovieRankCollectionViewCell.identifier
+        )
+        collectionView.register(
+            MovieRankHeaderView.self,
+            forSupplementaryViewOfKind: MiroCinemaViewController.movieRankSectionHeaderKind,
+            withReuseIdentifier: MovieRankHeaderView.identifier
+        )
+        collectionView.register(
+            MovieGenresCollectionViewCell.self,
+            forCellWithReuseIdentifier: MovieGenresCollectionViewCell.identifier
+        )
+        collectionView.register(
+            MovieGenresHeaderView.self,
+            forSupplementaryViewOfKind: MiroCinemaViewController.movieGenresSectionHeaderKind,
+            withReuseIdentifier: MovieGenresHeaderView.identifier
+        )
 
         return collectionView
     }()
@@ -58,10 +77,9 @@ final class MiroCinemaViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .black
-        collectionView.delegate = self
+        view.addSubview(collectionView)
         fetchData()
         configureNavigationBar()
-        configureCollectionView()
         configureCollectionViewLayout()
         configureCollectionViewDataSource()
         applySnapShot()
@@ -151,25 +169,6 @@ final class MiroCinemaViewController: UIViewController {
     }
 
     private func configureCollectionView() {
-        view.addSubview(collectionView)
-        collectionView.register(
-            MovieRankCollectionViewCell.self,
-            forCellWithReuseIdentifier: MovieRankCollectionViewCell.identifier
-        )
-        collectionView.register(
-            MovieRankHeaderView.self,
-            forSupplementaryViewOfKind: MiroCinemaViewController.movieRankSectionHeaderKind,
-            withReuseIdentifier: MovieRankHeaderView.identifier
-        )
-        collectionView.register(
-            MovieGenresCollectionViewCell.self,
-            forCellWithReuseIdentifier: MovieGenresCollectionViewCell.identifier
-        )
-        collectionView.register(
-            MovieGenresHeaderView.self,
-            forSupplementaryViewOfKind: MiroCinemaViewController.movieGenresSectionHeaderKind,
-            withReuseIdentifier: MovieGenresHeaderView.identifier
-        )
     }
 
     private func configureCollectionViewDataSource() {

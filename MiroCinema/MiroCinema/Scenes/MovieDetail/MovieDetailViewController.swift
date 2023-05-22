@@ -16,6 +16,11 @@ class MovieDetailViewController: UIViewController {
         return imageView
     }()
 
+    private let movieDetailCollectionView: UICollectionView = {
+        let collectionView = UICollectionView()
+        return collectionView
+    }()
+
     var movie: Movie?
     private let networkAPIManager: NetworkAPIManager
 
