@@ -8,12 +8,12 @@
 import Foundation
 
 
-struct MoviePosterImageAPIEndPoint: APIEndpoint {
+struct MovieImageAPIEndPoint: APIEndpoint {
 
-    let posterURL: String
+    let imageURL: String
 
-    init(posterURL: String) {
-        self.posterURL = posterURL
+    init(imageURL: String) {
+        self.imageURL = imageURL
     }
 
     private enum URLConstants {
@@ -24,7 +24,7 @@ struct MoviePosterImageAPIEndPoint: APIEndpoint {
     var endPoint: EndPoint {
         return EndPoint(
             baseURL: URLConstants.baseURL,
-            path: URLConstants.URLPath + posterURL
+            path: URLConstants.URLPath + imageURL
             )
     }
 

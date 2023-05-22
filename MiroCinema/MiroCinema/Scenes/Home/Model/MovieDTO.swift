@@ -11,7 +11,8 @@ struct MovieDTO: Decodable, Hashable {
 
     let ID: Int
     let originalTitle: String
-    let posterPath: String
+    let posterPath: String?
+    let backDropImagePath: String?
     let koreanTitle: String
     let releaseDate: String
     let id = UUID()
@@ -20,6 +21,7 @@ struct MovieDTO: Decodable, Hashable {
         case ID = "id"
         case originalTitle = "original_title"
         case posterPath = "poster_path"
+        case backDropImagePath = "backdrop_path"
         case koreanTitle = "title"
         case releaseDate = "release_date"
     }

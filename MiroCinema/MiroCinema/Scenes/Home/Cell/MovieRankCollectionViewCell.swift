@@ -20,7 +20,10 @@ class MovieRankCollectionViewCell: UICollectionViewCell {
     private let movieImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.image = UIImage(named: "Dream")
+        imageView.layer.cornerRadius = 25
+        imageView.clipsToBounds = true
         imageView.contentMode = .scaleAspectFit
+
         return imageView
     }()
 

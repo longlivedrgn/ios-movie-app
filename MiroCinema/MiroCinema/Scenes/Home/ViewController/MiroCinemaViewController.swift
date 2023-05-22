@@ -28,6 +28,12 @@ final class MiroCinemaViewController: UIViewController {
             applySnapShot()
         }
     }
+
+    private var genres = [Movie]() {
+        didSet {
+            applySnapShot()
+        }
+    }
     private var ranks = ["11","12","13","14","15","16","17","18","19","20"]
     private let movieNetworkManager = NetworkAPIManager()
     private let movieNetworkDispatcher = NetworkDispatcher()
@@ -75,13 +81,15 @@ final class MiroCinemaViewController: UIViewController {
                 for movieDTO in movieList {
                     let title = movieDTO.koreanTitle
                     let id = movieDTO.ID
-                    let imageEndPoint = MoviePosterImageAPIEndPoint(posterURL: movieDTO.posterPath)
+                    // 옵셔널 에러 처리해야될듯 -> 만약 posterPath가 없다면??
+                    guard let posterPath = movieDTO.posterPath else { return }
+                    let imageEndPoint = MovieImageAPIEndPoint(imageURL: posterPath)
                     let imageResult = try await movieNetworkDispatcher.performRequest(imageEndPoint.urlRequest)
 
                     switch imageResult {
                     case .success(let data):
                         guard let posterImage = UIImage(data: data) else { return }
-                        movies.append(Movie(ID: id, title: title, posterImage: posterImage))
+                        movies.append(Movie(id: id, title: title, posterImage: posterImage))
                     case .failure(let error):
                         print(error)
                     }
@@ -92,14 +100,38 @@ final class MiroCinemaViewController: UIViewController {
         }
 
         let genreEndPoint = MovieGenreAPIEndPoint(genreCode: 28)
+        let genreEndPoint2 = MovieGenreAPIEndPoint(genreCode: 80)
+        let genreEndPoint3 = MovieGenreAPIEndPoint(genreCode: 35)
+        let genreEndPoint4 = MovieGenreAPIEndPoint(genreCode: 18)
+        let genreEndPoint5 = MovieGenreAPIEndPoint(genreCode: 53)
+        let genreEndPoint6 = MovieGenreAPIEndPoint(genreCode: 36)
+
+        let genreList = [genreEndPoint, genreEndPoint2, genreEndPoint3, genreEndPoint4, genreEndPoint5, genreEndPoint6]
 
         Task {
             do {
-                let decodedData = try await movieNetworkManager.fetchData(
-                    to: MoviesDTO.self,
-                    endPoint: genreEndPoint
-                )
-                guard let movieRank = decodedData as? MoviesDTO else { return }
+                for genreEndPoint in genreList {
+                    let actionDecodedData = try await movieNetworkManager.fetchData(
+                        to: MoviesDTO.self,
+                        endPoint: genreEndPoint
+                    )
+                    guard let action = actionDecodedData as? MoviesDTO else { return }
+                    let actionMoviesFirst = action.movies[0]
+                    guard let backDropImagePath = actionMoviesFirst.backDropImagePath else { return }
+                    let actionImageEndPoint = MovieImageAPIEndPoint(imageURL: backDropImagePath)
+                    let actionId = actionMoviesFirst.ID
+                    let actionTitle = actionMoviesFirst.koreanTitle
+                    let actionimageResult = try await movieNetworkDispatcher.performRequest(actionImageEndPoint.urlRequest)
+
+                    switch actionimageResult {
+                    case .success(let data):
+                        guard let posterImage = UIImage(data: data) else { return }
+
+                        genres.append(Movie(id: actionId, title: actionTitle, backDropImage: posterImage))
+                    case .failure(let error):
+                        print(error)
+                    }
+                }
             } catch {
                 print(error)
             }
@@ -113,7 +145,7 @@ final class MiroCinemaViewController: UIViewController {
         snapShot.appendItems(movies)
 
         snapShot.appendSections([.genre])
-//        snapShot.appendItems(ranks)
+        snapShot.appendItems(genres)
 
         self.datasource?.apply(snapShot)
     }
@@ -157,6 +189,7 @@ final class MiroCinemaViewController: UIViewController {
                 let cell = collectionView.dequeueReusableCell(
                     withReuseIdentifier: MovieGenresCollectionViewCell.identifier,
                     for: indexPath) as? MovieGenresCollectionViewCell
+                cell?.configure(with: movie)
                 return cell
             }
         }

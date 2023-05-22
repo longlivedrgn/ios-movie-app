@@ -20,7 +20,9 @@ class MovieGenresCollectionViewCell: UICollectionViewCell {
     private let movieGenreImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.image = UIImage(named: "Monday")
-        imageView.contentMode = .scaleAspectFit
+        imageView.layer.cornerRadius = 10
+        imageView.clipsToBounds = true
+        imageView.contentMode = .scaleToFill
 
         return imageView
     }()
@@ -41,6 +43,11 @@ class MovieGenresCollectionViewCell: UICollectionViewCell {
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    func configure(with movie: Movie) {
+//        movieGenreNameLabel.text = movie.
+        movieGenreImageView.image = movie.backDropImage
     }
 
     private func configure() {
