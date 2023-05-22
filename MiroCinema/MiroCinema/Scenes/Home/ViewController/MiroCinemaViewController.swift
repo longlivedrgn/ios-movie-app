@@ -99,12 +99,12 @@ final class MiroCinemaViewController: UIViewController {
             }
         }
 
-        let genreEndPoint = MovieGenreAPIEndPoint(genreCode: 28)
-        let genreEndPoint2 = MovieGenreAPIEndPoint(genreCode: 80)
-        let genreEndPoint3 = MovieGenreAPIEndPoint(genreCode: 35)
-        let genreEndPoint4 = MovieGenreAPIEndPoint(genreCode: 18)
-        let genreEndPoint5 = MovieGenreAPIEndPoint(genreCode: 53)
-        let genreEndPoint6 = MovieGenreAPIEndPoint(genreCode: 36)
+        let genreEndPoint = MovieGenreAPIEndPoint(genre: .action)
+        let genreEndPoint2 = MovieGenreAPIEndPoint(genre: .documentary)
+        let genreEndPoint3 = MovieGenreAPIEndPoint(genre: .animation)
+        let genreEndPoint4 = MovieGenreAPIEndPoint(genre: .comedy)
+        let genreEndPoint5 = MovieGenreAPIEndPoint(genre: .history)
+        let genreEndPoint6 = MovieGenreAPIEndPoint(genre: .romance)
 
         let genreList = [genreEndPoint, genreEndPoint2, genreEndPoint3, genreEndPoint4, genreEndPoint5, genreEndPoint6]
 
@@ -116,7 +116,7 @@ final class MiroCinemaViewController: UIViewController {
                         endPoint: genreEndPoint
                     )
                     guard let action = actionDecodedData as? MoviesDTO else { return }
-                    let actionMoviesFirst = action.movies[0]
+                    guard let actionMoviesFirst = action.movies.first else { return }
                     guard let backDropImagePath = actionMoviesFirst.backDropImagePath else { return }
                     let actionImageEndPoint = MovieImageAPIEndPoint(imageURL: backDropImagePath)
                     let actionId = actionMoviesFirst.ID
@@ -126,8 +126,7 @@ final class MiroCinemaViewController: UIViewController {
                     switch actionimageResult {
                     case .success(let data):
                         guard let posterImage = UIImage(data: data) else { return }
-
-                        genres.append(Movie(id: actionId, title: actionTitle, backDropImage: posterImage))
+                        genres.append(Movie(id: actionId, title: actionTitle, backDropImage: posterImage, genreTitle: genreEndPoint.genre.description))
                     case .failure(let error):
                         print(error)
                     }

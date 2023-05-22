@@ -14,12 +14,20 @@ struct Movie: Hashable {
     let id = UUID()
     let posterImage: UIImage?
     let backDropImage: UIImage?
+    let genreTitle: String?
 
-    init(id: Int, title: String, posterImage: UIImage? = nil, backDropImage: UIImage? = nil) {
+    init(
+        id: Int,
+        title: String,
+        posterImage: UIImage? = nil,
+        backDropImage: UIImage? = nil,
+        genreTitle: String? = nil
+    ) {
         self.ID = id
         self.title = title
         self.posterImage = posterImage
         self.backDropImage = backDropImage
+        self.genreTitle = genreTitle
     }
 
     static func == (lhs: Movie, rhs: Movie) -> Bool {

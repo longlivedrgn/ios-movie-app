@@ -46,7 +46,7 @@ class MovieGenresCollectionViewCell: UICollectionViewCell {
     }
 
     func configure(with movie: Movie) {
-//        movieGenreNameLabel.text = movie.
+        movieGenreNameLabel.text = movie.genreTitle
         movieGenreImageView.image = movie.backDropImage
     }
 

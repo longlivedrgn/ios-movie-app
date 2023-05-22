@@ -9,10 +9,10 @@ import Foundation
 
 struct MovieGenreAPIEndPoint: APIEndpoint {
 
-    private let genreCode: Int
+    let genre: Genre
 
-    init(genreCode: Int) {
-        self.genreCode = genreCode
+    init(genre: Genre) {
+        self.genre = genre
     }
 
     private enum URLConstants {
@@ -31,7 +31,7 @@ struct MovieGenreAPIEndPoint: APIEndpoint {
     func makeQueryItems() -> [URLQueryItem]? {
         let languageQueryItem = URLQueryItem(name: "language", value: "ko-KR")
         let pageNumberQueryItem = URLQueryItem(name: "sort_by", value: "revenue.desc")
-        let genreCodeQueryItem = URLQueryItem(name: "with_genres", value: "\(genreCode)")
+        let genreCodeQueryItem = URLQueryItem(name: "with_genres", value: "\(genre.rawValue)")
 
 
         return [languageQueryItem, pageNumberQueryItem, genreCodeQueryItem]
