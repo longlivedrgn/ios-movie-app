@@ -9,6 +9,13 @@ import UIKit
 
 class MovieDetailViewController: UIViewController {
 
+    private enum Section: CaseIterable {
+        case detail
+        case credit
+    }
+
+    var tmpLabel: UILabel?
+
     static let movieDetailSectionHeaderKind = "movieDetailSectionHeaderKind"
 
     private let movieDetailFirstSectionView = MovieDetailFirstSectionView()
@@ -72,8 +79,10 @@ class MovieDetailViewController: UIViewController {
     private func createlayout() -> UICollectionViewCompositionalLayout {
 
         let layout = UICollectionViewCompositionalLayout { sectionIndex, layoutEnvironment in
-            switch sectionIndex {
-            case 0:
+
+            let sectionType = Section.allCases[sectionIndex]
+            switch sectionType {
+            case .detail:
                 let itemSize = NSCollectionLayoutSize(
                     widthDimension: .fractionalWidth(1),
                     heightDimension: .fractionalHeight(1)
@@ -88,7 +97,7 @@ class MovieDetailViewController: UIViewController {
                 let section = NSCollectionLayoutSection(group: group)
 
                 return section
-            case 1:
+            case .credit:
                 let itemSize = NSCollectionLayoutSize(
                     widthDimension: .fractionalWidth(1.0),
                     heightDimension: .fractionalWidth(0.5)
@@ -120,14 +129,6 @@ class MovieDetailViewController: UIViewController {
                 section.boundarySupplementaryItems = [header]
 
                 return section
-            default:
-                print("설마 여기 타냐?")
-                return NSCollectionLayoutSection(
-                    group: NSCollectionLayoutGroup(
-                        layoutSize: .init(widthDimension: .fractionalHeight(1),
-                                          heightDimension: .fractionalHeight(0.5))
-                    )
-                )
             }
         }
         return layout
@@ -136,12 +137,13 @@ class MovieDetailViewController: UIViewController {
 
 extension MovieDetailViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        if section == 0 {
+        let sectionType = Section.allCases[section]
+
+        switch sectionType {
+        case .detail:
             return 1
-        } else if section == 1 {
+        case .credit:
             return credits.count
-        } else {
-            return Int()
         }
     }
 
@@ -150,25 +152,29 @@ extension MovieDetailViewController: UICollectionViewDataSource {
             withReuseIdentifier: MovieDetailFirstSectionCell.identifier,
             for: indexPath) as? MovieDetailFirstSectionCell
         else { return UICollectionViewCell() }
+        firstSectionCell.firstSectionView.moreButton.addTarget(self, action: #selector(moreButtonTapped), for: .touchUpInside)
+        tmpLabel = firstSectionCell.firstSectionView.overViewLabel
 
         guard let creditCell = movieDetailCollectionView.dequeueReusableCell(
             withReuseIdentifier: MovieDetailCreditCell.identifier,
             for: indexPath) as? MovieDetailCreditCell
         else { return UICollectionViewCell() }
 
-        if indexPath.section == 0 {
+        let sectionType = Section.allCases[indexPath.section]
+
+        switch sectionType {
+        case .detail:
             return firstSectionCell
-        } else if indexPath.section == 1 {
+        case .credit:
             return creditCell
-        } else {
-            return UICollectionViewCell()
         }
     }
+
 }
 
 extension MovieDetailViewController: UICollectionViewDelegate {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 2
+        return Section.allCases.count
     }
 
     func collectionView(
@@ -183,5 +189,11 @@ extension MovieDetailViewController: UICollectionViewDelegate {
         default:
             return UICollectionReusableView()
         }
+    }
+
+    @objc func moreButtonTapped() {
+        print("뭔데")
+//        tmpLabel?.numberOfLines = 0
+        movieDetailFirstSectionView.layoutIfNeeded()
     }
 }

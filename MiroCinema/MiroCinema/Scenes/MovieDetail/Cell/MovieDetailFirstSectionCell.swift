@@ -11,7 +11,7 @@ class MovieDetailFirstSectionCell: UICollectionViewCell {
 
     static let identifier = String(describing: MovieDetailFirstSectionCell.self)
 
-    private let firstSectionView = MovieDetailFirstSectionView()
+    let firstSectionView = MovieDetailFirstSectionView()
 
     override init(frame: CGRect) {
         super.init(frame: frame)
