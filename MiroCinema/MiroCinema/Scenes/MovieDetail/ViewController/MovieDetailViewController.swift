@@ -18,8 +18,6 @@ class MovieDetailViewController: UIViewController {
 
     static let movieDetailSectionHeaderKind = "movieDetailSectionHeaderKind"
 
-    private let movieDetailFirstSectionView = MovieDetailFirstSectionView()
-
     private lazy var movieDetailCollectionView: UICollectionView = {
         let collectionview = UICollectionView(frame: .zero, collectionViewLayout: createlayout())
         collectionview.register(
@@ -152,8 +150,7 @@ extension MovieDetailViewController: UICollectionViewDataSource {
             withReuseIdentifier: MovieDetailFirstSectionCell.identifier,
             for: indexPath) as? MovieDetailFirstSectionCell
         else { return UICollectionViewCell() }
-        firstSectionCell.firstSectionView.moreButton.addTarget(self, action: #selector(moreButtonTapped), for: .touchUpInside)
-        tmpLabel = firstSectionCell.firstSectionView.overViewLabel
+        firstSectionCell.firstSectionView.delegate = self
 
         guard let creditCell = movieDetailCollectionView.dequeueReusableCell(
             withReuseIdentifier: MovieDetailCreditCell.identifier,
@@ -190,10 +187,12 @@ extension MovieDetailViewController: UICollectionViewDelegate {
             return UICollectionReusableView()
         }
     }
+}
 
-    @objc func moreButtonTapped() {
-        print("뭔데")
-//        tmpLabel?.numberOfLines = 0
-        movieDetailFirstSectionView.layoutIfNeeded()
+extension MovieDetailViewController: MovieDetailFirstSectionViewDelegate {
+
+    func movieDetailFirstSectionView(_ movieDetailFirstSectionView: MovieDetailFirstSectionView, didButtonTapped sender: UIButton) {
+        print("뭔데ㅜㅜ")
     }
+
 }

@@ -7,6 +7,10 @@
 
 import UIKit
 
+protocol MovieDetailFirstSectionViewDelegate: AnyObject {
+    func movieDetailFirstSectionView(_ movieDetailFirstSectionView: MovieDetailFirstSectionView, didButtonTapped sender: UIButton)
+}
+
 class MovieDetailFirstSectionView: UIView {
 
     private lazy var moviePosterImageView: UIImageView = {
@@ -74,7 +78,7 @@ class MovieDetailFirstSectionView: UIView {
         return label
     }()
     // 요거 home view에서 사용하니까 따로 빼기!!
-    let moreButton: UIButton = {
+    lazy var moreButton: UIButton = {
         let button = UIButton()
         let buttonTitleColor = UIColor.white
         let symbolImage = UIImage(systemName: "chevron.down")?.withTintColor(.white)
@@ -87,6 +91,7 @@ class MovieDetailFirstSectionView: UIView {
         button.setAttributedTitle(buttonTitle, for: .normal)
         button.backgroundColor = .darkGray
         button.layer.cornerRadius = 10
+        button.addTarget(self, action: #selector(moreButtonDidTapped), for: .touchUpInside)
 
         return button
     }()
@@ -127,6 +132,8 @@ class MovieDetailFirstSectionView: UIView {
 
         return layer
     }()
+
+    weak var delegate: MovieDetailFirstSectionViewDelegate?
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -186,6 +193,10 @@ class MovieDetailFirstSectionView: UIView {
 
     private func configureMoviePosterImageView() {
         gradientLayer.frame = moviePosterImageView.bounds
+    }
+
+    @objc private func moreButtonDidTapped(_ sender: UIButton) {
+        delegate?.movieDetailFirstSectionView(self, didButtonTapped: sender)
     }
 
 }
