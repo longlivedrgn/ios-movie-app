@@ -78,19 +78,9 @@ class MovieDetailFirstSectionView: UIView {
         return label
     }()
     // 요거 home view에서 사용하니까 따로 빼기!!
-    lazy var moreButton: UIButton = {
-        let button = UIButton()
-        let buttonTitleColor = UIColor.white
-        let symbolImage = UIImage(systemName: "chevron.down")?.withTintColor(.white)
-        let buttonTitle = NSMutableAttributedString(string: "더보기 ")
-        let symbolAttachment = NSTextAttachment()
-        symbolAttachment.image = symbolImage
-        let symbolString = NSAttributedString(attachment: symbolAttachment)
-        buttonTitle.append(symbolString)
-        buttonTitle.addAttribute(.foregroundColor, value: buttonTitleColor, range: NSRange(location: 0, length: buttonTitle.length))
-        button.setAttributedTitle(buttonTitle, for: .normal)
-        button.backgroundColor = .darkGray
-        button.layer.cornerRadius = 10
+    // custom class로 활용하기~
+    lazy var viewMoreButton: ViewMoreButton = {
+        let button = ViewMoreButton()
         button.addTarget(self, action: #selector(moreButtonDidTapped), for: .touchUpInside)
 
         return button
@@ -115,7 +105,7 @@ class MovieDetailFirstSectionView: UIView {
             arrangedSubviews: [
                 tagLineLabel,
                 overViewLabel,
-                moreButton
+                viewMoreButton
             ]
         )
         stackView.spacing = 10
@@ -186,7 +176,7 @@ class MovieDetailFirstSectionView: UIView {
             $0.bottom.lessThanOrEqualToSuperview().offset(-10)
         }
 
-        moreButton.snp.makeConstraints {
+        viewMoreButton.snp.makeConstraints {
             $0.height.equalTo(movieTitleVerticalStackView.snp.height)
         }
     }
