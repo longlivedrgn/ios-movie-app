@@ -20,6 +20,7 @@ class MovieDetailViewController: UIViewController {
 
     private lazy var movieDetailCollectionView: UICollectionView = {
         let collectionview = UICollectionView(frame: .zero, collectionViewLayout: createlayout())
+        collectionview.backgroundColor = .black
         collectionview.register(
             MovieDetailCreditCell.self,
             forCellWithReuseIdentifier: MovieDetailCreditCell.identifier
@@ -83,12 +84,12 @@ class MovieDetailViewController: UIViewController {
             case .detail:
                 let itemSize = NSCollectionLayoutSize(
                     widthDimension: .fractionalWidth(1),
-                    heightDimension: .fractionalHeight(1)
+                    heightDimension: .estimated(100)
                 )
                 let item = NSCollectionLayoutItem(layoutSize: itemSize)
                 let groupSize = NSCollectionLayoutSize(
                     widthDimension: .fractionalWidth(1),
-                    heightDimension: .fractionalHeight(0.8)
+                    heightDimension: .estimated(600)
                 )
                 let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
 
@@ -192,7 +193,12 @@ extension MovieDetailViewController: UICollectionViewDelegate {
 extension MovieDetailViewController: MovieDetailFirstSectionViewDelegate {
 
     func movieDetailFirstSectionView(_ movieDetailFirstSectionView: MovieDetailFirstSectionView, didButtonTapped sender: UIButton) {
-        print("뭔데ㅜㅜ")
+
+        movieDetailFirstSectionView.overViewLabel.numberOfLines = 0
+
+        DispatchQueue.main.async {
+            self.movieDetailCollectionView.reloadData()
+        }
     }
 
 }

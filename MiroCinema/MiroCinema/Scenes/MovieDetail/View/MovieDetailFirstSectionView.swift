@@ -160,7 +160,7 @@ class MovieDetailFirstSectionView: UIView {
 
         moviePosterImageView.snp.makeConstraints {
             $0.top.leading.trailing.equalToSuperview()
-            $0.height.equalTo(self.snp.height)
+            $0.height.equalTo(600)
         }
         
         certificationLabel.snp.makeConstraints {
