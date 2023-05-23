@@ -34,7 +34,6 @@ final class MiroCinemaViewController: UIViewController {
             applySnapShot()
         }
     }
-    private var ranks = ["11","12","13","14","15","16","17","18","19","20"]
     private let movieNetworkManager = NetworkAPIManager()
     private let movieNetworkDispatcher = NetworkDispatcher()
 

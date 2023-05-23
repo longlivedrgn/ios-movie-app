@@ -17,7 +17,7 @@ class MovieGenresCollectionViewCell: UICollectionViewCell {
         return containerView
     }()
 
-    private let movieGenreImageView: UIImageView = {
+    private let genreImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.image = UIImage(named: "Monday")
         imageView.layer.cornerRadius = 10
@@ -27,7 +27,7 @@ class MovieGenresCollectionViewCell: UICollectionViewCell {
         return imageView
     }()
 
-    let movieGenreNameLabel: UILabel = {
+    let genreNameLabel: UILabel = {
         let label = UILabel()
         label.text = "먼데이"
         label.textColor = .lightGray
@@ -46,27 +46,27 @@ class MovieGenresCollectionViewCell: UICollectionViewCell {
     }
 
     func configure(with movie: Movie) {
-        movieGenreNameLabel.text = movie.genreTitle
-        movieGenreImageView.image = movie.backDropImage
+        genreNameLabel.text = movie.genreTitle
+        genreImageView.image = movie.backDropImage
     }
 
     private func configure() {
         addSubview(containerView)
-        containerView.addSubview(movieGenreNameLabel)
-        containerView.addSubview(movieGenreImageView)
+        containerView.addSubview(genreNameLabel)
+        containerView.addSubview(genreImageView)
 
         containerView.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }
 
-        movieGenreImageView.snp.makeConstraints {
+        genreImageView.snp.makeConstraints {
             $0.top.leading.trailing.equalToSuperview()
-            $0.height.equalTo(movieGenreImageView.snp.width).multipliedBy(0.617)
+            $0.height.equalTo(genreImageView.snp.width).multipliedBy(0.617)
         }
 
-        movieGenreNameLabel.snp.makeConstraints {
+        genreNameLabel.snp.makeConstraints {
             $0.leading.trailing.bottom.equalToSuperview()
-            $0.top.equalTo(movieGenreImageView.snp.bottom)
+            $0.top.equalTo(genreImageView.snp.bottom)
         }
     }
 
