@@ -15,15 +15,17 @@ class MovieDetailFirstSectionView: UIView {
         return imageView
     }()
 
-    private let certificationView: UIView = {
-        let view = UIView()
+    private let certificationLabel: UILabel = {
         let label = UILabel()
-        view.addSubview(label)
-
         label.text = "전체 관람가"
-        label.font = UIFont.systemFont(ofSize: 10)
+        label.font = UIFont.systemFont(ofSize: 14)
+        label.textColor = .green
+        label.layer.borderColor = UIColor.green.cgColor
+        label.layer.borderWidth = 1
+        label.layer.cornerRadius = 15
+        label.textAlignment = .center
 
-        return view
+        return label
     }()
 
     private let titleLabel: UILabel = {
@@ -66,6 +68,7 @@ class MovieDetailFirstSectionView: UIView {
         let label = UILabel()
         label.text = "따단-딴-따단-딴 ♫ 전 세계를 열광시킬 올 타임 슈퍼 어드벤처의 등장! 뉴욕의 평범한 배관공 형제 '마리오'와 ‘루이지’는 배수관 고장으로 위기에 빠진 도시를 구하려다 미스터리한 초록색 파이프 안으로 빨려 들어가게 된다. 파이프를 통해 새로운 세상으로 차원 이동하게 된 형제. 형 '마리오'는 뛰어난 리더십을 지닌 '피치'가 통치하는 버섯왕국에 도착하지만 동생 '루이지'는 빌런 '쿠파'가 있는 다크랜드로 떨어지며 납치를 당하고 ‘마리오’는 동생을 구하기 위해 ‘피치’와 ‘키노피오’의 도움을 받아 '쿠파'에 맞서기로 결심한다. 그러나 슈퍼스타로 세상을 지배하려는 그의 강력한 힘 앞에 이들은 예기치 못한 위험에 빠지게 되는데"
         label.font = UIFont.systemFont(ofSize: 15)
+        label.numberOfLines = 2
         label.textColor = .lightGray
 
         return label
@@ -88,20 +91,30 @@ class MovieDetailFirstSectionView: UIView {
         return button
     }()
 
-    private lazy var movieDetailVerticalStackView: UIStackView = {
+    private lazy var movieTitleVerticalStackView: UIStackView = {
         let stackView = UIStackView(
             arrangedSubviews: [
-                certificationView,
                 titleLabel,
                 englishTitleLabel,
-                informationLabel,
+            ]
+        )
+        stackView.axis = .vertical
+        stackView.distribution = .fillProportionally
+        stackView.spacing = 5
+
+        return stackView
+    }()
+
+    private lazy var movieOverviewVerticalStackView: UIStackView = {
+        let stackView = UIStackView(
+            arrangedSubviews: [
                 tagLineLabel,
                 overViewLabel,
                 moreButton
             ]
         )
+        stackView.spacing = 10
         stackView.axis = .vertical
-        stackView.distribution = .fillProportionally
 
         return stackView
     }()
@@ -132,7 +145,10 @@ class MovieDetailFirstSectionView: UIView {
 
     private func setUI() {
         addSubview(moviePosterImageView)
-        addSubview(movieDetailVerticalStackView)
+        addSubview(certificationLabel)
+        addSubview(movieTitleVerticalStackView)
+        addSubview(informationLabel)
+        addSubview(movieOverviewVerticalStackView)
         moviePosterImageView.layer.addSublayer(gradientLayer)
 
         moviePosterImageView.snp.makeConstraints {
@@ -140,9 +156,31 @@ class MovieDetailFirstSectionView: UIView {
             $0.height.equalTo(self.snp.height)
         }
         
-        movieDetailVerticalStackView.snp.makeConstraints {
-            $0.leading.trailing.bottom.equalToSuperview()
+        certificationLabel.snp.makeConstraints {
+            $0.leading.equalToSuperview().offset(10)
             $0.top.equalTo(moviePosterImageView.snp.centerY)
+            $0.height.equalTo(30)
+            $0.width.equalTo(90)
+        }
+
+        movieTitleVerticalStackView.snp.makeConstraints {
+            $0.leading.trailing.equalToSuperview().inset(10)
+            $0.top.equalTo(certificationLabel.snp.bottom).offset(15)
+        }
+
+        informationLabel.snp.makeConstraints {
+            $0.leading.trailing.equalToSuperview().inset(10)
+            $0.top.equalTo(movieTitleVerticalStackView.snp.bottom).offset(20)
+        }
+
+        movieOverviewVerticalStackView.snp.makeConstraints {
+            $0.leading.trailing.equalToSuperview().inset(10)
+            $0.top.equalTo(informationLabel.snp.bottom).offset(25)
+            $0.bottom.lessThanOrEqualToSuperview().offset(-10)
+        }
+
+        moreButton.snp.makeConstraints {
+            $0.height.equalTo(movieTitleVerticalStackView.snp.height)
         }
     }
 
