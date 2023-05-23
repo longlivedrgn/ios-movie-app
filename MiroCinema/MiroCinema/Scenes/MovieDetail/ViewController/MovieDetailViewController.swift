@@ -11,18 +11,27 @@ class MovieDetailViewController: UIViewController {
 
     private let movieDetailFirstSectionView = MovieDetailFirstSectionView()
 
-    private let detailCollectionView: UICollectionView = {
+    private lazy var movieDetailCollectionView: UICollectionView = {
         let collectionview = UICollectionView(frame: .zero, collectionViewLayout: createlayout())
-        
+        collectionview.register(
+            MovieDetailCreditCell.self,
+            forCellWithReuseIdentifier: MovieDetailCreditCell.identifier
+        )
+        collectionview.register(
+            MovieDetailFirstSectionCell.self,
+            forCellWithReuseIdentifier: MovieDetailFirstSectionCell.identifier
+        )
+        collectionview.dataSource = self
+        collectionview.delegate = self
 
+        return collectionview
     }()
-//    var movie: Movie?
+    //    var movie: Movie?
     private let networkAPIManager: NetworkAPIManager
-
     private var credits = ["11","12","13","14","15","16","17","18","19","20"]
 
     init(movie: Movie, networkAPIManager: NetworkAPIManager) {
-//        self.movie = movie
+        //        self.movie = movie
         self.networkAPIManager = networkAPIManager
         super.init(nibName: nil, bundle: nil)
     }
@@ -33,82 +42,108 @@ class MovieDetailViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.addSubview(movieDetailFirstSectionView)
-        configureLayout()
-
+        setupUI()
+        layoutUI()
     }
 
-    private func configureLayout() {
-        movieDetailFirstSectionView.snp.makeConstraints {
-            $0.top.leading.trailing.equalToSuperview()
-            $0.height.equalTo(700)
-        }
+    private func setupUI() {
+        view.addSubview(movieDetailCollectionView)
+    }
 
-//    }
-//
+
+    private func layoutUI() {
+        movieDetailCollectionView.snp.makeConstraints {
+            $0.edges.equalToSuperview()
+        }
+    }
+
     private func createlayout() -> UICollectionViewCompositionalLayout {
 
         let layout = UICollectionViewCompositionalLayout { sectionIndex, layoutEnvironment in
+            switch sectionIndex {
+            case 0:
+                let itemSize = NSCollectionLayoutSize(
+                    widthDimension: .fractionalWidth(1),
+                    heightDimension: .fractionalHeight(1)
+                )
+                let item = NSCollectionLayoutItem(layoutSize: itemSize)
+                let groupSize = NSCollectionLayoutSize(
+                    widthDimension: .fractionalWidth(1),
+                    heightDimension: .absolute(600)
+                )
+                let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
 
-            let creditItemSize = NSCollectionLayoutSize(
-                widthDimension: .fractionalWidth(1.0),
-                heightDimension: .fractionalWidth(0.5)
-            )
-            let creditItem = NSCollectionLayoutItem(layoutSize: creditItemSize)
+                let section = NSCollectionLayoutSection(group: group)
 
-            //            creditItem.contentInsets = NSDirectionalEdgeInsets(
-            //                top: 10,
-            //                leading: 10,
-            //                bottom: 10,
-            //                trailing: 10
-            //            )
+                return section
+            case 1:
+                let itemSize = NSCollectionLayoutSize(
+                    widthDimension: .fractionalWidth(1.0),
+                    heightDimension: .fractionalWidth(0.5)
+                )
+                let item = NSCollectionLayoutItem(layoutSize: itemSize)
 
-            let creditGroupSize = NSCollectionLayoutSize(
-                widthDimension: .fractionalHeight(1.0),
-                heightDimension: .fractionalHeight(1.0)
-            )
+                let groupSize = NSCollectionLayoutSize(
+                    widthDimension: .fractionalWidth(0.35),
+                    heightDimension: .fractionalHeight(0.2)
+                )
+                let group = NSCollectionLayoutGroup.vertical(
+                    layoutSize: groupSize,
+                    subitems: [item, item]
+                )
 
-            let creditGroup = NSCollectionLayoutGroup.vertical(
-                layoutSize: creditGroupSize,
-                subitems: [creditItem, creditItem]
-            )
+                let section = NSCollectionLayoutSection(group: group)
+                section.orthogonalScrollingBehavior = .continuous
 
-            //            let movieRankHeaderSize = NSCollectionLayoutSize(
-            //                widthDimension: .fractionalWidth(1.0),
-            //                heightDimension: .absolute(44)
-            //            )
-            //
-            //            let movieRankHeader = NSCollectionLayoutBoundarySupplementaryItem(
-            //                layoutSize: movieRankHeaderSize,
-            //                elementKind: MiroCinemaViewController.movieRankSectionHeaderKind,
-            //                alignment: .top
-            //            )
-
-            let creditSection = NSCollectionLayoutSection(group: creditGroup)
-            //            movieRankSection.boundarySupplementaryItems = [movieRankHeader]
-
-            creditSection.orthogonalScrollingBehavior = .continuous
-
-            return creditSection
+                return section
+            default:
+                print("설마 여기 타냐?")
+                return NSCollectionLayoutSection(
+                    group: NSCollectionLayoutGroup(
+                        layoutSize: .init(widthDimension: .fractionalHeight(1),
+                                          heightDimension: .fractionalHeight(0.5))
+                    )
+                )
+            }
         }
-
         return layout
     }
-
-
 }
 
-//extension MovieDetailViewController: UICollectionViewDataSource {
-//
-//    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-//        print("뭔데")
-//        return credits.count
-//    }
-//
-//    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-//        print("여기타냐?")
-//        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MovieDetailCreditCollectionViewCell.identifier, for: indexPath) as? MovieDetailCreditCollectionViewCell else { return UICollectionViewCell() }
-//        return cell
-//    }
+extension MovieDetailViewController: UICollectionViewDataSource {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        if section == 0 {
+            return 1
+        } else if section == 1 {
+            return credits.count
+        } else {
+            return Int()
+        }
+    }
 
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        guard let firstSectionCell = movieDetailCollectionView.dequeueReusableCell(
+            withReuseIdentifier: MovieDetailFirstSectionCell.identifier,
+            for: indexPath) as? MovieDetailFirstSectionCell
+        else { return UICollectionViewCell() }
+
+        guard let creditCell = movieDetailCollectionView.dequeueReusableCell(
+            withReuseIdentifier: MovieDetailCreditCell.identifier,
+            for: indexPath) as? MovieDetailCreditCell
+        else { return UICollectionViewCell() }
+
+        if indexPath.section == 0 {
+            return firstSectionCell
+        } else if indexPath.section == 1 {
+            return creditCell
+        } else {
+            return UICollectionViewCell()
+        }
+    }
+}
+
+extension MovieDetailViewController: UICollectionViewDelegate {
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        return 2
+    }
 }

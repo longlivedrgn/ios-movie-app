@@ -132,7 +132,6 @@ class MovieDetailFirstSectionView: UIView {
 
 
     private func configureMoviePosterImageView() {
-
         let gradientLayer = CAGradientLayer()
         gradientLayer.frame = moviePosterImageView.bounds
         let colors: [CGColor] = [.init(gray: 0.0, alpha: 0.5), .init(gray: 0.0, alpha: 1)]

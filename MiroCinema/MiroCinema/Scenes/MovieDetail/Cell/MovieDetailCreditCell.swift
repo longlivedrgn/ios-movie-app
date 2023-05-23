@@ -1,5 +1,5 @@
 //
-//  MovieDetailCreditCollectionViewCell.swift
+//  MovieDetailCreditCell.swift
 //  MiroCinema
 //
 //  Created by 김용재 on 2023/05/22.
@@ -7,9 +7,15 @@
 
 import UIKit
 
-class MovieDetailCreditCollectionViewCell: UICollectionViewCell {
+class MovieDetailCreditCell: UICollectionViewCell {
 
-    static let identifier = String(describing: MovieDetailCreditCollectionViewCell.self)
+    static let identifier = String(describing: MovieDetailCreditCell.self)
+
+    private let containerView: UIView = {
+        let view = UIView()
+
+        return view
+    }()
 
     private let actorImageView: UIImageView = {
         let imageView = UIImageView()
@@ -53,7 +59,6 @@ class MovieDetailCreditCollectionViewCell: UICollectionViewCell {
         return stackView
     }()
 
-
     override init(frame: CGRect) {
         super.init(frame: frame)
         configure()
@@ -64,7 +69,14 @@ class MovieDetailCreditCollectionViewCell: UICollectionViewCell {
     }
 
     private func configure() {
-        addSubview(creditHorizontalStackView)
+        addSubview(containerView)
+        containerView.addSubview(creditHorizontalStackView)
+        containerView.snp.makeConstraints {
+//            $0.width.equalTo(100)
+//            $0.height.equalTo(100)
+            $0.edges.equalToSuperview()
+        }
+
         creditHorizontalStackView.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }
