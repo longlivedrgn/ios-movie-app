@@ -9,6 +9,8 @@ import UIKit
 
 class MovieDetailViewController: UIViewController {
 
+    static let movieDetailSectionHeaderKind = "movieDetailSectionHeaderKind"
+
     private let movieDetailFirstSectionView = MovieDetailFirstSectionView()
 
     private lazy var movieDetailCollectionView: UICollectionView = {
@@ -20,6 +22,11 @@ class MovieDetailViewController: UIViewController {
         collectionview.register(
             MovieDetailFirstSectionCell.self,
             forCellWithReuseIdentifier: MovieDetailFirstSectionCell.identifier
+        )
+        collectionview.register(
+            MovieDetailHeaderView.self,
+            forSupplementaryViewOfKind: MovieDetailViewController.movieDetailSectionHeaderKind,
+            withReuseIdentifier: MovieDetailHeaderView.identifier
         )
         collectionview.dataSource = self
         collectionview.delegate = self
@@ -95,6 +102,18 @@ class MovieDetailViewController: UIViewController {
                 let section = NSCollectionLayoutSection(group: group)
                 section.orthogonalScrollingBehavior = .continuous
 
+                let headerSize = NSCollectionLayoutSize(
+                    widthDimension: .fractionalWidth(1),
+                    heightDimension: .absolute(60)
+                )
+                let header = NSCollectionLayoutBoundarySupplementaryItem(
+                    layoutSize: headerSize,
+                    elementKind: MovieDetailViewController.movieDetailSectionHeaderKind,
+                    alignment: .top
+                )
+
+                section.boundarySupplementaryItems = [header]
+
                 return section
             default:
                 print("설마 여기 타냐?")
@@ -145,5 +164,19 @@ extension MovieDetailViewController: UICollectionViewDataSource {
 extension MovieDetailViewController: UICollectionViewDelegate {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 2
+    }
+
+    func collectionView(
+        _ collectionView: UICollectionView,
+        viewForSupplementaryElementOfKind kind: String,
+        at indexPath: IndexPath
+    ) -> UICollectionReusableView {
+        switch kind {
+        case MovieDetailViewController.movieDetailSectionHeaderKind:
+            let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: MovieDetailHeaderView.identifier, for: indexPath)
+            return header
+        default:
+            return UICollectionReusableView()
+        }
     }
 }
