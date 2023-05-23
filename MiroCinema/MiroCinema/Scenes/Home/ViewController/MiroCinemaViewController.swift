@@ -383,6 +383,13 @@ extension MiroCinemaViewController: UICollectionViewDelegate {
             networkAPIManager: movieNetworkManager
         )
         collectionView.deselectItem(at: indexPath, animated: true)
+        let backButtonBackgroundImage = UIImage(systemName: "list.bullet")
+        let barAppearance =
+            UINavigationBar.appearance(whenContainedInInstancesOf: [MovieDetailViewController.self])
+        barAppearance.backIndicatorImage = backButtonBackgroundImage
+        barAppearance.backIndicatorTransitionMaskImage = backButtonBackgroundImage
+        let backBarButton = UIBarButtonItem(title: "", style: .done, target: nil, action: nil)
+        navigationItem.backBarButtonItem = backBarButton
         navigationController?.pushViewController(movieDetailViewController, animated: true)
     }
 }

@@ -67,7 +67,6 @@ class MovieDetailFirstSectionView: UIView {
         label.font = UIFont.systemFont(ofSize: 15)
         label.translatesAutoresizingMaskIntoConstraints = false
 
-
         return label
     }()
 
@@ -95,14 +94,22 @@ class MovieDetailFirstSectionView: UIView {
         )
         stackView.axis = .vertical
         stackView.distribution = .fillProportionally
-        stackView.backgroundColor = .green
 
         return stackView
     }()
 
+    private let gradientLayer: CAGradientLayer = {
+        let layer = CAGradientLayer()
+        let colors: [CGColor] = [.init(gray: 0.0, alpha: 0.5), .init(gray: 0.0, alpha: 1)]
+        layer.locations = [0.25, 0.7]
+        layer.colors = colors
+
+        return layer
+    }()
+
     override init(frame: CGRect) {
         super.init(frame: frame)
-        configure()
+        setUI()
     }
 
     // 요거 다시 공부하기
@@ -115,9 +122,10 @@ class MovieDetailFirstSectionView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
 
-    private func configure() {
+    private func setUI() {
         addSubview(moviePosterImageView)
         addSubview(movieDetailVerticalStackView)
+        moviePosterImageView.layer.addSublayer(gradientLayer)
 
         moviePosterImageView.snp.makeConstraints {
             $0.top.leading.trailing.equalToSuperview()
@@ -130,15 +138,8 @@ class MovieDetailFirstSectionView: UIView {
         }
     }
 
-
     private func configureMoviePosterImageView() {
-        let gradientLayer = CAGradientLayer()
         gradientLayer.frame = moviePosterImageView.bounds
-        let colors: [CGColor] = [.init(gray: 0.0, alpha: 0.5), .init(gray: 0.0, alpha: 1)]
-        gradientLayer.locations = [0.25, 0.7]
-        gradientLayer.colors = colors
-
-        moviePosterImageView.layer.addSublayer(gradientLayer)
     }
 
 }

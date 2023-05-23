@@ -30,6 +30,7 @@ class MovieDetailViewController: UIViewController {
         )
         collectionview.dataSource = self
         collectionview.delegate = self
+        collectionview.contentInsetAdjustmentBehavior = .never
 
         return collectionview
     }()
@@ -55,6 +56,10 @@ class MovieDetailViewController: UIViewController {
 
     private func setupUI() {
         view.addSubview(movieDetailCollectionView)
+        let navigationAppearance = UINavigationBarAppearance()
+        navigationController?.navigationBar.tintColor = .white
+        navigationAppearance.configureWithTransparentBackground()
+        navigationController?.navigationBar.standardAppearance = navigationAppearance
     }
 
 
