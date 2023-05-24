@@ -1,11 +1,11 @@
 //
-//  File.swift
+//  MovieDetailsDTO.swift
 //  MiroCinema
 //
 //  Created by 김용재 on 2023/05/24.
 //
 
-struct MovieDetailDTO: Decodable {
+struct MovieDetailsDTO: Decodable {
 
     let originalTitle: String
     let koreanTitle: String

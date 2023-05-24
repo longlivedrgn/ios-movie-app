@@ -43,12 +43,14 @@ class MovieDetailViewController: UIViewController {
 
     private let movie: Movie
     // 💥 요것도 Model로 만들어서 넣어주면 좋을듯!
-    private var movieDetail: MovieDetailDTO?
+    private var movieDetail: MovieDetailsDTO?
     private let movieNetworkAPIManager: NetworkAPIManager
-    private var credits = ["11","12","13","14","15","16","17","18","19","20"]
+    private let movieNetworkDispatcher = NetworkDispatcher()
+    private var movieCredits = [MovieCredit]()
 
     init(movie: Movie, networkAPIManager: NetworkAPIManager) {
         self.movie = movie
+        print(movie.ID)
         self.movieNetworkAPIManager = networkAPIManager
         super.init(nibName: nil, bundle: nil)
     }
@@ -59,7 +61,8 @@ class MovieDetailViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        fetchMovieDetail()
+        fetchMovieDetails()
+        fetchMovieCredits()
         setupUI()
         layoutUI()
     }
@@ -145,7 +148,7 @@ extension MovieDetailViewController: UICollectionViewDataSource {
         case .detail:
             return 1
         case .credit:
-            return credits.count
+            return movieCredits.count
         }
     }
 
@@ -170,6 +173,7 @@ extension MovieDetailViewController: UICollectionViewDataSource {
             firstSectionCell.configure(with: movieDetail, image: image)
             return firstSectionCell
         case .credit:
+            creditCell.configure(with: movieCredits[indexPath.row])
             return creditCell
         }
     }
@@ -206,7 +210,7 @@ extension MovieDetailViewController: MovieDetailFirstSectionViewDelegate {
 
         switch button.isTapped {
         case true:
-            movieDetailFirstSectionView.overViewLabel.numberOfLines = 3
+            movieDetailFirstSectionView.overViewLabel.numberOfLines = 2
         case false:
             movieDetailFirstSectionView.overViewLabel.numberOfLines = 0
         }
@@ -221,13 +225,49 @@ extension MovieDetailViewController: MovieDetailFirstSectionViewDelegate {
 
 extension MovieDetailViewController {
 
-    private func fetchMovieDetail() {
-        let movieDetailEndPoint = MovieDetailAPIEndPoint(movieCode: movie.ID)
+    private func fetchMovieDetails() {
+        let movieDetailEndPoint = MovieDetailsAPIEndPoint(movieCode: movie.ID)
         Task {
             do {
-                let decodedData = try await movieNetworkAPIManager.fetchData(to: MovieDetailDTO.self, endPoint: movieDetailEndPoint)
-                guard let movie = decodedData as? MovieDetailDTO else { return }
+                let decodedData = try await movieNetworkAPIManager.fetchData(to: MovieDetailsDTO.self, endPoint: movieDetailEndPoint)
+                guard let movie = decodedData as? MovieDetailsDTO else { return }
                 movieDetail = movie
+                DispatchQueue.main.async {
+                    self.movieDetailCollectionView.reloadData()
+                }
+            } catch {
+                print(error)
+            }
+        }
+    }
+
+    private func fetchMovieCredits() {
+        let movieCreditsEndPoint = MovieCreditsAPIEndPoint(movieCode: movie.ID)
+        print(movie.ID)
+        // 💥 아래 로직 깔끔하게 정리하기!~~ + Popularity로 정렬하는 알고리즘 추가하자!!
+        Task {
+            do {
+                let decodedData = try await movieNetworkAPIManager.fetchData(to: MovieCreditsDTO.self, endPoint: movieCreditsEndPoint)
+
+                guard let credits = decodedData as? MovieCreditsDTO else { return }
+                let group = credits.cast.sorted { first, second in
+                    return first.popularity > second.popularity
+                }
+
+                for actorInformation in group.prefix(16) {
+                    guard let imageProfilePath = actorInformation.profilePath else { continue }
+                    let imageProfilePathEndPoint = MovieImageAPIEndPoint(imageURL: imageProfilePath)
+                    let actorName = actorInformation.name
+                    let actorDepartment = actorInformation.department
+                    let actorImageResult = try await movieNetworkDispatcher.performRequest(imageProfilePathEndPoint.urlRequest)
+                    switch actorImageResult {
+                    case .success(let data):
+                        guard let profileImage = UIImage(data: data) else { return }
+                        movieCredits.append(MovieCredit(name: actorName, department: actorDepartment, profileImage: profileImage))
+                    case .failure(let error):
+                        print(error)
+                    }
+                }
                 DispatchQueue.main.async {
                     self.movieDetailCollectionView.reloadData()
                 }

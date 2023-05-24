@@ -66,6 +66,12 @@ class MovieDetailCreditCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
+    func configure(with credit: MovieCredit) {
+        actorImageView.image = credit.profileImage
+        actorNameLabel.text = credit.name
+        roleLabel.text = credit.department
+    }
+
     private func configure() {
         addSubview(creditHorizontalStackView)
 

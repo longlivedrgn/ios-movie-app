@@ -1,5 +1,5 @@
 //
-//  MovieDetailAPIEndPoint.swift
+//  MovieDetailsAPIEndPoint.swift
 //  MiroCinema
 //
 //  Created by 김용재 on 2023/05/24.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct MovieDetailAPIEndPoint: MovieAPIEndPoint {
+struct MovieDetailsAPIEndPoint: MovieAPIEndPoint {
 
     let movieCode: String
 
