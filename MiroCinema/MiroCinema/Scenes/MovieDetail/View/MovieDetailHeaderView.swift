@@ -14,6 +14,8 @@ class MovieDetailHeaderView: UICollectionReusableView {
     private let headerTextLabel: UILabel = {
         let label = UILabel()
         label.text = "감독 및 등장인물"
+        label.font = UIFont.systemFont(ofSize: 20, weight: .bold)
+        label.textColor = .white
 
         return label
     }()

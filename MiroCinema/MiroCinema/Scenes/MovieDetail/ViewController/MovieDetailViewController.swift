@@ -40,12 +40,13 @@ class MovieDetailViewController: UIViewController {
 
         return collectionview
     }()
-    //    var movie: Movie?
+
+    private let movie: Movie
     private let networkAPIManager: NetworkAPIManager
     private var credits = ["11","12","13","14","15","16","17","18","19","20"]
 
     init(movie: Movie, networkAPIManager: NetworkAPIManager) {
-        //        self.movie = movie
+        self.movie = movie
         self.networkAPIManager = networkAPIManager
         super.init(nibName: nil, bundle: nil)
     }
@@ -98,14 +99,14 @@ class MovieDetailViewController: UIViewController {
                 return section
             case .credit:
                 let itemSize = NSCollectionLayoutSize(
-                    widthDimension: .fractionalWidth(1.0),
-                    heightDimension: .fractionalWidth(0.5)
+                    widthDimension: .fractionalWidth(0.8),
+                    heightDimension: .fractionalWidth(0.45)
                 )
                 let item = NSCollectionLayoutItem(layoutSize: itemSize)
 
                 let groupSize = NSCollectionLayoutSize(
-                    widthDimension: .fractionalWidth(0.35),
-                    heightDimension: .fractionalHeight(0.2)
+                    widthDimension: .fractionalWidth(0.45),
+                    heightDimension: .fractionalHeight(0.225)
                 )
                 let group = NSCollectionLayoutGroup.vertical(
                     layoutSize: groupSize,

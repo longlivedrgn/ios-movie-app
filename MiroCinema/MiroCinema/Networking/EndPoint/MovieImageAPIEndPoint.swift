@@ -8,7 +8,7 @@
 import Foundation
 
 
-struct MovieImageAPIEndPoint: APIEndpoint {
+struct MovieImageAPIEndPoint: MovieAPIEndPoint {
 
     let imageURL: String
 
@@ -29,10 +29,6 @@ struct MovieImageAPIEndPoint: APIEndpoint {
     }
 
     func makeQueryItems() -> [URLQueryItem]? {
-        return nil
-    }
-
-    func makeHeaders() -> [String : String]? {
         return nil
     }
 

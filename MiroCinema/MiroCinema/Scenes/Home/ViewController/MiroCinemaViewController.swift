@@ -383,6 +383,7 @@ extension MiroCinemaViewController: UICollectionViewDelegate {
             networkAPIManager: movieNetworkManager
         )
         collectionView.deselectItem(at: indexPath, animated: true)
+        // MARK: 💥 back button 수정하는 로직 수정하기!
         let backButtonBackgroundImage = UIImage(systemName: "list.bullet")
         let barAppearance =
             UINavigationBar.appearance(whenContainedInInstancesOf: [MovieDetailViewController.self])

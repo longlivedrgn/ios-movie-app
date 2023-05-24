@@ -77,8 +77,7 @@ class MovieDetailFirstSectionView: UIView {
 
         return label
     }()
-    // 요거 home view에서 사용하니까 따로 빼기!!
-    // custom class로 활용하기~
+
     lazy var viewMoreButton: ViewMoreButton = {
         let button = ViewMoreButton()
         button.addTarget(self, action: #selector(moreButtonDidTapped), for: .touchUpInside)

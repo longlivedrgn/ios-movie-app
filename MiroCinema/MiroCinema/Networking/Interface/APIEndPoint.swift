@@ -12,6 +12,7 @@ protocol APIEndpoint {
     var endPoint: EndPoint { get }
     var urlRequest: URLRequest? { get }
     func makeQueryItems() -> [URLQueryItem]?
+    func makeHeaders() -> [String : String]?
 
 }
 

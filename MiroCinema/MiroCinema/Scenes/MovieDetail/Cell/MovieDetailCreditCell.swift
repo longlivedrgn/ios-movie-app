@@ -11,18 +11,10 @@ class MovieDetailCreditCell: UICollectionViewCell {
 
     static let identifier = String(describing: MovieDetailCreditCell.self)
 
-    private let containerView: UIView = {
-        let view = UIView()
-
-        return view
-    }()
-
-    private let actorImageView: UIImageView = {
-        let imageView = UIImageView()
+    private let actorImageView: CircleImageView = {
+        let imageView = CircleImageView()
         imageView.image = UIImage(named: "Monday")
-        imageView.layer.cornerRadius = 10
-        imageView.clipsToBounds = true
-        imageView.contentMode = .scaleToFill
+        imageView.contentMode = .scaleAspectFill
 
         return imageView
     }()
@@ -32,6 +24,7 @@ class MovieDetailCreditCell: UICollectionViewCell {
         label.text = "크리스 프렛"
         label.textColor = .systemBackground
         label.textAlignment = .center
+        label.font = UIFont.systemFont(ofSize: 15)
 
         return label
     }()
@@ -41,6 +34,7 @@ class MovieDetailCreditCell: UICollectionViewCell {
         label.text = "감독"
         label.textColor = .lightGray
         label.textAlignment = .center
+        label.font = UIFont.systemFont(ofSize: 15)
 
         return label
     }()
@@ -48,6 +42,8 @@ class MovieDetailCreditCell: UICollectionViewCell {
     private lazy var creditTextVerticalStackView: UIStackView = {
         let stackView = UIStackView(arrangedSubviews: [actorNameLabel, roleLabel])
         stackView.axis = .vertical
+        stackView.alignment = .leading
+        stackView.distribution = .fillProportionally
 
         return stackView
     }()
@@ -55,6 +51,8 @@ class MovieDetailCreditCell: UICollectionViewCell {
     private lazy var creditHorizontalStackView: UIStackView = {
         let stackView = UIStackView(arrangedSubviews: [actorImageView, creditTextVerticalStackView])
         stackView.axis = .horizontal
+        stackView.alignment = .center
+        stackView.spacing = 10
 
         return stackView
     }()
@@ -69,17 +67,19 @@ class MovieDetailCreditCell: UICollectionViewCell {
     }
 
     private func configure() {
-        addSubview(containerView)
-        containerView.addSubview(creditHorizontalStackView)
-        containerView.snp.makeConstraints {
-//            $0.width.equalTo(100)
-//            $0.height.equalTo(100)
-            $0.edges.equalToSuperview()
-        }
+        addSubview(creditHorizontalStackView)
 
         creditHorizontalStackView.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }
+        creditTextVerticalStackView.snp.makeConstraints {
+            $0.height.equalToSuperview().multipliedBy(0.65)
+        }
+        actorImageView.snp.makeConstraints {
+            $0.height.equalTo(creditTextVerticalStackView.snp.height)
+            $0.width.equalTo(actorImageView.snp.height)
+        }
+
     }
 
 }
