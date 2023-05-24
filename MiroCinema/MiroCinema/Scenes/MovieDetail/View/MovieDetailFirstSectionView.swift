@@ -184,6 +184,17 @@ class MovieDetailFirstSectionView: UIView {
         gradientLayer.frame = moviePosterImageView.bounds
     }
 
+    func configure(with movie: MovieDetailDTO, image: UIImage) {
+        self.moviePosterImageView.image = image
+        self.titleLabel.text = movie.koreanTitle
+        self.englishTitleLabel.text = movie.originalTitle
+        //movie.productionCountries?.first
+        // + movie.genres.first?.name + String(movie.runTime)
+        self.informationLabel.text = movie.releaseDate
+        self.tagLineLabel.text = movie.tagLine
+        self.overViewLabel.text = movie.overview
+    }
+
     @objc private func moreButtonDidTapped(_ sender: UIButton) {
         delegate?.movieDetailFirstSectionView(self, didButtonTapped: sender)
     }

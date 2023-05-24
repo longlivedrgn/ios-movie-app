@@ -42,12 +42,14 @@ class MovieDetailViewController: UIViewController {
     }()
 
     private let movie: Movie
-    private let networkAPIManager: NetworkAPIManager
+    // 💥 요것도 Model로 만들어서 넣어주면 좋을듯!
+    private var movieDetail: MovieDetailDTO?
+    private let movieNetworkAPIManager: NetworkAPIManager
     private var credits = ["11","12","13","14","15","16","17","18","19","20"]
 
     init(movie: Movie, networkAPIManager: NetworkAPIManager) {
         self.movie = movie
-        self.networkAPIManager = networkAPIManager
+        self.movieNetworkAPIManager = networkAPIManager
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -57,6 +59,7 @@ class MovieDetailViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        fetchMovieDetail()
         setupUI()
         layoutUI()
     }
@@ -68,7 +71,6 @@ class MovieDetailViewController: UIViewController {
         navigationAppearance.configureWithTransparentBackground()
         navigationController?.navigationBar.standardAppearance = navigationAppearance
     }
-
 
     private func layoutUI() {
         movieDetailCollectionView.snp.makeConstraints {
@@ -163,6 +165,9 @@ extension MovieDetailViewController: UICollectionViewDataSource {
 
         switch sectionType {
         case .detail:
+            guard let image = movie.posterImage else { return firstSectionCell }
+            guard let movieDetail else { return firstSectionCell }
+            firstSectionCell.configure(with: movieDetail, image: image)
             return firstSectionCell
         case .credit:
             return creditCell
@@ -209,6 +214,26 @@ extension MovieDetailViewController: MovieDetailFirstSectionViewDelegate {
         button.setButtonTitle()
         DispatchQueue.main.async {
             self.movieDetailCollectionView.reloadData()
+        }
+    }
+
+}
+
+extension MovieDetailViewController {
+
+    private func fetchMovieDetail() {
+        let movieDetailEndPoint = MovieDetailAPIEndPoint(movieCode: movie.ID)
+        Task {
+            do {
+                let decodedData = try await movieNetworkAPIManager.fetchData(to: MovieDetailDTO.self, endPoint: movieDetailEndPoint)
+                guard let movie = decodedData as? MovieDetailDTO else { return }
+                movieDetail = movie
+                DispatchQueue.main.async {
+                    self.movieDetailCollectionView.reloadData()
+                }
+            } catch {
+                print(error)
+            }
         }
     }
 
