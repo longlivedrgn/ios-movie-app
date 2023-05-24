@@ -12,6 +12,7 @@ final class MiroCinemaViewController: UIViewController {
 
     static let movieRankSectionHeaderKind = "movieRankSectionHeaderKind"
     static let movieGenresSectionHeaderKind = "movieGenresSectionHeaderKind"
+    static let movieGenresSectionFooterKind = "movieGenresSectionFooterKind"
 
     private enum Section: CaseIterable {
         case rank
@@ -70,6 +71,12 @@ final class MiroCinemaViewController: UIViewController {
             withReuseIdentifier: MovieGenresHeaderView.identifier
         )
 
+        collectionView.register(
+            MovieGenresFooterView.self,
+            forSupplementaryViewOfKind: MiroCinemaViewController.movieGenresSectionFooterKind,
+            withReuseIdentifier: MovieGenresFooterView.identifer
+        )
+
         return collectionView
     }()
 
@@ -123,8 +130,11 @@ final class MiroCinemaViewController: UIViewController {
         let genreEndPoint4 = MovieGenreAPIEndPoint(genre: .comedy)
         let genreEndPoint5 = MovieGenreAPIEndPoint(genre: .history)
         let genreEndPoint6 = MovieGenreAPIEndPoint(genre: .romance)
+        let genreEndPoint7 = MovieGenreAPIEndPoint(genre: .fantasy)
+        let genreEndPoint8 = MovieGenreAPIEndPoint(genre: .drama)
+        let genreEndPoint9 = MovieGenreAPIEndPoint(genre: .scienceFiction)
 
-        let genreList = [genreEndPoint, genreEndPoint2, genreEndPoint3, genreEndPoint4, genreEndPoint5, genreEndPoint6]
+        let genreList = [genreEndPoint, genreEndPoint2, genreEndPoint3, genreEndPoint4, genreEndPoint5, genreEndPoint6, genreEndPoint7, genreEndPoint8, genreEndPoint9]
 
         Task {
             do {
@@ -199,19 +209,30 @@ final class MiroCinemaViewController: UIViewController {
 
             switch sectionType {
             case .rank:
-                let supplementaryView = collectionView.dequeueReusableSupplementaryView(
+                guard let supplementaryView = collectionView.dequeueReusableSupplementaryView(
                     ofKind: kind,
                     withReuseIdentifier: MovieRankHeaderView.identifier,
-                    for: indexPath) as? MovieRankHeaderView
+                    for: indexPath) as? MovieRankHeaderView else { return UICollectionReusableView() }
 
                 return supplementaryView
             case .genre:
-                let supplementaryView = collectionView.dequeueReusableSupplementaryView(
-                    ofKind: kind,
-                    withReuseIdentifier: MovieGenresHeaderView.identifier,
-                    for: indexPath) as? MovieGenresHeaderView
-
-                return supplementaryView
+                // 💥 코드 로직 수정하기!! switch 문 안에 switch문이라니!!
+                switch kind {
+                case MiroCinemaViewController.movieGenresSectionHeaderKind:
+                    guard let supplementaryView = collectionView.dequeueReusableSupplementaryView(
+                        ofKind: kind,
+                        withReuseIdentifier: MovieGenresHeaderView.identifier,
+                        for: indexPath) as? MovieGenresHeaderView else { return UICollectionReusableView() }
+                    return supplementaryView
+                case MiroCinemaViewController.movieGenresSectionFooterKind:
+                    guard let supplementaryView = collectionView.dequeueReusableSupplementaryView(
+                        ofKind: kind,
+                        withReuseIdentifier: MovieGenresFooterView.identifer,
+                        for: indexPath) as? MovieGenresFooterView  else { return UICollectionReusableView() }
+                    return supplementaryView
+                default:
+                    return UICollectionReusableView()
+                }
             }
         }
 
@@ -328,8 +349,19 @@ final class MiroCinemaViewController: UIViewController {
             alignment: .top
         )
 
+        let movieGenresFooterSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1.0),
+            heightDimension: .absolute(55)
+        )
+
+        let movieGenresFooter = NSCollectionLayoutBoundarySupplementaryItem(
+            layoutSize: movieGenresFooterSize,
+            elementKind: MiroCinemaViewController.movieGenresSectionFooterKind,
+            alignment: .bottom
+        )
+
         let movieGenresSection = NSCollectionLayoutSection(group: movieGenresGroup)
-        movieGenresSection.boundarySupplementaryItems = [movieGenresHeader]
+        movieGenresSection.boundarySupplementaryItems = [movieGenresHeader, movieGenresFooter]
 
         return movieGenresSection
     }
