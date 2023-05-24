@@ -9,7 +9,9 @@ import UIKit
 
 class ViewMoreButton: UIButton {
 
-    var isTapped: Bool = false
+    var isTapped = false
+    var buttonTitleSymbol: UIImage?
+    var buttonTitle = NSMutableAttributedString()
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -20,33 +22,32 @@ class ViewMoreButton: UIButton {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func setUI() {
-        let buttonTitleColor = UIColor.white
+    private func setUI() {
         backgroundColor = .darkGray
         layer.cornerRadius = 10
-        // MARK: 여기 로직 처리 깔끔하게 하기!
+        setButtonTitle()
+    }
 
-        if !isTapped {
-            let symbolImage = UIImage(systemName: "chevron.down")?.withTintColor(.white)
-            let buttonTitle = NSMutableAttributedString(string: "더보기 ")
-            let symbolAttachment = NSTextAttachment()
-            symbolAttachment.image = symbolImage
-            let symbolString = NSAttributedString(attachment: symbolAttachment)
-            buttonTitle.append(symbolString)
-            buttonTitle.addAttribute(.foregroundColor, value: buttonTitleColor, range: NSRange(location: 0, length: buttonTitle.length))
-            setAttributedTitle(buttonTitle, for: .normal)
-        } else {
-            let symbolImage = UIImage(systemName: "chevron.down")?.withTintColor(.white)
-            let buttonTitle = NSMutableAttributedString(string: "닫기 ")
-            let symbolAttachment = NSTextAttachment()
-            symbolAttachment.image = symbolImage
-            let symbolString = NSAttributedString(attachment: symbolAttachment)
-            buttonTitle.append(symbolString)
-            buttonTitle.addAttribute(.foregroundColor, value: buttonTitleColor, range: NSRange(location: 0, length: buttonTitle.length))
-            setAttributedTitle(buttonTitle, for: .normal)
+    func setButtonTitle() {
+        switch isTapped {
+        case true:
+            buttonTitleSymbol = UIImage(systemName: "chevron.up")?.withTintColor(.white)
+            buttonTitle = NSMutableAttributedString(string: "닫기 ")
+        case false:
+            buttonTitleSymbol = UIImage(systemName: "chevron.down")?.withTintColor(.white)
+            buttonTitle = NSMutableAttributedString(string: "더보기 ")
         }
-
-
+        let symbolAttachment = NSTextAttachment()
+        symbolAttachment.image = buttonTitleSymbol
+        let symbolString = NSAttributedString(attachment: symbolAttachment)
+        let buttonTitleColor = UIColor.white
+        buttonTitle.append(symbolString)
+        buttonTitle.addAttribute(
+            .foregroundColor,
+            value: buttonTitleColor,
+            range: NSRange(location: 0, length: buttonTitle.length)
+        )
+        setAttributedTitle(buttonTitle, for: .normal)
     }
 
 }

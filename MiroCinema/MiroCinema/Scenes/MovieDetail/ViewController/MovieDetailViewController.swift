@@ -192,19 +192,23 @@ extension MovieDetailViewController: UICollectionViewDelegate {
 
 extension MovieDetailViewController: MovieDetailFirstSectionViewDelegate {
 
-    func movieDetailFirstSectionView(_ movieDetailFirstSectionView: MovieDetailFirstSectionView, didButtonTapped sender: UIButton) {
+    func movieDetailFirstSectionView(
+        _ movieDetailFirstSectionView: MovieDetailFirstSectionView,
+        didButtonTapped sender: UIButton
+    ) {
         guard let button = sender as? ViewMoreButton else { return }
 
-        if !button.isTapped {
-            movieDetailFirstSectionView.overViewLabel.numberOfLines = 0
-        } else {
+        switch button.isTapped {
+        case true:
             movieDetailFirstSectionView.overViewLabel.numberOfLines = 3
+        case false:
+            movieDetailFirstSectionView.overViewLabel.numberOfLines = 0
         }
-
+        button.isTapped.toggle()
+        button.setButtonTitle()
         DispatchQueue.main.async {
             self.movieDetailCollectionView.reloadData()
         }
-        button.isTapped.toggle()
     }
 
 }
