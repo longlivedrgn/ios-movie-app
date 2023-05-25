@@ -21,7 +21,6 @@ final class MiroCinemaViewController: UIViewController {
 
     private typealias DataSource = UICollectionViewDiffableDataSource<Section, Movie>
     private typealias SnapShot = NSDiffableDataSourceSnapshot<Section, Movie>
-//    private var snapShot = SnapShot()
 
     private var datasource: DataSource?
 

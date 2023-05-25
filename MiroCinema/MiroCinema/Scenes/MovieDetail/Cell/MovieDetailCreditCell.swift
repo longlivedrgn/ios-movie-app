@@ -13,7 +13,7 @@ class MovieDetailCreditCell: UICollectionViewCell {
 
     private let actorImageView: CircleImageView = {
         let imageView = CircleImageView()
-        imageView.image = UIImage(named: "Monday")
+        imageView.image = UIImage(systemName: "grayImage")
         imageView.contentMode = .scaleAspectFill
 
         return imageView
@@ -21,7 +21,7 @@ class MovieDetailCreditCell: UICollectionViewCell {
 
     private let actorNameLabel: UILabel = {
         let label = UILabel()
-        label.text = "크리스 프렛"
+        label.text = "-"
         label.textColor = .systemBackground
         label.textAlignment = .center
         label.font = UIFont.systemFont(ofSize: 15)
@@ -31,7 +31,7 @@ class MovieDetailCreditCell: UICollectionViewCell {
 
     private let roleLabel: UILabel = {
         let label = UILabel()
-        label.text = "감독"
+        label.text = "-"
         label.textColor = .lightGray
         label.textAlignment = .center
         label.font = UIFont.systemFont(ofSize: 15)
@@ -85,7 +85,6 @@ class MovieDetailCreditCell: UICollectionViewCell {
             $0.height.equalTo(creditTextVerticalStackView.snp.height)
             $0.width.equalTo(actorImageView.snp.height)
         }
-
     }
 
 }

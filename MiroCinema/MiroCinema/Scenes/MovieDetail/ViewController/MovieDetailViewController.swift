@@ -14,8 +14,6 @@ class MovieDetailViewController: UIViewController {
         case credit
     }
 
-    var tmpLabel: UILabel?
-
     static let movieDetailSectionHeaderKind = "movieDetailSectionHeaderKind"
 
     private lazy var movieDetailCollectionView: UICollectionView = {
@@ -62,9 +60,9 @@ class MovieDetailViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         fetchMovieDetails()
-        fetchMovieCredits()
         setupUI()
         layoutUI()
+        fetchMovieCredits()
     }
 
     private func setupUI() {
@@ -142,7 +140,10 @@ class MovieDetailViewController: UIViewController {
 }
 
 extension MovieDetailViewController: UICollectionViewDataSource {
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    func collectionView(
+        _ collectionView: UICollectionView,
+        numberOfItemsInSection section: Int
+    ) -> Int {
         let sectionType = Section.allCases[section]
 
         switch sectionType {
@@ -153,7 +154,10 @@ extension MovieDetailViewController: UICollectionViewDataSource {
         }
     }
 
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+    func collectionView(
+        _ collectionView: UICollectionView,
+        cellForItemAt indexPath: IndexPath
+    ) -> UICollectionViewCell {
         guard let firstSectionCell = movieDetailCollectionView.dequeueReusableCell(
             withReuseIdentifier: MovieDetailFirstSectionCell.identifier,
             for: indexPath) as? MovieDetailFirstSectionCell
@@ -193,7 +197,11 @@ extension MovieDetailViewController: UICollectionViewDelegate {
     ) -> UICollectionReusableView {
         switch kind {
         case MovieDetailViewController.movieDetailSectionHeaderKind:
-            let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: MovieDetailHeaderView.identifier, for: indexPath)
+            let header = collectionView.dequeueReusableSupplementaryView(
+                ofKind: kind,
+                withReuseIdentifier: MovieDetailHeaderView.identifier,
+                for: indexPath
+            )
             return header
         default:
             return UICollectionReusableView()
@@ -230,7 +238,10 @@ extension MovieDetailViewController {
         let movieDetailEndPoint = MovieDetailsAPIEndPoint(movieCode: movie.ID)
         Task {
             do {
-                let decodedData = try await movieNetworkAPIManager.fetchData(to: MovieDetailsDTO.self, endPoint: movieDetailEndPoint)
+                let decodedData = try await movieNetworkAPIManager.fetchData(
+                    to: MovieDetailsDTO.self,
+                    endPoint: movieDetailEndPoint
+                )
                 guard let movie = decodedData as? MovieDetailsDTO else { return }
                 movieDetail = movie
                 DispatchQueue.main.async {
@@ -244,7 +255,6 @@ extension MovieDetailViewController {
 
     private func fetchMovieCredits() {
         let movieCreditsEndPoint = MovieCreditsAPIEndPoint(movieCode: movie.ID)
-        print(movie.ID)
         // 💥 아래 로직 깔끔하게 정리하기!~~ + Popularity로 정렬하는 알고리즘 추가하자!!
         Task {
             do {
@@ -254,7 +264,6 @@ extension MovieDetailViewController {
                 let group = credits.cast.sorted { first, second in
                     return first.popularity > second.popularity
                 }
-
                 for actorInformation in group.prefix(16) {
                     guard let imageProfilePath = actorInformation.profilePath else { continue }
                     let imageProfilePathEndPoint = MovieImageAPIEndPoint(imageURL: imageProfilePath)
