@@ -17,32 +17,35 @@ class MovieRankHeaderView: UICollectionReusableView {
         return view
     }()
 
-
-    private let sortedByOpenDateButton: UIButton = {
+    private lazy var sortedByOpenDateButton: UIButton = {
         let button = UIButton()
         button.setTitle("영화 개봉순", for: .normal)
-        button.layer.cornerRadius = 20
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 15, weight: .bold)
-        button.backgroundColor = UIColor(red: 0.902, green: 0.286, blue: 0.502, alpha: 1)
-
-        return button
-    }()
-
-    private let sortedByReservationRateButton: UIButton = {
-        let button = UIButton()
-        button.setTitle("예매율순", for: .normal)
+        button.addTarget(self, action: #selector(sortedByOpenDateButtonDidTapped), for: .touchUpInside)
         button.layer.cornerRadius = 20
         button.titleLabel?.font = UIFont.systemFont(ofSize: 15, weight: .bold)
         button.layer.borderWidth = 1
         button.backgroundColor = .black
         button.layer.borderColor = UIColor.gray.cgColor
+        button.tag = SortedByButton.openDate.rawValue
+
+        return button
+    }()
+
+    private lazy var sortedByReservationRateButton: UIButton = {
+        let button = UIButton()
+        button.addTarget(self, action: #selector(sortedByReservationRateButtonDidTapped), for: .touchUpInside)
+        button.setTitle("예매율순", for: .normal)
+        button.layer.cornerRadius = 20
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 15, weight: .bold)
+        button.backgroundColor = UIColor(red: 0.902, green: 0.286, blue: 0.502, alpha: 1)
+        button.tag = SortedByButton.reservationRate.rawValue
 
         return button
     }()
 
     private lazy var movieRankHorizontalStackView: UIStackView = {
         let stackView = UIStackView(
-            arrangedSubviews: [sortedByOpenDateButton, sortedByReservationRateButton]
+            arrangedSubviews: [sortedByReservationRateButton, sortedByOpenDateButton]
         )
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.axis = .horizontal
@@ -51,6 +54,8 @@ class MovieRankHeaderView: UICollectionReusableView {
 
         return stackView
     }()
+
+    weak var delegate: MovieRankHeaderViewDelegate?
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -79,6 +84,33 @@ class MovieRankHeaderView: UICollectionReusableView {
         movieRankHorizontalStackView.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }
+    }
+
+    func changeButtonColor(clickedButton button: UIButton) {
+        switch SortedByButton(rawValue: button.tag) {
+        case .reservationRate:
+            sortedByReservationRateButton.backgroundColor = UIColor(red: 0.902, green: 0.286, blue: 0.502, alpha: 1)
+            sortedByReservationRateButton.layer.borderWidth = 0
+            sortedByOpenDateButton.layer.borderWidth = 1
+            sortedByOpenDateButton.backgroundColor = .black
+            sortedByOpenDateButton.layer.borderColor = UIColor.gray.cgColor
+        case .openDate:
+            sortedByOpenDateButton.backgroundColor = UIColor(red: 0.902, green: 0.286, blue: 0.502, alpha: 1)
+            sortedByOpenDateButton.layer.borderWidth = 0
+            sortedByReservationRateButton.layer.borderWidth = 1
+            sortedByReservationRateButton.backgroundColor = .black
+            sortedByReservationRateButton.layer.borderColor = UIColor.gray.cgColor
+        case .none:
+            fatalError()
+        }
+    }
+
+    @objc private func sortedByOpenDateButtonDidTapped(_ sender: UIButton) {
+        delegate?.movieRankHeaderView(self, didButtonTapped: sender)
+    }
+
+    @objc private func sortedByReservationRateButtonDidTapped(_ sender: UIButton) {
+        delegate?.movieRankHeaderView(self, didButtonTapped: sender)
     }
 
 }

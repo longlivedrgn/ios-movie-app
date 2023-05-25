@@ -121,11 +121,11 @@ final class MiroCinemaViewController: UIViewController {
                 guard let movieRank = decodedData as? MoviesDTO else { return }
                 // 영화 개봉순으로 정렬하기 알고리즘 추가하기
                 let movieList = movieRank.movies.prefix(10)
-                print(movieList.count)
 
                 for (index, movieDTO) in movieList.enumerated() {
                     let title = movieDTO.koreanTitle
                     let id = movieDTO.ID
+                    let releaseDate = movieDTO.releaseDate.convertToDate()
                     // 옵셔널 에러 처리해야될듯 -> 만약 posterPath가 없다면??
                     guard let posterPath = movieDTO.posterPath else { return }
                     let imageEndPoint = MovieImageAPIEndPoint(imageURL: posterPath)
@@ -134,7 +134,7 @@ final class MiroCinemaViewController: UIViewController {
                     switch imageResult {
                     case .success(let data):
                         guard let posterImage = UIImage(data: data) else { return }
-                        let movie = Movie(id: id, title: title, posterImage: posterImage)
+                        let movie = Movie(id: id, title: title, releaseDate: releaseDate, posterImage: posterImage)
                         movies[index] = movie
                     case .failure(let error):
                         print(error)
@@ -250,6 +250,7 @@ final class MiroCinemaViewController: UIViewController {
                     ofKind: kind,
                     withReuseIdentifier: MovieRankHeaderView.identifier,
                     for: indexPath) as? MovieRankHeaderView else { return UICollectionReusableView() }
+                supplementaryView.delegate = self
 
                 return supplementaryView
             case .genre:
@@ -478,6 +479,40 @@ extension MiroCinemaViewController: MovieGenresFooterViewDelegate {
         }
         button.isTapped.toggle()
         button.setButtonTitle()
+    }
+
+    private func applySnapShot2() {
+        var snapShot = SnapShot()
+        snapShot.appendSections([.rank])
+        let sortedMovies = movies.sorted {
+            $0.releaseDate ?? Date() > $1.releaseDate ?? Date()
+        }
+        snapShot.appendItems(sortedMovies)
+
+        snapShot.appendSections([.genre])
+        snapShot.appendItems(genres)
+
+        datasource?.apply(snapShot)
+    }
+
+}
+
+extension MiroCinemaViewController: MovieRankHeaderViewDelegate {
+
+    func movieRankHeaderView(
+        _ movieRankHeaderView: MovieRankHeaderView,
+        didButtonTapped sender: UIButton
+    ) {
+        switch SortedByButton(rawValue: sender.tag) {
+        case .reservationRate:
+            movieRankHeaderView.changeButtonColor(clickedButton: sender)
+            applySnapShot()
+        case .openDate:
+            movieRankHeaderView.changeButtonColor(clickedButton: sender)
+            applySnapShot2()
+        case .none:
+            fatalError()
+        }
     }
 
 }

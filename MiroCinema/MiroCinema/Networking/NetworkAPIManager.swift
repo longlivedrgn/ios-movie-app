@@ -17,7 +17,6 @@ struct NetworkAPIManager {
         endPoint: APIEndpoint
     ) async throws -> Decodable? {
         let urlRequest = endPoint.urlRequest
-        print(urlRequest)
         let result = try await networkDispatcher.performRequest(urlRequest)
 
         switch result {

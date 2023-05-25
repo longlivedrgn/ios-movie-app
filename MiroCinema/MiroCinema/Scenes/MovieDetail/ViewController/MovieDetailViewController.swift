@@ -51,7 +51,6 @@ class MovieDetailViewController: UIViewController {
 
     init(movie: Movie, networkAPIManager: NetworkAPIManager) {
         self.movie = movie
-        print(movie.ID)
         self.movieNetworkAPIManager = networkAPIManager
         super.init(nibName: nil, bundle: nil)
     }
