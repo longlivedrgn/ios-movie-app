@@ -36,7 +36,8 @@ class MovieGenresFooterView: UICollectionReusableView {
 
     private func layoutUI() {
         viewMoreButton.snp.makeConstraints {
-            $0.edges.equalToSuperview()
+            $0.top.leading.bottom.equalToSuperview()
+            $0.trailing.equalToSuperview().inset(20)
         }
     }
 
