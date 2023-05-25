@@ -11,11 +11,14 @@ class MovieGenresFooterView: UICollectionReusableView {
     
     static let identifer = String(describing: MovieGenresFooterView.self)
 
-    private let viewMoreButton: ViewMoreButton = {
-        let viewMoreButton = ViewMoreButton()
+    private lazy var viewMoreButton: ViewMoreButton = {
+        let button = ViewMoreButton()
+        button.addTarget(self, action: #selector(moreButtonDidTapped), for: .touchUpInside)
 
-        return viewMoreButton
+        return button
     }()
+
+    weak var delegate: MovieGenresFooterViewDelegate?
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -35,6 +38,10 @@ class MovieGenresFooterView: UICollectionReusableView {
         viewMoreButton.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }
+    }
+
+    @objc private func moreButtonDidTapped(_ sender: UIButton) {
+        delegate?.movieGenresFooterView(self, didButtonTapped: sender)
     }
 
 }

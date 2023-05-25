@@ -74,7 +74,7 @@ class MovieDetailFirstSectionView: UIView {
         return label
     }()
 
-    lazy var viewMoreButton: ViewMoreButton = {
+    private lazy var viewMoreButton: ViewMoreButton = {
         let button = ViewMoreButton()
         button.addTarget(self, action: #selector(moreButtonDidTapped), for: .touchUpInside)
 

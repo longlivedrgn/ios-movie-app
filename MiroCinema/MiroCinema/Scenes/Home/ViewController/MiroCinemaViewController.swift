@@ -21,6 +21,7 @@ final class MiroCinemaViewController: UIViewController {
 
     private typealias DataSource = UICollectionViewDiffableDataSource<Section, Movie>
     private typealias SnapShot = NSDiffableDataSourceSnapshot<Section, Movie>
+//    private var snapShot = SnapShot()
 
     private var datasource: DataSource?
 
@@ -35,6 +36,8 @@ final class MiroCinemaViewController: UIViewController {
             applySnapShot()
         }
     }
+
+    private var allGenres = [Movie]()
     private let movieNetworkManager = NetworkAPIManager()
     private let movieNetworkDispatcher = NetworkDispatcher()
 
@@ -133,12 +136,16 @@ final class MiroCinemaViewController: UIViewController {
         let genreEndPoint7 = MovieGenreAPIEndPoint(genre: .fantasy)
         let genreEndPoint8 = MovieGenreAPIEndPoint(genre: .drama)
         let genreEndPoint9 = MovieGenreAPIEndPoint(genre: .scienceFiction)
+        let genreEndPoint10 = MovieGenreAPIEndPoint(genre: .scienceFiction)
+        let genreEndPoint11 = MovieGenreAPIEndPoint(genre: .scienceFiction)
+        let genreEndPoint12 = MovieGenreAPIEndPoint(genre: .scienceFiction)
 
-        let genreList = [genreEndPoint, genreEndPoint2, genreEndPoint3, genreEndPoint4, genreEndPoint5, genreEndPoint6, genreEndPoint7, genreEndPoint8, genreEndPoint9]
+
+        let genreList = [genreEndPoint, genreEndPoint2, genreEndPoint3, genreEndPoint4, genreEndPoint5, genreEndPoint6, genreEndPoint7, genreEndPoint8, genreEndPoint9, genreEndPoint10, genreEndPoint11, genreEndPoint12]
 
         Task {
             do {
-                for genreEndPoint in genreList {
+                for (index, genreEndPoint) in genreList.enumerated() {
                     let actionDecodedData = try await movieNetworkManager.fetchData(
                         to: MoviesDTO.self,
                         endPoint: genreEndPoint
@@ -154,7 +161,11 @@ final class MiroCinemaViewController: UIViewController {
                     switch actionimageResult {
                     case .success(let data):
                         guard let posterImage = UIImage(data: data) else { return }
-                        genres.append(Movie(id: actionId, title: actionTitle, backDropImage: posterImage, genreTitle: genreEndPoint.genre.description))
+                        let movie = Movie(id: actionId, title: actionTitle, backDropImage: posterImage, genreTitle: genreEndPoint.genre.description)
+                        if (0...5).contains(index) {
+                            genres.append(movie)
+                        }
+                        allGenres.append(movie)
                     case .failure(let error):
                         print(error)
                     }
@@ -162,6 +173,7 @@ final class MiroCinemaViewController: UIViewController {
             } catch {
                 print(error)
             }
+            applySnapShot()
         }
 
     }
@@ -174,10 +186,18 @@ final class MiroCinemaViewController: UIViewController {
         snapShot.appendSections([.genre])
         snapShot.appendItems(genres)
 
-        self.datasource?.apply(snapShot)
+        datasource?.apply(snapShot)
     }
 
-    private func configureCollectionView() {
+    private func applyAllSnapShot() {
+        var snapShot = SnapShot()
+        snapShot.appendSections([.rank])
+        snapShot.appendItems(movies)
+
+        snapShot.appendSections([.genre])
+        snapShot.appendItems(allGenres)
+        
+        datasource?.apply(snapShot)
     }
 
     private func configureCollectionViewDataSource() {
@@ -229,6 +249,7 @@ final class MiroCinemaViewController: UIViewController {
                         ofKind: kind,
                         withReuseIdentifier: MovieGenresFooterView.identifer,
                         for: indexPath) as? MovieGenresFooterView  else { return UICollectionReusableView() }
+                    supplementaryView.delegate = self
                     return supplementaryView
                 default:
                     return UICollectionReusableView()
@@ -425,4 +446,21 @@ extension MiroCinemaViewController: UICollectionViewDelegate {
         navigationItem.backBarButtonItem = backBarButton
         navigationController?.pushViewController(movieDetailViewController, animated: true)
     }
+}
+
+extension MiroCinemaViewController: MovieGenresFooterViewDelegate {
+
+    func movieGenresFooterView(_ movieGenresFooterView: MovieGenresFooterView, didButtonTapped sender: UIButton) {
+        guard let button = sender as? ViewMoreButton else { return }
+
+        switch button.isTapped {
+        case true:
+            applySnapShot()
+        case false:
+            applyAllSnapShot()
+        }
+        button.isTapped.toggle()
+        button.setButtonTitle()
+    }
+
 }
