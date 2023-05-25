@@ -238,7 +238,8 @@ extension MovieDetailViewController: MovieDetailFirstSectionViewDelegate {
 extension MovieDetailViewController {
 
     private func fetchMovieDetails() {
-        let movieDetailEndPoint = MovieDetailsAPIEndPoint(movieCode: movie.ID)
+        guard let movieID = movie.ID else { return }
+        let movieDetailEndPoint = MovieDetailsAPIEndPoint(movieCode: movieID)
         Task {
             do {
                 let decodedData = try await movieNetworkAPIManager.fetchData(
@@ -257,7 +258,8 @@ extension MovieDetailViewController {
     }
 
     private func fetchMovieCredits() {
-        let movieCreditsEndPoint = MovieCreditsAPIEndPoint(movieCode: movie.ID)
+        guard let movieID = movie.ID else { return }
+        let movieCreditsEndPoint = MovieCreditsAPIEndPoint(movieCode: movieID)
         // 💥 아래 로직 깔끔하게 정리하기!~~ + Popularity로 정렬하는 알고리즘 추가하자!!
         Task {
             do {

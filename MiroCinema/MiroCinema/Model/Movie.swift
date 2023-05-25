@@ -9,16 +9,16 @@ import UIKit
 
 struct Movie: Hashable {
 
-    let ID: Int
-    let title: String
+    var ID: Int?
+    var title: String?
     let id = UUID()
-    let posterImage: UIImage?
-    let backDropImage: UIImage?
-    let genreTitle: String?
+    var posterImage: UIImage?
+    var backDropImage: UIImage?
+    var genreTitle: String?
 
     init(
-        id: Int,
-        title: String,
+        id: Int? = nil,
+        title: String? = nil,
         posterImage: UIImage? = nil,
         backDropImage: UIImage? = nil,
         genreTitle: String? = nil

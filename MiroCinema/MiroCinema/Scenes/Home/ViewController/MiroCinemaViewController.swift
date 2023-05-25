@@ -24,18 +24,35 @@ final class MiroCinemaViewController: UIViewController {
 
     private var datasource: DataSource?
 
-    private var movies = [Movie]() {
+    private var movies = [
+        Movie(title: "-", posterImage: UIImage(named: "grayImage")),
+        Movie(title: "-", posterImage: UIImage(named: "grayImage")),
+        Movie(title: "-", posterImage: UIImage(named: "grayImage")),
+        Movie(title: "-", posterImage: UIImage(named: "grayImage")),
+        Movie(title: "-", posterImage: UIImage(named: "grayImage")),
+        Movie(title: "-", posterImage: UIImage(named: "grayImage")),
+        Movie(title: "-", posterImage: UIImage(named: "grayImage")),
+        Movie(title: "-", posterImage: UIImage(named: "grayImage")),
+        Movie(title: "-", posterImage: UIImage(named: "grayImage")),
+        Movie(title: "-", posterImage: UIImage(named: "grayImage"))
+    ] {
         didSet {
             applySnapShot()
         }
     }
 
-    private var genres = [Movie]() {
+    private var genres = [
+        Movie(backDropImage: UIImage(named: "grayImage"), genreTitle: "-"),
+        Movie(backDropImage: UIImage(named: "grayImage"), genreTitle: "-"),
+        Movie(backDropImage: UIImage(named: "grayImage"), genreTitle: "-"),
+        Movie(backDropImage: UIImage(named: "grayImage"), genreTitle: "-"),
+        Movie(backDropImage: UIImage(named: "grayImage"), genreTitle: "-"),
+        Movie(backDropImage: UIImage(named: "grayImage"), genreTitle: "-"),
+    ] {
         didSet {
             applySnapShot()
         }
     }
-
     private var allGenres = [Movie]()
     private let movieNetworkManager = NetworkAPIManager()
     private let movieNetworkDispatcher = NetworkDispatcher()
@@ -103,9 +120,10 @@ final class MiroCinemaViewController: UIViewController {
                 )
                 guard let movieRank = decodedData as? MoviesDTO else { return }
                 // 영화 개봉순으로 정렬하기 알고리즘 추가하기
-                let movieList = movieRank.movies
+                let movieList = movieRank.movies.prefix(10)
+                print(movieList.count)
 
-                for movieDTO in movieList {
+                for (index, movieDTO) in movieList.enumerated() {
                     let title = movieDTO.koreanTitle
                     let id = movieDTO.ID
                     // 옵셔널 에러 처리해야될듯 -> 만약 posterPath가 없다면??
@@ -116,7 +134,8 @@ final class MiroCinemaViewController: UIViewController {
                     switch imageResult {
                     case .success(let data):
                         guard let posterImage = UIImage(data: data) else { return }
-                        movies.append(Movie(id: id, title: title, posterImage: posterImage))
+                        let movie = Movie(id: id, title: title, posterImage: posterImage)
+                        movies[index] = movie
                     case .failure(let error):
                         print(error)
                     }
@@ -138,7 +157,6 @@ final class MiroCinemaViewController: UIViewController {
         let genreEndPoint10 = MovieGenreAPIEndPoint(genre: .scienceFiction)
         let genreEndPoint11 = MovieGenreAPIEndPoint(genre: .scienceFiction)
         let genreEndPoint12 = MovieGenreAPIEndPoint(genre: .scienceFiction)
-
 
         let genreList = [genreEndPoint, genreEndPoint2, genreEndPoint3, genreEndPoint4, genreEndPoint5, genreEndPoint6, genreEndPoint7, genreEndPoint8, genreEndPoint9, genreEndPoint10, genreEndPoint11, genreEndPoint12]
 
@@ -162,7 +180,7 @@ final class MiroCinemaViewController: UIViewController {
                         guard let posterImage = UIImage(data: data) else { return }
                         let movie = Movie(id: actionId, title: actionTitle, backDropImage: posterImage, genreTitle: genreEndPoint.genre.description)
                         if (0...5).contains(index) {
-                            genres.append(movie)
+                            genres[index] = movie
                         }
                         allGenres.append(movie)
                     case .failure(let error):
