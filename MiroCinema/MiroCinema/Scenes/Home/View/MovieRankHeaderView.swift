@@ -17,28 +17,25 @@ class MovieRankHeaderView: UICollectionReusableView {
         return view
     }()
 
-    private lazy var sortedByOpenDateButton: UIButton = {
-        let button = UIButton()
+    private lazy var sortedByOpenDateButton: RankSortButton = {
+        let button = RankSortButton()
         button.setTitle("영화 개봉순", for: .normal)
         button.addTarget(self, action: #selector(sortedByOpenDateButtonDidTapped), for: .touchUpInside)
-        button.layer.cornerRadius = 20
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 15, weight: .bold)
+        button.sort = .openDate
         button.layer.borderWidth = 1
         button.backgroundColor = .black
         button.layer.borderColor = UIColor.gray.cgColor
-        button.tag = SortedByButton.openDate.rawValue
 
         return button
     }()
 
-    private lazy var sortedByReservationRateButton: UIButton = {
-        let button = UIButton()
+    private lazy var sortedByReservationRateButton: RankSortButton = {
+        let button = RankSortButton()
         button.addTarget(self, action: #selector(sortedByReservationRateButtonDidTapped), for: .touchUpInside)
+        button.sort = .reservationRate
         button.setTitle("예매율순", for: .normal)
-        button.layer.cornerRadius = 20
         button.titleLabel?.font = UIFont.systemFont(ofSize: 15, weight: .bold)
         button.backgroundColor = UIColor(red: 0.902, green: 0.286, blue: 0.502, alpha: 1)
-        button.tag = SortedByButton.reservationRate.rawValue
 
         return button
     }()
@@ -86,8 +83,9 @@ class MovieRankHeaderView: UICollectionReusableView {
         }
     }
 
-    func changeButtonColor(clickedButton button: UIButton) {
-        switch SortedByButton(rawValue: button.tag) {
+    func changeButtonColor(clickedButton button: RankSortButton) {
+        guard let sort = button.sort else { return }
+        switch sort {
         case .reservationRate:
             sortedByReservationRateButton.backgroundColor = UIColor(red: 0.902, green: 0.286, blue: 0.502, alpha: 1)
             sortedByReservationRateButton.layer.borderWidth = 0
@@ -100,16 +98,14 @@ class MovieRankHeaderView: UICollectionReusableView {
             sortedByReservationRateButton.layer.borderWidth = 1
             sortedByReservationRateButton.backgroundColor = .black
             sortedByReservationRateButton.layer.borderColor = UIColor.gray.cgColor
-        case .none:
-            fatalError()
         }
     }
 
-    @objc private func sortedByOpenDateButtonDidTapped(_ sender: UIButton) {
+    @objc private func sortedByOpenDateButtonDidTapped(_ sender: RankSortButton) {
         delegate?.movieRankHeaderView(self, didButtonTapped: sender)
     }
 
-    @objc private func sortedByReservationRateButtonDidTapped(_ sender: UIButton) {
+    @objc private func sortedByReservationRateButtonDidTapped(_ sender: RankSortButton) {
         delegate?.movieRankHeaderView(self, didButtonTapped: sender)
     }
 

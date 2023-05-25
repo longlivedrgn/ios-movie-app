@@ -11,7 +11,7 @@ protocol MovieRankHeaderViewDelegate: AnyObject {
 
     func movieRankHeaderView(
         _ movieRankHeaderView: MovieRankHeaderView,
-        didButtonTapped sender: UIButton
+        didButtonTapped sender: RankSortButton
     )
 
 }

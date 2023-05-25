@@ -23,7 +23,7 @@ final class MiroCinemaViewController: UIViewController {
     private typealias SnapShot = NSDiffableDataSourceSnapshot<Section, Movie>
 
     private var datasource: DataSource?
-
+    // 💥 Mock으로 빼두기~
     private var movies = [
         Movie(title: "-", posterImage: UIImage(named: "grayImage")),
         Movie(title: "-", posterImage: UIImage(named: "grayImage")),
@@ -501,17 +501,16 @@ extension MiroCinemaViewController: MovieRankHeaderViewDelegate {
 
     func movieRankHeaderView(
         _ movieRankHeaderView: MovieRankHeaderView,
-        didButtonTapped sender: UIButton
+        didButtonTapped sender: RankSortButton
     ) {
-        switch SortedByButton(rawValue: sender.tag) {
+        guard let sort = sender.sort else { return }
+        switch sort {
         case .reservationRate:
             movieRankHeaderView.changeButtonColor(clickedButton: sender)
             applySnapShot()
         case .openDate:
             movieRankHeaderView.changeButtonColor(clickedButton: sender)
             applySnapShot2()
-        case .none:
-            fatalError()
         }
     }
 

@@ -7,9 +7,9 @@
 
 import Foundation
 
-enum SortedByButton: Int {
+enum ButtonSort {
 
-    case openDate = 0
-    case reservationRate = 1
+    case openDate
+    case reservationRate
 
 }
