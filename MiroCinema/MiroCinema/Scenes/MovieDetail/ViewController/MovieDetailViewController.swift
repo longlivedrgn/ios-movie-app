@@ -44,7 +44,10 @@ class MovieDetailViewController: UIViewController {
     private var movieDetail: MovieDetailsDTO?
     private let movieNetworkAPIManager: NetworkAPIManager
     private let movieNetworkDispatcher = NetworkDispatcher()
-    private var movieCredits = [MovieCredit]()
+    private var movieCredits = [MovieCredit](
+        repeating: MovieCredit(name: "-", department: "-", profileImage: UIImage(named: "grayImage")),
+        count: 16
+    )
 
     init(movie: Movie, networkAPIManager: NetworkAPIManager) {
         self.movie = movie
@@ -264,7 +267,7 @@ extension MovieDetailViewController {
                 let group = credits.cast.sorted { first, second in
                     return first.popularity > second.popularity
                 }
-                for actorInformation in group.prefix(16) {
+                for (index, actorInformation) in group.prefix(16).enumerated() {
                     guard let imageProfilePath = actorInformation.profilePath else { continue }
                     let imageProfilePathEndPoint = MovieImageAPIEndPoint(imageURL: imageProfilePath)
                     let actorName = actorInformation.name
@@ -273,6 +276,9 @@ extension MovieDetailViewController {
                     switch actorImageResult {
                     case .success(let data):
                         guard let profileImage = UIImage(data: data) else { return }
+                        movieCredits[index].name = actorName
+                        movieCredits[index].department = actorDepartment
+                        movieCredits[index].profileImage = profileImage
                         movieCredits.append(MovieCredit(name: actorName, department: actorDepartment, profileImage: profileImage))
                     case .failure(let error):
                         print(error)

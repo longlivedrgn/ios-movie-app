@@ -9,9 +9,9 @@ import UIKit
 
 struct MovieCredit {
 
-    let name: String
-    let department: String?
-    let profileImage: UIImage?
+    var name: String
+    var department: String?
+    var profileImage: UIImage?
 
     init(name: String, department: String?, profileImage: UIImage?) {
         self.name = name
