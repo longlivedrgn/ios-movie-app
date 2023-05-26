@@ -9,11 +9,6 @@ import UIKit
 
 class MovieDetailViewController: UIViewController {
 
-    private enum Section: CaseIterable {
-        case detail
-        case credit
-    }
-
     static let movieDetailSectionHeaderKind = "movieDetailSectionHeaderKind"
 
     private lazy var movieDetailCollectionView: UICollectionView = {
@@ -52,13 +47,16 @@ class MovieDetailViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupUI()
-        layoutUI()
+        configureViews()
         configureNotificationCenter()
     }
 
-    private func setupUI() {
+    private func configureViews() {
         view.addSubview(movieDetailCollectionView)
+
+        movieDetailCollectionView.snp.makeConstraints {
+            $0.edges.equalToSuperview()
+        }
         configureNavigationBar()
     }
 
@@ -82,12 +80,6 @@ class MovieDetailViewController: UIViewController {
         navigationController?.navigationBar.tintColor = .white
         navigationAppearance.configureWithTransparentBackground()
         navigationController?.navigationBar.standardAppearance = navigationAppearance
-    }
-
-    private func layoutUI() {
-        movieDetailCollectionView.snp.makeConstraints {
-            $0.edges.equalToSuperview()
-        }
     }
 
     private func createlayout() -> UICollectionViewCompositionalLayout {
