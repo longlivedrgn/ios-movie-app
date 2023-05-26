@@ -184,13 +184,33 @@ class MovieDetailFirstSectionView: UIView {
         self.moviePosterImageView.image = image
         self.titleLabel.text = movie.koreanTitle
         self.englishTitleLabel.text = movie.originalTitle
-        self.informationLabel.text = movie.releaseDate
+        self.informationLabel.text  = generateInformationText(
+            releaseDate: movie.releaseDate,
+            countries: movie.productionCountries,
+            kinds: movie.genres,
+            runTime: movie.runTime
+        )
         self.tagLineLabel.text = movie.tagLine
         self.overViewLabel.text = movie.overview
     }
 
     @objc private func moreButtonDidTapped(_ sender: UIButton) {
         delegate?.movieDetailFirstSectionView(self, didButtonTapped: sender)
+    }
+
+    private func generateInformationText(
+        releaseDate: String,
+        countries: [ProductionCountry],
+        kinds: [MovieKind],
+        runTime: Int
+    ) -> String {
+        let verticalBar = "   ⃓  "
+        let releaseDateString = releaseDate.replacingOccurrences(of: "-", with: ".")
+        let countryNameString = countries.first?.name ?? ""
+        let genreNameString = kinds.first?.name ?? ""
+        let runTimeString = String(runTime)+"분"
+
+        return releaseDateString + verticalBar + countryNameString + verticalBar + genreNameString + verticalBar + runTimeString
     }
 
 }
