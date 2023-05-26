@@ -59,7 +59,7 @@ class MovieDetailCreditCell: UICollectionViewCell {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        configure()
+        configureViews()
     }
 
     required init?(coder: NSCoder) {
@@ -72,7 +72,7 @@ class MovieDetailCreditCell: UICollectionViewCell {
         roleLabel.text = credit.characterName
     }
 
-    private func configure() {
+    private func configureViews() {
         addSubview(creditHorizontalStackView)
 
         creditHorizontalStackView.snp.makeConstraints {

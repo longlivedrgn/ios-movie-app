@@ -56,19 +56,20 @@ class MovieRankHeaderView: UICollectionReusableView {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        addSubViews()
-        configureLayout()
+        configureViews()
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    private func addSubViews() {
+    private func configureViews() {
         addSubview(containerView)
         containerView.addSubview(movieRankHorizontalStackView)
         movieRankHorizontalStackView.addSubview(sortedByOpenDateButton)
         movieRankHorizontalStackView.addSubview(sortedByReservationRateButton)
+
+        configureLayout()
     }
 
     private func configureLayout() {

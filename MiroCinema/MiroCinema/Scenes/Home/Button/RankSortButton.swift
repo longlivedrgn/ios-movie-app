@@ -13,14 +13,14 @@ class RankSortButton: UIButton {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        setUI()
+        configureAttributes()
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    private func setUI() {
+    private func configureAttributes() {
         layer.cornerRadius = 20
         titleLabel?.font = UIFont.systemFont(ofSize: 15, weight: .bold)
     }

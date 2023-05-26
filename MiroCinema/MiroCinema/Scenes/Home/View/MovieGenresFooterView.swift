@@ -22,19 +22,16 @@ class MovieGenresFooterView: UICollectionReusableView {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        setupUI()
-        layoutUI()
+        configureViews()
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    private func setupUI() {
+    private func configureViews() {
         addSubview(viewMoreButton)
-    }
 
-    private func layoutUI() {
         viewMoreButton.snp.makeConstraints {
             $0.top.leading.bottom.equalToSuperview()
             $0.trailing.equalToSuperview().inset(20)

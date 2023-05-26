@@ -39,7 +39,7 @@ class MovieRankCollectionViewCell: UICollectionViewCell {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        configure()
+        configureViews()
     }
 
     required init?(coder: NSCoder) {
@@ -51,7 +51,7 @@ class MovieRankCollectionViewCell: UICollectionViewCell {
         movieImageView.image = movie.posterImage
     }
 
-    private func configure() {
+    private func configureViews() {
         addSubview(containerView)
         containerView.addSubview(movieImageView)
         containerView.addSubview(movieNameLabel)

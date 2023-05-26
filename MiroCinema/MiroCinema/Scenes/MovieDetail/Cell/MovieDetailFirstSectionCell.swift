@@ -16,7 +16,7 @@ class MovieDetailFirstSectionCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         addSubview(firstSectionView)
-        layoutUI()
+        configureView()
     }
 
     required init?(coder: NSCoder) {
@@ -27,7 +27,7 @@ class MovieDetailFirstSectionCell: UICollectionViewCell {
         firstSectionView.configure(with: movieDetail, image: image)
     }
 
-    private func layoutUI() {
+    private func configureView() {
         firstSectionView.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }

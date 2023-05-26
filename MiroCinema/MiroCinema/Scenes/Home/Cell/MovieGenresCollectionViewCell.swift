@@ -38,7 +38,7 @@ class MovieGenresCollectionViewCell: UICollectionViewCell {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        configure()
+        configureViews()
     }
 
     required init?(coder: NSCoder) {
@@ -50,7 +50,7 @@ class MovieGenresCollectionViewCell: UICollectionViewCell {
         genreImageView.image = movie.backDropImage
     }
 
-    private func configure() {
+    private func configureViews() {
         addSubview(containerView)
         containerView.addSubview(genreNameLabel)
         containerView.addSubview(genreImageView)

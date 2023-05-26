@@ -307,7 +307,9 @@ final class MovieHomeViewController: UIViewController {
     }
 
     @objc private func didFetchData(_ notification: Notification) {
-        applySnapShot()
+        DispatchQueue.main.async {
+            self.applySnapShot()
+        }
     }
 
     private func configureNavigationBar() {

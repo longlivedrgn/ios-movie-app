@@ -122,7 +122,7 @@ class MovieDetailFirstSectionView: UIView {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        setUI()
+        configureViews()
     }
 
     // 요거 다시 공부하기
@@ -135,14 +135,14 @@ class MovieDetailFirstSectionView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
 
-    private func setUI() {
+    private func configureViews() {
         addSubview(moviePosterImageView)
         addSubview(certificationLabel)
         addSubview(movieTitleVerticalStackView)
         addSubview(informationLabel)
         addSubview(movieOverviewVerticalStackView)
-        moviePosterImageView.layer.addSublayer(gradientLayer)
 
+        moviePosterImageView.layer.addSublayer(gradientLayer)
         moviePosterImageView.snp.makeConstraints {
             $0.top.leading.trailing.equalToSuperview()
             $0.height.equalTo(600)
