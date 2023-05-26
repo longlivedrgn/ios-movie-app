@@ -45,7 +45,7 @@ class MovieGenresCollectionViewCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func configure(with movie: Movie) {
+    func configure(with movie: MovieGenre) {
         genreNameLabel.text = movie.genreTitle
         genreImageView.image = movie.backDropImage
     }

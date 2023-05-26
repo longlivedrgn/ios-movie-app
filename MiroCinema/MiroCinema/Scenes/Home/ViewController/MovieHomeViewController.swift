@@ -1,5 +1,5 @@
 //
-//  MiroCinemaViewController.swift
+//  MovieHomeViewController.swift
 //  MiroCinema
 //
 //  Created by 김용재 on 2023/05/17.
@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-final class MiroCinemaViewController: UIViewController {
+final class MovieHomeViewController: UIViewController {
 
     static let movieRankSectionHeaderKind = "movieRankSectionHeaderKind"
     static let movieGenresSectionHeaderKind = "movieGenresSectionHeaderKind"
@@ -17,43 +17,21 @@ final class MiroCinemaViewController: UIViewController {
     private enum Section: CaseIterable {
         case rank
         case genre
+
+        static var allSections: [Section] {
+            return [.rank, .genre]
+        }
     }
 
-    private typealias DataSource = UICollectionViewDiffableDataSource<Section, Movie>
-    private typealias SnapShot = NSDiffableDataSourceSnapshot<Section, Movie>
+    private typealias DataSource = UICollectionViewDiffableDataSource<Section, Item>
+    private typealias SnapShot = NSDiffableDataSourceSnapshot<Section, Item>
+
+    var isRankSortedByOpenDate = false
+    var isMoreButtonTapped = false
 
     private var datasource: DataSource?
-    // 💥 Mock으로 빼두기~
-    private var movies = [
-        Movie(title: "-", posterImage: UIImage(named: "grayImage")),
-        Movie(title: "-", posterImage: UIImage(named: "grayImage")),
-        Movie(title: "-", posterImage: UIImage(named: "grayImage")),
-        Movie(title: "-", posterImage: UIImage(named: "grayImage")),
-        Movie(title: "-", posterImage: UIImage(named: "grayImage")),
-        Movie(title: "-", posterImage: UIImage(named: "grayImage")),
-        Movie(title: "-", posterImage: UIImage(named: "grayImage")),
-        Movie(title: "-", posterImage: UIImage(named: "grayImage")),
-        Movie(title: "-", posterImage: UIImage(named: "grayImage")),
-        Movie(title: "-", posterImage: UIImage(named: "grayImage"))
-    ] {
-        didSet {
-            applySnapShot()
-        }
-    }
-
-    private var genres = [
-        Movie(backDropImage: UIImage(named: "grayImage"), genreTitle: "-"),
-        Movie(backDropImage: UIImage(named: "grayImage"), genreTitle: "-"),
-        Movie(backDropImage: UIImage(named: "grayImage"), genreTitle: "-"),
-        Movie(backDropImage: UIImage(named: "grayImage"), genreTitle: "-"),
-        Movie(backDropImage: UIImage(named: "grayImage"), genreTitle: "-"),
-        Movie(backDropImage: UIImage(named: "grayImage"), genreTitle: "-"),
-    ] {
-        didSet {
-            applySnapShot()
-        }
-    }
-    private var allGenres = [Movie]()
+    private var movies = Movie.skeletonModels
+    private var genres = MovieGenre.skeletonModels
     private let movieNetworkManager = NetworkAPIManager()
     private let movieNetworkDispatcher = NetworkDispatcher()
 
@@ -77,7 +55,7 @@ final class MiroCinemaViewController: UIViewController {
         )
         collectionView.register(
             MovieRankHeaderView.self,
-            forSupplementaryViewOfKind: MiroCinemaViewController.movieRankSectionHeaderKind,
+            forSupplementaryViewOfKind: MovieHomeViewController.movieRankSectionHeaderKind,
             withReuseIdentifier: MovieRankHeaderView.identifier
         )
         collectionView.register(
@@ -86,13 +64,13 @@ final class MiroCinemaViewController: UIViewController {
         )
         collectionView.register(
             MovieGenresHeaderView.self,
-            forSupplementaryViewOfKind: MiroCinemaViewController.movieGenresSectionHeaderKind,
+            forSupplementaryViewOfKind: MovieHomeViewController.movieGenresSectionHeaderKind,
             withReuseIdentifier: MovieGenresHeaderView.identifier
         )
 
         collectionView.register(
             MovieGenresFooterView.self,
-            forSupplementaryViewOfKind: MiroCinemaViewController.movieGenresSectionFooterKind,
+            forSupplementaryViewOfKind: MovieHomeViewController.movieGenresSectionFooterKind,
             withReuseIdentifier: MovieGenresFooterView.identifer
         )
 
@@ -103,14 +81,15 @@ final class MiroCinemaViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .black
         view.addSubview(collectionView)
-        fetchData()
+        fetchRankData()
+        fetchGenresData()
         configureNavigationBar()
         configureCollectionViewLayout()
         configureCollectionViewDataSource()
         applySnapShot()
     }
 
-    private func fetchData() {
+    private func fetchRankData() {
         let movieRankEndPoint = MovieRankAPIEndPoint()
         Task {
             do {
@@ -119,14 +98,12 @@ final class MiroCinemaViewController: UIViewController {
                     endPoint: movieRankEndPoint
                 )
                 guard let movieRank = decodedData as? MoviesDTO else { return }
-                // 영화 개봉순으로 정렬하기 알고리즘 추가하기
                 let movieList = movieRank.movies.prefix(10)
 
                 for (index, movieDTO) in movieList.enumerated() {
                     let title = movieDTO.koreanTitle
                     let id = movieDTO.ID
                     let releaseDate = movieDTO.releaseDate.convertToDate()
-                    // 옵셔널 에러 처리해야될듯 -> 만약 posterPath가 없다면??
                     guard let posterPath = movieDTO.posterPath else { return }
                     let imageEndPoint = MovieImageAPIEndPoint(imageURL: posterPath)
                     let imageResult = try await movieNetworkDispatcher.performRequest(imageEndPoint.urlRequest)
@@ -140,101 +117,87 @@ final class MiroCinemaViewController: UIViewController {
                         print(error)
                     }
                 }
+                applySnapShot()
             } catch {
                 print(error)
             }
         }
+    }
 
-        let genreEndPoint = MovieGenreAPIEndPoint(genre: .action)
-        let genreEndPoint2 = MovieGenreAPIEndPoint(genre: .documentary)
-        let genreEndPoint3 = MovieGenreAPIEndPoint(genre: .animation)
-        let genreEndPoint4 = MovieGenreAPIEndPoint(genre: .comedy)
-        let genreEndPoint5 = MovieGenreAPIEndPoint(genre: .history)
-        let genreEndPoint6 = MovieGenreAPIEndPoint(genre: .romance)
-        let genreEndPoint7 = MovieGenreAPIEndPoint(genre: .fantasy)
-        let genreEndPoint8 = MovieGenreAPIEndPoint(genre: .drama)
-        let genreEndPoint9 = MovieGenreAPIEndPoint(genre: .scienceFiction)
-        let genreEndPoint10 = MovieGenreAPIEndPoint(genre: .scienceFiction)
-        let genreEndPoint11 = MovieGenreAPIEndPoint(genre: .scienceFiction)
-        let genreEndPoint12 = MovieGenreAPIEndPoint(genre: .scienceFiction)
+    private func fetchGenresData() {
 
-        let genreList = [genreEndPoint, genreEndPoint2, genreEndPoint3, genreEndPoint4, genreEndPoint5, genreEndPoint6, genreEndPoint7, genreEndPoint8, genreEndPoint9, genreEndPoint10, genreEndPoint11, genreEndPoint12]
-
+        let allGenresEndPoints = MovieGenreAPIEndPoint.allEndPoints
         Task {
             do {
-                for (index, genreEndPoint) in genreList.enumerated() {
-                    let actionDecodedData = try await movieNetworkManager.fetchData(
+                for (index, genreEndPoint) in allGenresEndPoints.enumerated() {
+                    let decodedData = try await movieNetworkManager.fetchData(
                         to: MoviesDTO.self,
                         endPoint: genreEndPoint
                     )
-                    guard let action = actionDecodedData as? MoviesDTO else { return }
-                    guard let actionMoviesFirst = action.movies.first else { return }
-                    guard let backDropImagePath = actionMoviesFirst.backDropImagePath else { return }
-                    let actionImageEndPoint = MovieImageAPIEndPoint(imageURL: backDropImagePath)
-                    let actionId = actionMoviesFirst.ID
-                    let actionTitle = actionMoviesFirst.koreanTitle
-                    let actionimageResult = try await movieNetworkDispatcher.performRequest(actionImageEndPoint.urlRequest)
+                    guard let movieItems = decodedData as? MoviesDTO else { return }
+                    guard let bestMovie = movieItems.movies.first else { return }
+                    guard let backDropImagePath = bestMovie.backDropImagePath else { return }
+                    let endPoint = MovieImageAPIEndPoint(imageURL: backDropImagePath)
+                    let imageResult = try await movieNetworkDispatcher.performRequest(endPoint.urlRequest)
 
-                    switch actionimageResult {
+                    switch imageResult {
                     case .success(let data):
-                        guard let posterImage = UIImage(data: data) else { return }
-                        let movie = Movie(id: actionId, title: actionTitle, backDropImage: posterImage, genreTitle: genreEndPoint.genre.description)
-                        if (0...5).contains(index) {
-                            genres[index] = movie
+                        guard let backDropImage = UIImage(data: data) else { return }
+                        let genre = MovieGenre(backDropImage: backDropImage, genreTitle: genreEndPoint.genre.description)
+                        print(genre)
+                        if (0...5).contains(index){
+                            genres[index] = genre
+                        } else {
+                            genres.append(genre)
                         }
-                        allGenres.append(movie)
                     case .failure(let error):
                         print(error)
                     }
                 }
+                applySnapShot()
             } catch {
                 print(error)
             }
-            applySnapShot()
         }
-
     }
 
     private func applySnapShot() {
         var snapShot = SnapShot()
-        snapShot.appendSections([.rank])
-        snapShot.appendItems(movies)
+        snapShot.appendSections(Section.allSections)
 
-        snapShot.appendSections([.genre])
-        snapShot.appendItems(genres)
+        var rankMovies = movies
+        if isRankSortedByOpenDate {
+            rankMovies = rankMovies.sorted { $0.releaseDate ?? Date() > $1.releaseDate ?? Date() }
+        }
+        let movieItems = rankMovies.map { Item.rank($0) }
+        snapShot.appendItems(movieItems, toSection: .rank)
 
-        datasource?.apply(snapShot)
-    }
+        var allGenres = genres
+        if !isMoreButtonTapped {
+            allGenres = Array(allGenres.prefix(6))
+        }
+        let genreItems = allGenres.map { Item.gerne($0) }
+        snapShot.appendItems(genreItems, toSection: .genre)
 
-    private func applyAllSnapShot() {
-        var snapShot = SnapShot()
-        snapShot.appendSections([.rank])
-        snapShot.appendItems(movies)
-
-        snapShot.appendSections([.genre])
-        snapShot.appendItems(allGenres)
-        
         datasource?.apply(snapShot)
     }
 
     private func configureCollectionViewDataSource() {
         datasource = UICollectionViewDiffableDataSource(collectionView: collectionView)
-        { collectionView, indexPath, movie in
+        { collectionView, indexPath, item in
 
-            let sectionType = Section.allCases[indexPath.section]
-
-            switch sectionType {
-            case .rank:
+            switch item {
+            case .rank(let movie):
                 let cell = collectionView.dequeueReusableCell(
                     withReuseIdentifier: MovieRankCollectionViewCell.identifier,
                     for: indexPath) as? MovieRankCollectionViewCell
                 cell?.configure(with: movie)
                 return cell
-            case .genre:
+            case .gerne(let genre):
                 let cell = collectionView.dequeueReusableCell(
                     withReuseIdentifier: MovieGenresCollectionViewCell.identifier,
                     for: indexPath) as? MovieGenresCollectionViewCell
-                cell?.configure(with: movie)
+                cell?.configure(with: genre)
                 return cell
             }
         }
@@ -256,17 +219,18 @@ final class MiroCinemaViewController: UIViewController {
             case .genre:
                 // 💥 코드 로직 수정하기!! switch 문 안에 switch문이라니!!
                 switch kind {
-                case MiroCinemaViewController.movieGenresSectionHeaderKind:
+                case MovieHomeViewController.movieGenresSectionHeaderKind:
                     guard let supplementaryView = collectionView.dequeueReusableSupplementaryView(
                         ofKind: kind,
                         withReuseIdentifier: MovieGenresHeaderView.identifier,
                         for: indexPath) as? MovieGenresHeaderView else { return UICollectionReusableView() }
                     return supplementaryView
-                case MiroCinemaViewController.movieGenresSectionFooterKind:
+                case MovieHomeViewController.movieGenresSectionFooterKind:
                     guard let supplementaryView = collectionView.dequeueReusableSupplementaryView(
                         ofKind: kind,
                         withReuseIdentifier: MovieGenresFooterView.identifer,
-                        for: indexPath) as? MovieGenresFooterView  else { return UICollectionReusableView() }
+                        for: indexPath) as? MovieGenresFooterView
+                    else { return UICollectionReusableView() }
                     supplementaryView.delegate = self
                     return supplementaryView
                 default:
@@ -274,8 +238,6 @@ final class MiroCinemaViewController: UIViewController {
                 }
             }
         }
-
-        applySnapShot()
     }
 
     private func configureCollectionViewLayout() {
@@ -333,7 +295,7 @@ final class MiroCinemaViewController: UIViewController {
 
         let movieRankHeader = NSCollectionLayoutBoundarySupplementaryItem(
             layoutSize: movieRankHeaderSize,
-            elementKind: MiroCinemaViewController.movieRankSectionHeaderKind,
+            elementKind: MovieHomeViewController.movieRankSectionHeaderKind,
             alignment: .top
         )
 
@@ -384,7 +346,7 @@ final class MiroCinemaViewController: UIViewController {
         )
         let movieGenresHeader = NSCollectionLayoutBoundarySupplementaryItem(
             layoutSize: movieGenresHeaderSize,
-            elementKind: MiroCinemaViewController.movieGenresSectionHeaderKind,
+            elementKind: MovieHomeViewController.movieGenresSectionHeaderKind,
             alignment: .top
         )
 
@@ -395,7 +357,7 @@ final class MiroCinemaViewController: UIViewController {
 
         let movieGenresFooter = NSCollectionLayoutBoundarySupplementaryItem(
             layoutSize: movieGenresFooterSize,
-            elementKind: MiroCinemaViewController.movieGenresSectionFooterKind,
+            elementKind: MovieHomeViewController.movieGenresSectionFooterKind,
             alignment: .bottom
         )
 
@@ -404,7 +366,6 @@ final class MiroCinemaViewController: UIViewController {
 
         return movieGenresSection
     }
-
     private func configureNavigationBar() {
         navigationController?.navigationBar.barTintColor = .black
         configureNavigationTitle()
@@ -446,72 +407,61 @@ final class MiroCinemaViewController: UIViewController {
 
 }
 
-extension MiroCinemaViewController: UICollectionViewDelegate {
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        guard let movie = datasource?.itemIdentifier(for: indexPath) else { return }
-        let movieDetailViewController = MovieDetailViewController(
-            movie: movie,
-            networkAPIManager: movieNetworkManager
-        )
-        collectionView.deselectItem(at: indexPath, animated: true)
-        // MARK: 💥 back button 수정하는 로직 수정하기!
-        let backButtonBackgroundImage = UIImage(systemName: "list.bullet")
-        let barAppearance =
-            UINavigationBar.appearance(whenContainedInInstancesOf: [MovieDetailViewController.self])
-        barAppearance.backIndicatorImage = backButtonBackgroundImage
-        barAppearance.backIndicatorTransitionMaskImage = backButtonBackgroundImage
-        let backBarButton = UIBarButtonItem(title: "", style: .done, target: nil, action: nil)
-        navigationItem.backBarButtonItem = backBarButton
-        navigationController?.pushViewController(movieDetailViewController, animated: true)
-    }
+extension MovieHomeViewController: UICollectionViewDelegate {
+        func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+            guard let movie = datasource?.itemIdentifier(for: indexPath) else { return }
+            // MARK: 💥 back button 수정하는 로직 수정하기!
+            let backButtonBackgroundImage = UIImage(systemName: "list.bullet")
+            let barAppearance =
+                UINavigationBar.appearance(whenContainedInInstancesOf: [MovieDetailViewController.self])
+            barAppearance.backIndicatorImage = backButtonBackgroundImage
+            barAppearance.backIndicatorTransitionMaskImage = backButtonBackgroundImage
+            let backBarButton = UIBarButtonItem(title: "", style: .done, target: nil, action: nil)
+            collectionView.deselectItem(at: indexPath, animated: true)
+
+            navigationItem.backBarButtonItem = backBarButton
+
+            switch movie {
+            case .rank(let movie):
+                let movieDetailViewController = MovieDetailViewController(
+                    movie: movie,
+                    networkAPIManager: movieNetworkManager
+                )
+                navigationController?.pushViewController(movieDetailViewController, animated: true)
+            case .gerne(let genre):
+                print(genre)
+                print("genre!")
+            }
+        }
 }
 
-extension MiroCinemaViewController: MovieGenresFooterViewDelegate {
+extension MovieHomeViewController: MovieGenresFooterViewDelegate {
 
     func movieGenresFooterView(_ movieGenresFooterView: MovieGenresFooterView, didButtonTapped sender: UIButton) {
         guard let button = sender as? ViewMoreButton else { return }
-
-        switch button.isTapped {
-        case true:
-            applySnapShot()
-        case false:
-            applyAllSnapShot()
-        }
         button.isTapped.toggle()
+        isMoreButtonTapped.toggle()
+        applySnapShot()
         button.setButtonTitle()
-    }
-
-    private func applySnapShot2() {
-        var snapShot = SnapShot()
-        snapShot.appendSections([.rank])
-        let sortedMovies = movies.sorted {
-            $0.releaseDate ?? Date() > $1.releaseDate ?? Date()
-        }
-        snapShot.appendItems(sortedMovies)
-
-        snapShot.appendSections([.genre])
-        snapShot.appendItems(genres)
-
-        datasource?.apply(snapShot)
     }
 
 }
 
-extension MiroCinemaViewController: MovieRankHeaderViewDelegate {
+extension MovieHomeViewController: MovieRankHeaderViewDelegate {
 
     func movieRankHeaderView(
         _ movieRankHeaderView: MovieRankHeaderView,
         didButtonTapped sender: RankSortButton
     ) {
         guard let sort = sender.sort else { return }
+        isRankSortedByOpenDate.toggle()
         switch sort {
         case .reservationRate:
             movieRankHeaderView.changeButtonColor(clickedButton: sender)
-            applySnapShot()
         case .openDate:
             movieRankHeaderView.changeButtonColor(clickedButton: sender)
-            applySnapShot2()
         }
+        applySnapShot()
     }
 
 }

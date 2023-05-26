@@ -38,3 +38,22 @@ struct MovieGenreAPIEndPoint: MovieAPIEndPoint {
     }
 
 }
+
+extension MovieGenreAPIEndPoint {
+
+    static let allEndPoints = [
+        MovieGenreAPIEndPoint(genre: .action),
+        MovieGenreAPIEndPoint(genre: .documentary),
+        MovieGenreAPIEndPoint(genre: .animation),
+        MovieGenreAPIEndPoint(genre: .comedy),
+        MovieGenreAPIEndPoint(genre: .history),
+        MovieGenreAPIEndPoint(genre: .romance),
+        MovieGenreAPIEndPoint(genre: .fantasy),
+        MovieGenreAPIEndPoint(genre: .drama),
+        MovieGenreAPIEndPoint(genre: .family),
+        MovieGenreAPIEndPoint(genre: .western),
+        MovieGenreAPIEndPoint(genre: .war),
+        MovieGenreAPIEndPoint(genre: .mystery)
+    ]
+
+}

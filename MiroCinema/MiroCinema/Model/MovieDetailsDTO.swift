@@ -11,7 +11,7 @@ struct MovieDetailsDTO: Decodable {
     let koreanTitle: String
     let releaseDate: String
     let productionCountries: [ProductionCountry]
-    let genres: [MovieGenre]
+    let genres: [MovieKind]
     let runTime: Int
     let tagLine: String
     let overview: String
@@ -35,7 +35,7 @@ struct ProductionCountry: Decodable {
 
 }
 
-struct MovieGenre: Decodable {
+struct MovieKind: Decodable {
 
     let name: String
 

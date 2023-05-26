@@ -11,7 +11,7 @@
 		808232DCC0B16E1751DFBD64 /* Pods_MiroCinema_MiroCinemaUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0B0B66B41DC6BBD2EC131A53 /* Pods_MiroCinema_MiroCinemaUITests.framework */; };
 		8704A4912A14DD68000AB7F5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8704A4902A14DD68000AB7F5 /* AppDelegate.swift */; };
 		8704A4932A14DD68000AB7F5 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8704A4922A14DD68000AB7F5 /* SceneDelegate.swift */; };
-		8704A4952A14DD68000AB7F5 /* MiroCinemaViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8704A4942A14DD68000AB7F5 /* MiroCinemaViewController.swift */; };
+		8704A4952A14DD68000AB7F5 /* MovieHomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8704A4942A14DD68000AB7F5 /* MovieHomeViewController.swift */; };
 		8704A49B2A14DD68000AB7F5 /* MiroCinema.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 8704A4992A14DD68000AB7F5 /* MiroCinema.xcdatamodeld */; };
 		8704A49D2A14DD69000AB7F5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8704A49C2A14DD69000AB7F5 /* Assets.xcassets */; };
 		8704A4A02A14DD69000AB7F5 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8704A49E2A14DD69000AB7F5 /* LaunchScreen.storyboard */; };
@@ -87,7 +87,7 @@
 		8704A48D2A14DD68000AB7F5 /* MiroCinema.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MiroCinema.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8704A4902A14DD68000AB7F5 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		8704A4922A14DD68000AB7F5 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		8704A4942A14DD68000AB7F5 /* MiroCinemaViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiroCinemaViewController.swift; sourceTree = "<group>"; };
+		8704A4942A14DD68000AB7F5 /* MovieHomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieHomeViewController.swift; sourceTree = "<group>"; };
 		8704A49A2A14DD68000AB7F5 /* MiroCinema.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = MiroCinema.xcdatamodel; sourceTree = "<group>"; };
 		8704A49C2A14DD69000AB7F5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		8704A49F2A14DD69000AB7F5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -274,7 +274,7 @@
 		8737A9BA2A1A3B5B0056C6A3 /* ViewController */ = {
 			isa = PBXGroup;
 			children = (
-				8704A4942A14DD68000AB7F5 /* MiroCinemaViewController.swift */,
+				8704A4942A14DD68000AB7F5 /* MovieHomeViewController.swift */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
@@ -679,7 +679,7 @@
 				87C408752A1DDDE700C3F3D3 /* MovieCredit.swift in Sources */,
 				8755EE6E2A1B3A9000FA775E /* MovieDetailCreditCell.swift in Sources */,
 				87E53F282A1EF82E00D78160 /* MovieGenresFooterViewDelegate.swift in Sources */,
-				8704A4952A14DD68000AB7F5 /* MiroCinemaViewController.swift in Sources */,
+				8704A4952A14DD68000AB7F5 /* MovieHomeViewController.swift in Sources */,
 				8737A9BF2A1A3BC90056C6A3 /* MoviesDTO.swift in Sources */,
 				87E53F2C2A1F3AA000D78160 /* SortedByButton.swift in Sources */,
 				87B9D8C72A1B09C900BB5609 /* Genre.swift in Sources */,
