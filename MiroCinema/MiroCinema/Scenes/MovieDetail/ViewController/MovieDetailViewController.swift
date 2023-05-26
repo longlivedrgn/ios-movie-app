@@ -44,10 +44,7 @@ class MovieDetailViewController: UIViewController {
     private var movieDetail: MovieDetailsDTO?
     private let movieNetworkAPIManager = NetworkAPIManager()
     private let movieNetworkDispatcher = NetworkDispatcher()
-    private var movieCredits = [MovieCredit](
-        repeating: MovieCredit(name: "-", department: "-", profileImage: UIImage(named: "grayImage")),
-        count: 16
-    )
+    private var movieCredits = MovieCredit.skeletonModels
 
     init(movie: Movie) {
         self.movie = movie
@@ -117,10 +114,6 @@ class MovieDetailViewController: UIViewController {
                     subitems: [item, item]
                 )
 
-                let section = NSCollectionLayoutSection(group: group)
-                section.orthogonalScrollingBehavior = .continuous
-                section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 0)
-                section.interGroupSpacing = 15
                 let headerSize = NSCollectionLayoutSize(
                     widthDimension: .fractionalWidth(1),
                     heightDimension: .absolute(60)
@@ -131,6 +124,11 @@ class MovieDetailViewController: UIViewController {
                     alignment: .top
                 )
 
+                let section = NSCollectionLayoutSection(group: group)
+                section.orthogonalScrollingBehavior = .continuous
+                section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 0)
+                section.interGroupSpacing = 15
+
                 section.boundarySupplementaryItems = [header]
 
                 return section
@@ -138,6 +136,7 @@ class MovieDetailViewController: UIViewController {
         }
         return layout
     }
+
 }
 
 extension MovieDetailViewController: UICollectionViewDataSource {
@@ -187,6 +186,7 @@ extension MovieDetailViewController: UICollectionViewDataSource {
 }
 
 extension MovieDetailViewController: UICollectionViewDelegate {
+
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return Section.allCases.count
     }
@@ -196,17 +196,12 @@ extension MovieDetailViewController: UICollectionViewDelegate {
         viewForSupplementaryElementOfKind kind: String,
         at indexPath: IndexPath
     ) -> UICollectionReusableView {
-        switch kind {
-        case MovieDetailViewController.movieDetailSectionHeaderKind:
-            let header = collectionView.dequeueReusableSupplementaryView(
-                ofKind: kind,
-                withReuseIdentifier: MovieDetailHeaderView.identifier,
-                for: indexPath
-            )
-            return header
-        default:
-            return UICollectionReusableView()
-        }
+        let header = collectionView.dequeueReusableSupplementaryView(
+            ofKind: kind,
+            withReuseIdentifier: MovieDetailHeaderView.identifier,
+            for: indexPath
+        )
+        return header
     }
 }
 

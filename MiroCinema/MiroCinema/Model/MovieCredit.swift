@@ -19,4 +19,9 @@ struct MovieCredit {
         self.profileImage = profileImage
     }
 
+    static var skeletonModels = [MovieCredit](
+        repeating: MovieCredit(name: "-", department: "-", profileImage: UIImage(named: "grayImage")),
+        count: 16
+    )
+
 }

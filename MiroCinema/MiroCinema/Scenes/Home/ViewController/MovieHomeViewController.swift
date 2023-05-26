@@ -14,12 +14,12 @@ final class MovieHomeViewController: UIViewController {
     static let movieGenresSectionHeaderKind = "movieGenresSectionHeaderKind"
     static let movieGenresSectionFooterKind = "movieGenresSectionFooterKind"
 
-    enum Item: Hashable {
+    private enum Item: Hashable {
         case rank(Movie)
         case gerne(MovieGenre)
     }
 
-    enum Section: CaseIterable {
+    private enum Section: CaseIterable {
         case rank
         case genre
 
@@ -40,7 +40,7 @@ final class MovieHomeViewController: UIViewController {
 
     private let navigationTitle: UILabel = {
         let titleLabel = UILabel()
-        titleLabel.text = "미로 시네마"
+        titleLabel.text = "미로 시네마🍿"
         titleLabel.font = UIFont.systemFont(ofSize: 25, weight: .bold)
         titleLabel.textColor = .systemBackground
 
