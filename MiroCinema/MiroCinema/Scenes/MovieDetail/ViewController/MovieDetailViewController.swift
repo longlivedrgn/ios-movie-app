@@ -42,16 +42,15 @@ class MovieDetailViewController: UIViewController {
     private let movie: Movie
     // 💥 요것도 Model로 만들어서 넣어주면 좋을듯!
     private var movieDetail: MovieDetailsDTO?
-    private let movieNetworkAPIManager: NetworkAPIManager
+    private let movieNetworkAPIManager = NetworkAPIManager()
     private let movieNetworkDispatcher = NetworkDispatcher()
     private var movieCredits = [MovieCredit](
         repeating: MovieCredit(name: "-", department: "-", profileImage: UIImage(named: "grayImage")),
         count: 16
     )
 
-    init(movie: Movie, networkAPIManager: NetworkAPIManager) {
+    init(movie: Movie) {
         self.movie = movie
-        self.movieNetworkAPIManager = networkAPIManager
         super.init(nibName: nil, bundle: nil)
     }
 

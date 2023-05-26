@@ -7,13 +7,6 @@
 
 import UIKit
 
-enum Item: Hashable {
-
-    case rank(Movie)
-    case gerne(MovieGenre)
-
-}
-
 struct Movie: Hashable {
 
     var ID: Int?

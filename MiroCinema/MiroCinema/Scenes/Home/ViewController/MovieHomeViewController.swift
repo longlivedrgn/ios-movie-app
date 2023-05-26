@@ -14,7 +14,12 @@ final class MovieHomeViewController: UIViewController {
     static let movieGenresSectionHeaderKind = "movieGenresSectionHeaderKind"
     static let movieGenresSectionFooterKind = "movieGenresSectionFooterKind"
 
-    private enum Section: CaseIterable {
+    enum Item: Hashable {
+        case rank(Movie)
+        case gerne(MovieGenre)
+    }
+
+    enum Section: CaseIterable {
         case rank
         case genre
 
@@ -26,14 +31,12 @@ final class MovieHomeViewController: UIViewController {
     private typealias DataSource = UICollectionViewDiffableDataSource<Section, Item>
     private typealias SnapShot = NSDiffableDataSourceSnapshot<Section, Item>
 
+    private var datasource: DataSource?
+    private let movieHomeController = MovieHomeController()
+
     var isRankSortedByOpenDate = false
     var isMoreButtonTapped = false
 
-    private var datasource: DataSource?
-    private var movies = Movie.skeletonModels
-    private var genres = MovieGenre.skeletonModels
-    private let movieNetworkManager = NetworkAPIManager()
-    private let movieNetworkDispatcher = NetworkDispatcher()
 
     private let navigationTitle: UILabel = {
         let titleLabel = UILabel()
@@ -81,98 +84,25 @@ final class MovieHomeViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .black
         view.addSubview(collectionView)
-        fetchRankData()
-        fetchGenresData()
+        configureNotificationCenter()
         configureNavigationBar()
         configureCollectionViewLayout()
         configureCollectionViewDataSource()
         applySnapShot()
     }
 
-    private func fetchRankData() {
-        let movieRankEndPoint = MovieRankAPIEndPoint()
-        Task {
-            do {
-                let decodedData = try await movieNetworkManager.fetchData(
-                    to: MoviesDTO.self,
-                    endPoint: movieRankEndPoint
-                )
-                guard let movieRank = decodedData as? MoviesDTO else { return }
-                let movieList = movieRank.movies.prefix(10)
-
-                for (index, movieDTO) in movieList.enumerated() {
-                    let title = movieDTO.koreanTitle
-                    let id = movieDTO.ID
-                    let releaseDate = movieDTO.releaseDate.convertToDate()
-                    guard let posterPath = movieDTO.posterPath else { return }
-                    let imageEndPoint = MovieImageAPIEndPoint(imageURL: posterPath)
-                    let imageResult = try await movieNetworkDispatcher.performRequest(imageEndPoint.urlRequest)
-
-                    switch imageResult {
-                    case .success(let data):
-                        guard let posterImage = UIImage(data: data) else { return }
-                        let movie = Movie(id: id, title: title, releaseDate: releaseDate, posterImage: posterImage)
-                        movies[index] = movie
-                    case .failure(let error):
-                        print(error)
-                    }
-                }
-                applySnapShot()
-            } catch {
-                print(error)
-            }
-        }
-    }
-
-    private func fetchGenresData() {
-
-        let allGenresEndPoints = MovieGenreAPIEndPoint.allEndPoints
-        Task {
-            do {
-                for (index, genreEndPoint) in allGenresEndPoints.enumerated() {
-                    let decodedData = try await movieNetworkManager.fetchData(
-                        to: MoviesDTO.self,
-                        endPoint: genreEndPoint
-                    )
-                    guard let movieItems = decodedData as? MoviesDTO else { return }
-                    guard let bestMovie = movieItems.movies.first else { return }
-                    guard let backDropImagePath = bestMovie.backDropImagePath else { return }
-                    let endPoint = MovieImageAPIEndPoint(imageURL: backDropImagePath)
-                    let imageResult = try await movieNetworkDispatcher.performRequest(endPoint.urlRequest)
-
-                    switch imageResult {
-                    case .success(let data):
-                        guard let backDropImage = UIImage(data: data) else { return }
-                        let genre = MovieGenre(backDropImage: backDropImage, genreTitle: genreEndPoint.genre.description)
-                        print(genre)
-                        if (0...5).contains(index){
-                            genres[index] = genre
-                        } else {
-                            genres.append(genre)
-                        }
-                    case .failure(let error):
-                        print(error)
-                    }
-                }
-                applySnapShot()
-            } catch {
-                print(error)
-            }
-        }
-    }
-
     private func applySnapShot() {
         var snapShot = SnapShot()
         snapShot.appendSections(Section.allSections)
 
-        var rankMovies = movies
+        var rankMovies = movieHomeController.movies
         if isRankSortedByOpenDate {
             rankMovies = rankMovies.sorted { $0.releaseDate ?? Date() > $1.releaseDate ?? Date() }
         }
         let movieItems = rankMovies.map { Item.rank($0) }
         snapShot.appendItems(movieItems, toSection: .rank)
 
-        var allGenres = genres
+        var allGenres = movieHomeController.genres
         if !isMoreButtonTapped {
             allGenres = Array(allGenres.prefix(6))
         }
@@ -212,18 +142,18 @@ final class MovieHomeViewController: UIViewController {
                 guard let supplementaryView = collectionView.dequeueReusableSupplementaryView(
                     ofKind: kind,
                     withReuseIdentifier: MovieRankHeaderView.identifier,
-                    for: indexPath) as? MovieRankHeaderView else { return UICollectionReusableView() }
+                    for: indexPath) as? MovieRankHeaderView
+                else { return UICollectionReusableView() }
                 supplementaryView.delegate = self
-
                 return supplementaryView
             case .genre:
-                // 💥 코드 로직 수정하기!! switch 문 안에 switch문이라니!!
                 switch kind {
                 case MovieHomeViewController.movieGenresSectionHeaderKind:
                     guard let supplementaryView = collectionView.dequeueReusableSupplementaryView(
                         ofKind: kind,
                         withReuseIdentifier: MovieGenresHeaderView.identifier,
-                        for: indexPath) as? MovieGenresHeaderView else { return UICollectionReusableView() }
+                        for: indexPath) as? MovieGenresHeaderView
+                    else { return UICollectionReusableView() }
                     return supplementaryView
                 case MovieHomeViewController.movieGenresSectionFooterKind:
                     guard let supplementaryView = collectionView.dequeueReusableSupplementaryView(
@@ -366,10 +296,35 @@ final class MovieHomeViewController: UIViewController {
 
         return movieGenresSection
     }
+
+    private func configureNotificationCenter() {
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(didFetchData(_:)),
+            name: NSNotification.Name("MovieHomeControllerDidFetchData"),
+            object: nil
+        )
+    }
+
+    @objc private func didFetchData(_ notification: Notification) {
+        applySnapShot()
+    }
+
     private func configureNavigationBar() {
         navigationController?.navigationBar.barTintColor = .black
         configureNavigationTitle()
         configureNavigationButton()
+        configureNavigationBackButton()
+    }
+
+    private func configureNavigationBackButton() {
+        let backButtonBackgroundImage = UIImage(systemName: "list.bullet")
+        let barAppearance = UINavigationBar.appearance(
+            whenContainedInInstancesOf: [MovieDetailViewController.self]
+        )
+        barAppearance.backIndicatorImage = backButtonBackgroundImage
+        let backBarButton = UIBarButtonItem(title: "", style: .done, target: nil, action: nil)
+        navigationItem.backBarButtonItem = backBarButton
     }
 
     private func configureNavigationTitle() {
@@ -379,7 +334,6 @@ final class MovieHomeViewController: UIViewController {
     private func configureNavigationButton() {
         let ticketButtonIcon = UIImage(named: "ticketButtonIcon")
         let ticketButtonIconItem = UIBarButtonItem(customView: UIImageView(image: ticketButtonIcon))
-
 
         let mapButtonColor = UIColor(red: 0.8, green: 0.8, blue: 0.8, alpha: 1)
         let mapButtonIcon = UIImage(systemName: "map")?.withTintColor(
@@ -408,31 +362,21 @@ final class MovieHomeViewController: UIViewController {
 }
 
 extension MovieHomeViewController: UICollectionViewDelegate {
-        func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-            guard let movie = datasource?.itemIdentifier(for: indexPath) else { return }
-            // MARK: 💥 back button 수정하는 로직 수정하기!
-            let backButtonBackgroundImage = UIImage(systemName: "list.bullet")
-            let barAppearance =
-                UINavigationBar.appearance(whenContainedInInstancesOf: [MovieDetailViewController.self])
-            barAppearance.backIndicatorImage = backButtonBackgroundImage
-            barAppearance.backIndicatorTransitionMaskImage = backButtonBackgroundImage
-            let backBarButton = UIBarButtonItem(title: "", style: .done, target: nil, action: nil)
-            collectionView.deselectItem(at: indexPath, animated: true)
 
-            navigationItem.backBarButtonItem = backBarButton
+        func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+            collectionView.deselectItem(at: indexPath, animated: true)
+            guard let movie = datasource?.itemIdentifier(for: indexPath) else { return }
 
             switch movie {
             case .rank(let movie):
-                let movieDetailViewController = MovieDetailViewController(
-                    movie: movie,
-                    networkAPIManager: movieNetworkManager
-                )
+                let movieDetailViewController = MovieDetailViewController(movie: movie)
                 navigationController?.pushViewController(movieDetailViewController, animated: true)
             case .gerne(let genre):
                 print(genre)
                 print("genre!")
             }
         }
+
 }
 
 extension MovieHomeViewController: MovieGenresFooterViewDelegate {
@@ -453,14 +397,8 @@ extension MovieHomeViewController: MovieRankHeaderViewDelegate {
         _ movieRankHeaderView: MovieRankHeaderView,
         didButtonTapped sender: RankSortButton
     ) {
-        guard let sort = sender.sort else { return }
         isRankSortedByOpenDate.toggle()
-        switch sort {
-        case .reservationRate:
-            movieRankHeaderView.changeButtonColor(clickedButton: sender)
-        case .openDate:
-            movieRankHeaderView.changeButtonColor(clickedButton: sender)
-        }
+        movieRankHeaderView.changeButtonColor(clickedButton: sender)
         applySnapShot()
     }
 
