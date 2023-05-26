@@ -84,11 +84,11 @@ final class MovieHomeViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .black
         view.addSubview(collectionView)
-        configureNotificationCenter()
-        configureNavigationBar()
         configureCollectionViewLayout()
         configureCollectionViewDataSource()
         applySnapShot()
+        configureNotificationCenter()
+        configureNavigationBar()
     }
 
     private func applySnapShot() {
@@ -388,7 +388,24 @@ extension MovieHomeViewController: MovieGenresFooterViewDelegate {
         button.isTapped.toggle()
         isMoreButtonTapped.toggle()
         applySnapShot()
+        scrollToBottom()
         button.setButtonTitle()
+    }
+    // 💥 공부다시해보기..ㅜㅜ
+    private func scrollToBottom() {
+        let lastSection = collectionView.numberOfSections - 1
+        let footerIndexPath = IndexPath(item: 0, section: lastSection)
+        guard let footerView = self.collectionView.layoutAttributesForSupplementaryElement(
+            ofKind: MovieHomeViewController.movieGenresSectionFooterKind,
+            at: footerIndexPath
+        ) else { return }
+
+        let footerFrame = footerView.frame
+        let navigationBarHeight = self.navigationController?.navigationBar.frame.height ?? 0
+        let visibleContentHeight = self.collectionView.bounds.height - navigationBarHeight
+        let contentOffset = footerFrame.origin.y + footerFrame.height - visibleContentHeight
+
+        self.collectionView.setContentOffset(CGPoint(x: 0, y: contentOffset), animated: true)
     }
 
 }
