@@ -31,7 +31,7 @@ class MovieDetailFirstSectionView: UIView {
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 30, weight: .bold)
-        label.textColor = .systemBackground
+        label.textColor = .white
         label.text = "-"
 
         return label
@@ -58,7 +58,7 @@ class MovieDetailFirstSectionView: UIView {
     private let tagLineLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 15, weight: .bold)
-        label.textColor = .systemBackground
+        label.textColor = .white
         label.text = "-!"
 
         return label

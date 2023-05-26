@@ -42,7 +42,7 @@ final class MovieHomeViewController: UIViewController {
         let titleLabel = UILabel()
         titleLabel.text = "미로 시네마🍿"
         titleLabel.font = UIFont.systemFont(ofSize: 25, weight: .bold)
-        titleLabel.textColor = .systemBackground
+        titleLabel.textColor = .white
 
         return titleLabel
     }()

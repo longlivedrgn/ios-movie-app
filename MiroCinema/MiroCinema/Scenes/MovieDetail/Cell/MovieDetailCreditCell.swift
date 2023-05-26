@@ -22,7 +22,7 @@ class MovieDetailCreditCell: UICollectionViewCell {
     private let actorNameLabel: UILabel = {
         let label = UILabel()
         label.text = "-"
-        label.textColor = .systemBackground
+        label.textColor = .white
         label.textAlignment = .center
         label.font = UIFont.systemFont(ofSize: 15)
 

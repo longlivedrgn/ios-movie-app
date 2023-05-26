@@ -21,7 +21,7 @@ class MovieGenresHeaderView: UICollectionReusableView {
         let label = UILabel()
         label.text = "장르별 영화"
         label.font = UIFont.systemFont(ofSize: 25, weight: .bold)
-        label.textColor = .systemBackground
+        label.textColor = .white
 
         return label
     }()
