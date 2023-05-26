@@ -9,6 +9,11 @@ import UIKit
 
 class MovieDetailViewController: UIViewController {
 
+    private enum Section: CaseIterable {
+        case detail
+        case credit
+    }
+
     static let movieDetailSectionHeaderKind = "movieDetailSectionHeaderKind"
 
     private lazy var movieDetailCollectionView: UICollectionView = {
