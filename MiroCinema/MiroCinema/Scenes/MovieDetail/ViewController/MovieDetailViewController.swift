@@ -39,15 +39,10 @@ class MovieDetailViewController: UIViewController {
         return collectionview
     }()
 
-    private let movie: Movie
-    // 💥 요것도 Model로 만들어서 넣어주면 좋을듯!
-    private var movieDetail: MovieDetailsDTO?
-    private let movieNetworkAPIManager = NetworkAPIManager()
-    private let movieNetworkDispatcher = NetworkDispatcher()
-    private var movieCredits = MovieCredit.skeletonModels
+    private let movieDetailController: MovieDetailController
 
     init(movie: Movie) {
-        self.movie = movie
+        self.movieDetailController = MovieDetailController(movie: movie)
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -57,15 +52,29 @@ class MovieDetailViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        fetchMovieDetails()
-        fetchMovieCredits()
         setupUI()
         layoutUI()
+        configureNotificationCenter()
     }
 
     private func setupUI() {
         view.addSubview(movieDetailCollectionView)
         configureNavigationBar()
+    }
+
+    private func configureNotificationCenter() {
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(didFetchData(_:)),
+            name: NSNotification.Name("MovieDetailControllerDidFetchData"),
+            object: nil
+        )
+    }
+
+    @objc private func didFetchData(_ notification: Notification) {
+        DispatchQueue.main.async {
+            self.movieDetailCollectionView.reloadData()
+        }
     }
 
     private func configureNavigationBar() {
@@ -161,7 +170,7 @@ extension MovieDetailViewController: UICollectionViewDataSource {
         case .detail:
             return 1
         case .credit:
-            return movieCredits.count
+            return movieDetailController.movieCredits.count
         }
     }
 
@@ -184,12 +193,12 @@ extension MovieDetailViewController: UICollectionViewDataSource {
 
         switch sectionType {
         case .detail:
-            guard let image = movie.posterImage else { return firstSectionCell }
-            guard let movieDetail else { return firstSectionCell }
+            guard let image = movieDetailController.movie.posterImage else { return firstSectionCell }
+            guard let movieDetail = movieDetailController.movieDetail else { return firstSectionCell }
             firstSectionCell.configure(with: movieDetail, image: image)
             return firstSectionCell
         case .credit:
-            creditCell.configure(with: movieCredits[indexPath.row])
+            creditCell.configure(with: movieDetailController.movieCredits[indexPath.row])
             return creditCell
         }
     }
@@ -238,64 +247,4 @@ extension MovieDetailViewController: MovieDetailFirstSectionViewDelegate {
 
 }
 
-extension MovieDetailViewController {
-
-    private func fetchMovieDetails() {
-        guard let movieID = movie.ID else { return }
-        let movieDetailEndPoint = MovieDetailsAPIEndPoint(movieCode: movieID)
-        Task {
-            do {
-                let decodedData = try await movieNetworkAPIManager.fetchData(
-                    to: MovieDetailsDTO.self,
-                    endPoint: movieDetailEndPoint
-                )
-                guard let movieInformation = decodedData as? MovieDetailsDTO else { return }
-                movieDetail = movieInformation
-                self.movieDetailCollectionView.reloadData()
-            } catch {
-                print(error)
-            }
-        }
-    }
-
-    private func fetchMovieCredits() {
-        guard let movieID = movie.ID else { return }
-        let movieCreditsEndPoint = MovieCreditsAPIEndPoint(movieCode: movieID)
-        Task {
-            do {
-                let decodedData = try await movieNetworkAPIManager.fetchData(
-                    to: MovieCreditsDTO.self,
-                    endPoint: movieCreditsEndPoint
-                )
-                guard let credits = decodedData as? MovieCreditsDTO else { return }
-                let sortedCredits = credits.cast.sorted { return $0.popularity > $1.popularity }
-
-                for (index, actor) in sortedCredits.prefix(16).enumerated() {
-                    let actorName = actor.name
-                    let characterName = actor.characterName
-                    let imageProfilePath = actor.profilePath ?? ""
-                    let imageProfilePathEndPoint = MovieImageAPIEndPoint(imageURL: imageProfilePath)
-                    let actorImageResult = try await movieNetworkDispatcher.performRequest(imageProfilePathEndPoint.urlRequest)
-
-                    movieCredits[index].name = actorName
-                    movieCredits[index].characterName = characterName
-
-                    switch actorImageResult {
-                    case .success(let data):
-                        guard let profileImage = UIImage(data: data) else { return }
-                        movieCredits[index].profileImage = profileImage
-                    case .failure:
-                        movieCredits[index].profileImage = UIImage(systemName: "x.square.fill")?
-                            .withTintColor(.gray)
-                            .withRenderingMode(.alwaysOriginal)
-                    }
-                }
-                self.movieDetailCollectionView.reloadData()
-            } catch {
-                print(error)
-            }
-        }
-    }
-
-}
 
