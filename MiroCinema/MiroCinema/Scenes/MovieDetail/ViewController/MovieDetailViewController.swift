@@ -112,6 +112,8 @@ class MovieDetailViewController: UIViewController {
             widthDimension: .fractionalWidth(1),
             heightDimension: .estimated(600)
         )
+
+
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
 
         let section = NSCollectionLayoutSection(group: group)
@@ -128,12 +130,13 @@ class MovieDetailViewController: UIViewController {
 
         let groupSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(0.4),
-            heightDimension: .fractionalHeight(0.225)
+            heightDimension: .fractionalHeight(0.2)
         )
         let group = NSCollectionLayoutGroup.vertical(
             layoutSize: groupSize,
             subitems: [item, item]
         )
+        group.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 15, bottom: 0, trailing: 0)
 
         let headerSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1),
@@ -144,6 +147,7 @@ class MovieDetailViewController: UIViewController {
             elementKind: MovieDetailViewController.movieDetailSectionHeaderKind,
             alignment: .top
         )
+        header.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 15, bottom: 0, trailing: 0)
 
         let section = NSCollectionLayoutSection(group: group)
         section.orthogonalScrollingBehavior = .continuous

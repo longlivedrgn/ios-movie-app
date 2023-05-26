@@ -50,7 +50,9 @@ class MovieDetailFirstSectionView: UIView {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 15)
         label.textColor = .lightGray
+        label.numberOfLines = 0
         label.text = "-"
+        label.textAlignment = .left
 
         return label
     }()
@@ -149,24 +151,24 @@ class MovieDetailFirstSectionView: UIView {
         }
         
         certificationLabel.snp.makeConstraints {
-            $0.leading.equalToSuperview().offset(10)
+            $0.leading.equalToSuperview().offset(15)
             $0.top.equalTo(moviePosterImageView.snp.centerY)
             $0.height.equalTo(30)
             $0.width.equalTo(90)
         }
 
         movieTitleVerticalStackView.snp.makeConstraints {
-            $0.leading.trailing.equalToSuperview().inset(10)
+            $0.leading.trailing.equalToSuperview().inset(15)
             $0.top.equalTo(certificationLabel.snp.bottom).offset(15)
         }
 
         informationLabel.snp.makeConstraints {
-            $0.leading.trailing.equalToSuperview().inset(10)
+            $0.leading.trailing.equalToSuperview().inset(15)
             $0.top.equalTo(movieTitleVerticalStackView.snp.bottom).offset(20)
         }
 
         movieOverviewVerticalStackView.snp.makeConstraints {
-            $0.leading.trailing.equalToSuperview().inset(10)
+            $0.leading.trailing.equalToSuperview().inset(15)
             $0.top.equalTo(informationLabel.snp.bottom).offset(25)
             $0.bottom.lessThanOrEqualToSuperview().offset(-10)
         }
