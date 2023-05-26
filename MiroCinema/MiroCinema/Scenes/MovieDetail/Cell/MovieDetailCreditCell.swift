@@ -69,7 +69,7 @@ class MovieDetailCreditCell: UICollectionViewCell {
     func configure(with credit: MovieCredit) {
         actorImageView.image = credit.profileImage
         actorNameLabel.text = credit.name
-        roleLabel.text = credit.department
+        roleLabel.text = credit.characterName
     }
 
     private func configure() {

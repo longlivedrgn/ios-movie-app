@@ -58,13 +58,17 @@ class MovieDetailViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         fetchMovieDetails()
+        fetchMovieCredits()
         setupUI()
         layoutUI()
-        fetchMovieCredits()
     }
 
     private func setupUI() {
         view.addSubview(movieDetailCollectionView)
+        configureNavigationBar()
+    }
+
+    private func configureNavigationBar() {
         let navigationAppearance = UINavigationBarAppearance()
         navigationController?.navigationBar.tintColor = .white
         navigationAppearance.configureWithTransparentBackground()
@@ -84,57 +88,64 @@ class MovieDetailViewController: UIViewController {
             let sectionType = Section.allCases[sectionIndex]
             switch sectionType {
             case .detail:
-                let itemSize = NSCollectionLayoutSize(
-                    widthDimension: .fractionalWidth(1),
-                    heightDimension: .estimated(100)
-                )
-                let item = NSCollectionLayoutItem(layoutSize: itemSize)
-                let groupSize = NSCollectionLayoutSize(
-                    widthDimension: .fractionalWidth(1),
-                    heightDimension: .estimated(600)
-                )
-                let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
-
-                let section = NSCollectionLayoutSection(group: group)
-
-                return section
+                return self.createDetailLayout()
             case .credit:
-                let itemSize = NSCollectionLayoutSize(
-                    widthDimension: .fractionalWidth(0.8),
-                    heightDimension: .fractionalWidth(0.45)
-                )
-                let item = NSCollectionLayoutItem(layoutSize: itemSize)
-
-                let groupSize = NSCollectionLayoutSize(
-                    widthDimension: .fractionalWidth(0.4),
-                    heightDimension: .fractionalHeight(0.225)
-                )
-                let group = NSCollectionLayoutGroup.vertical(
-                    layoutSize: groupSize,
-                    subitems: [item, item]
-                )
-
-                let headerSize = NSCollectionLayoutSize(
-                    widthDimension: .fractionalWidth(1),
-                    heightDimension: .absolute(60)
-                )
-                let header = NSCollectionLayoutBoundarySupplementaryItem(
-                    layoutSize: headerSize,
-                    elementKind: MovieDetailViewController.movieDetailSectionHeaderKind,
-                    alignment: .top
-                )
-
-                let section = NSCollectionLayoutSection(group: group)
-                section.orthogonalScrollingBehavior = .continuous
-                section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 0)
-                section.interGroupSpacing = 15
-
-                section.boundarySupplementaryItems = [header]
-
-                return section
+                return self.createCreditLayout()
             }
         }
         return layout
+    }
+
+    private func createDetailLayout() -> NSCollectionLayoutSection {
+        let itemSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1),
+            heightDimension: .estimated(100)
+        )
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+        let groupSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1),
+            heightDimension: .estimated(600)
+        )
+        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
+
+        let section = NSCollectionLayoutSection(group: group)
+
+        return section
+    }
+
+    private func createCreditLayout() -> NSCollectionLayoutSection {
+        let itemSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(0.8),
+            heightDimension: .fractionalWidth(0.45)
+        )
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+
+        let groupSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(0.4),
+            heightDimension: .fractionalHeight(0.225)
+        )
+        let group = NSCollectionLayoutGroup.vertical(
+            layoutSize: groupSize,
+            subitems: [item, item]
+        )
+
+        let headerSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1),
+            heightDimension: .absolute(60)
+        )
+        let header = NSCollectionLayoutBoundarySupplementaryItem(
+            layoutSize: headerSize,
+            elementKind: MovieDetailViewController.movieDetailSectionHeaderKind,
+            alignment: .top
+        )
+
+        let section = NSCollectionLayoutSection(group: group)
+        section.orthogonalScrollingBehavior = .continuous
+        section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 0)
+        section.interGroupSpacing = 15
+        section.boundarySupplementaryItems = [header]
+
+        return section
     }
 
 }
@@ -203,6 +214,7 @@ extension MovieDetailViewController: UICollectionViewDelegate {
         )
         return header
     }
+
 }
 
 extension MovieDetailViewController: MovieDetailFirstSectionViewDelegate {
@@ -221,9 +233,7 @@ extension MovieDetailViewController: MovieDetailFirstSectionViewDelegate {
         }
         button.isTapped.toggle()
         button.setButtonTitle()
-        DispatchQueue.main.async {
-            self.movieDetailCollectionView.reloadData()
-        }
+        self.movieDetailCollectionView.reloadData()
     }
 
 }
@@ -239,11 +249,9 @@ extension MovieDetailViewController {
                     to: MovieDetailsDTO.self,
                     endPoint: movieDetailEndPoint
                 )
-                guard let movie = decodedData as? MovieDetailsDTO else { return }
-                movieDetail = movie
-                DispatchQueue.main.async {
-                    self.movieDetailCollectionView.reloadData()
-                }
+                guard let movieInformation = decodedData as? MovieDetailsDTO else { return }
+                movieDetail = movieInformation
+                self.movieDetailCollectionView.reloadData()
             } catch {
                 print(error)
             }
@@ -253,35 +261,36 @@ extension MovieDetailViewController {
     private func fetchMovieCredits() {
         guard let movieID = movie.ID else { return }
         let movieCreditsEndPoint = MovieCreditsAPIEndPoint(movieCode: movieID)
-        // 💥 아래 로직 깔끔하게 정리하기!~~ + Popularity로 정렬하는 알고리즘 추가하자!!
         Task {
             do {
-                let decodedData = try await movieNetworkAPIManager.fetchData(to: MovieCreditsDTO.self, endPoint: movieCreditsEndPoint)
-
+                let decodedData = try await movieNetworkAPIManager.fetchData(
+                    to: MovieCreditsDTO.self,
+                    endPoint: movieCreditsEndPoint
+                )
                 guard let credits = decodedData as? MovieCreditsDTO else { return }
-                let group = credits.cast.sorted { first, second in
-                    return first.popularity > second.popularity
-                }
-                for (index, actorInformation) in group.prefix(16).enumerated() {
-                    guard let imageProfilePath = actorInformation.profilePath else { continue }
+                let sortedCredits = credits.cast.sorted { return $0.popularity > $1.popularity }
+
+                for (index, actor) in sortedCredits.prefix(16).enumerated() {
+                    let actorName = actor.name
+                    let characterName = actor.characterName
+                    let imageProfilePath = actor.profilePath ?? ""
                     let imageProfilePathEndPoint = MovieImageAPIEndPoint(imageURL: imageProfilePath)
-                    let actorName = actorInformation.name
-                    let actorDepartment = actorInformation.department
                     let actorImageResult = try await movieNetworkDispatcher.performRequest(imageProfilePathEndPoint.urlRequest)
+
+                    movieCredits[index].name = actorName
+                    movieCredits[index].characterName = characterName
+
                     switch actorImageResult {
                     case .success(let data):
                         guard let profileImage = UIImage(data: data) else { return }
-                        movieCredits[index].name = actorName
-                        movieCredits[index].department = actorDepartment
                         movieCredits[index].profileImage = profileImage
-                        movieCredits.append(MovieCredit(name: actorName, department: actorDepartment, profileImage: profileImage))
-                    case .failure(let error):
-                        print(error)
+                    case .failure:
+                        movieCredits[index].profileImage = UIImage(systemName: "x.square.fill")?
+                            .withTintColor(.gray)
+                            .withRenderingMode(.alwaysOriginal)
                     }
                 }
-                DispatchQueue.main.async {
-                    self.movieDetailCollectionView.reloadData()
-                }
+                self.movieDetailCollectionView.reloadData()
             } catch {
                 print(error)
             }
@@ -289,3 +298,4 @@ extension MovieDetailViewController {
     }
 
 }
+

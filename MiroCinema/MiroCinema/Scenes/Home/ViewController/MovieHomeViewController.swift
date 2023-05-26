@@ -185,15 +185,15 @@ final class MovieHomeViewController: UIViewController {
 
             switch section {
             case .rank:
-                return self.generateMovieRankLayout()
+                return self.createRankLayout()
             case .genre:
-                return self.generateMovieGenresLayout()
+                return self.createGenresLayout()
             }
         }
         return layout
     }
 
-    private func generateMovieRankLayout() -> NSCollectionLayoutSection {
+    private func createRankLayout() -> NSCollectionLayoutSection {
 
         let movieItemSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1.0),
@@ -237,7 +237,7 @@ final class MovieHomeViewController: UIViewController {
         return movieRankSection
     }
 
-    private func generateMovieGenresLayout() -> NSCollectionLayoutSection {
+    private func createGenresLayout() -> NSCollectionLayoutSection {
 
         let movieGenreItemSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1/3),

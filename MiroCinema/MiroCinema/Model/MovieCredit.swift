@@ -10,12 +10,12 @@ import UIKit
 struct MovieCredit {
 
     var name: String
-    var department: String?
+    var characterName: String?
     var profileImage: UIImage?
 
     init(name: String, department: String?, profileImage: UIImage?) {
         self.name = name
-        self.department = department
+        self.characterName = department
         self.profileImage = profileImage
     }
 
