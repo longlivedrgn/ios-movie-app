@@ -22,7 +22,7 @@ struct Certification: Decodable {
     let information: [Information]
 
     enum CodingKeys: String, CodingKey {
-        case countryCode = "iso3166_1"
+        case countryCode = "iso_3166_1"
         case information = "release_dates"
     }
 

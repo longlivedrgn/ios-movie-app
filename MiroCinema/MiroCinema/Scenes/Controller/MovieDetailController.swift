@@ -19,6 +19,7 @@ final class MovieDetailController {
         self.movie = movie
         fetchMovieDetails()
         fetchMovieCredits()
+        fetchMovieCertification()
     }
 
     private func fetchMovieDetails() {
@@ -83,5 +84,27 @@ final class MovieDetailController {
                 object: nil
             )
         }
+    }
+
+    private func fetchMovieCertification() {
+        guard let movieID = movie.ID else { return }
+        let movieCertificationEndPoint = MovieCertificationAPIEndPoint(movieCode: movieID)
+        Task {
+            do {
+                let decodedData = try await movieNetworkAPIManager.fetchData(
+                    to: MovieCertificationDTO.self,
+                    endPoint: movieCertificationEndPoint
+                )
+                guard let movieCertification = decodedData as? MovieCertificationDTO else { return }
+                guard  let korenCertification = movieCertification.certifications.first(
+                    where: { $0.countryCode == "KR"}
+                ) else { return }
+
+                print(korenCertification.information.first?.certificationRate ?? "관람등급미정")
+            } catch {
+                print(error)
+            }
+        }
+
     }
 }
