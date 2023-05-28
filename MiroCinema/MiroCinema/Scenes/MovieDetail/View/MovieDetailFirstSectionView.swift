@@ -182,22 +182,42 @@ class MovieDetailFirstSectionView: UIView {
         gradientLayer.frame = moviePosterImageView.bounds
     }
 
-    func configure(with movie: MovieDetailsDTO, image: UIImage) {
+    func configure(with movie: MovieDetail, image: UIImage) {
         self.moviePosterImageView.image = image
         self.titleLabel.text = movie.koreanTitle
         self.englishTitleLabel.text = movie.originalTitle
         self.informationLabel.text  = generateInformationText(
             releaseDate: movie.releaseDate,
-            countries: movie.productionCountries,
+            countries: movie.countries,
             kinds: movie.genres,
-            runTime: movie.runTime
+            runTime: movie.runtime
         )
         self.tagLineLabel.text = movie.tagLine
         self.overViewLabel.text = movie.overview
+        configureCerticationLabel(rate: movie.certificationRate)
     }
 
     @objc private func moreButtonDidTapped(_ sender: UIButton) {
         delegate?.movieDetailFirstSectionView(self, didButtonTapped: sender)
+    }
+
+    private func configureCerticationLabel(rate: String) {
+        guard let koreanRate = USACertifcation(rawValue: rate) else { return }
+        certificationLabel.text = koreanRate.koreanDescription
+
+        switch koreanRate {
+        case .R, .NC17:
+            certificationLabel.textColor = .red
+            certificationLabel.layer.borderColor = UIColor.red.cgColor
+        case .PG, .G:
+            return
+        case .NR:
+            certificationLabel.textColor = .gray
+            certificationLabel.layer.borderColor = UIColor.gray.cgColor
+        case .PG13:
+            certificationLabel.textColor = .yellow
+            certificationLabel.layer.borderColor = UIColor.yellow.cgColor
+        }
     }
 
     private func generateInformationText(

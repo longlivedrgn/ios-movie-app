@@ -9,7 +9,7 @@ import UIKit
 
 class RankSortButton: UIButton {
 
-    var sort: ButtonType?
+    var sort: ButtonKind?
 
     override init(frame: CGRect) {
         super.init(frame: frame)

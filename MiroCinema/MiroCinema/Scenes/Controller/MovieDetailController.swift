@@ -12,27 +12,34 @@ final class MovieDetailController {
     let movie: Movie
     private let movieNetworkAPIManager = NetworkAPIManager()
     private let movieNetworkDispatcher = NetworkDispatcher()
-    var movieDetail: MovieDetailsDTO?
+    var movieDetail: MovieDetail?
     var movieCredits = MovieCredit.skeletonModels
 
     init(movie: Movie) {
         self.movie = movie
         fetchMovieDetails()
         fetchMovieCredits()
-        fetchMovieCertification()
     }
 
     private func fetchMovieDetails() {
         guard let movieID = movie.ID else { return }
         let movieDetailEndPoint = MovieDetailsAPIEndPoint(movieCode: movieID)
+        let movieCertificationEndPoint = MovieCertificationAPIEndPoint(movieCode: movieID)
         Task {
             do {
-                let decodedData = try await movieNetworkAPIManager.fetchData(
+                let decodedDetailData = try await movieNetworkAPIManager.fetchData(
                     to: MovieDetailsDTO.self,
                     endPoint: movieDetailEndPoint
                 )
-                guard let movieInformation = decodedData as? MovieDetailsDTO else { return }
-                movieDetail = movieInformation
+                guard let movieInformation = decodedDetailData as? MovieDetailsDTO else { return }
+
+                let decodedCertificationData = try await movieNetworkAPIManager.fetchData(
+                    to: MovieCertificationDTO.self,
+                    endPoint: movieCertificationEndPoint
+                )
+                guard let movieCertification = decodedCertificationData as? MovieCertificationDTO else { return }
+
+                movieDetail = generateMovieDetail(with: movieInformation, movieCertification)
             } catch {
                 print(error)
             }
@@ -86,30 +93,27 @@ final class MovieDetailController {
         }
     }
 
-    private func fetchMovieCertification() {
-        guard let movieID = movie.ID else { return }
-        let movieCertificationEndPoint = MovieCertificationAPIEndPoint(movieCode: movieID)
-        Task {
-            do {
-                let decodedData = try await movieNetworkAPIManager.fetchData(
-                    to: MovieCertificationDTO.self,
-                    endPoint: movieCertificationEndPoint
-                )
-                guard let movieCertification = decodedData as? MovieCertificationDTO else { return }
-                guard  let USACertification = movieCertification.certifications.first(
-                    where: { $0.countryCode == "US"}
-                ) else { return }
-                guard let certification = USACertification.information.first(where: {
-                    $0.certificationRate != ""
-                }) else { return }
+    private func generateMovieDetail(with movieDetailsDTO: MovieDetailsDTO, _ movieCertificationDTO: MovieCertificationDTO) -> MovieDetail {
 
-                let rate = certification.certificationRate
-                print("🌱🌱🌱🌱🌱🌱🌱🌱🌱🌱🌱🌱🌱🌱🌱🌱🌱🌱🌱🌱🌱")
-                print(USACertifcation(rawValue: rate)?.koreanDescription ?? "💕")
-            } catch {
-                print(error)
-            }
-        }
+        let USACertification = movieCertificationDTO.certifications.first(
+            where: { $0.countryCode == "US"}
+        )
+        let certification = USACertification?.information.first(where: {
+            $0.certificationRate != ""
+        })
+        let rate = certification?.certificationRate ?? "NR"
 
+        return MovieDetail(
+                certificationRate: rate,
+                koreanTitle: movieDetailsDTO.koreanTitle,
+                originalTitle: movieDetailsDTO.originalTitle,
+                releaseDate: movieDetailsDTO.releaseDate,
+                countries: movieDetailsDTO.productionCountries,
+                genres: movieDetailsDTO.genres,
+                runtime: movieDetailsDTO.runTime,
+                tagLine: movieDetailsDTO.tagLine,
+                overview: movieDetailsDTO.overview
+            )
     }
+
 }
