@@ -1,5 +1,5 @@
 //
-//  GenreViewController.swift
+//  MovieGenreViewController.swift
 //  MiroCinema
 //
 //  Created by 김용재 on 2023/05/28.
@@ -7,21 +7,20 @@
 
 import UIKit
 
-class GenreViewController: UIViewController {
+class MovieGenreViewController: UIViewController {
 
     private lazy var genreCollectionView: UICollectionView = {
         let collectionview = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
         collectionview.register(GenreListCell.self, forCellWithReuseIdentifier: GenreListCell.identifier)
         collectionview.dataSource = self
-//        collectionview.delegate = self
 
         return collectionview
     }()
 
-    var genreMovies: MoviesDTO?
+    var genreMovies: [MovieDTO]?
 
-    init() {
-//        self.movieDetailController = MovieDetailController(movie: movie)
+    init(genre: MovieGenre) {
+        self.genreMovies = genre.movies?.movies
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -32,6 +31,7 @@ class GenreViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         configureCollectionView()
+        print(genreMovies?.count)
     }
 
     private func configureCollectionView() {
@@ -50,10 +50,10 @@ class GenreViewController: UIViewController {
 
 }
 
-extension GenreViewController: UICollectionViewDataSource {
+extension MovieGenreViewController: UICollectionViewDataSource {
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return genreMovies?.movies.count
+        return genreMovies?.count ?? 0
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -64,6 +64,6 @@ extension GenreViewController: UICollectionViewDataSource {
 
 }
 
-extension GenreViewController: UICollectionViewDelegate {
+extension MovieGenreViewController: UICollectionViewDelegate {
 
 }

@@ -377,7 +377,9 @@ extension MovieHomeViewController: UICollectionViewDelegate {
                 let movieDetailViewController = MovieDetailViewController(movie: movie)
                 navigationController?.pushViewController(movieDetailViewController, animated: true)
             case .gerne(let genre):
-                print("genre!")
+                print(genre)
+                let movieGenreViewController = MovieGenreViewController(genre: genre)
+                navigationController?.pushViewController(movieGenreViewController, animated: true)
             }
         }
 

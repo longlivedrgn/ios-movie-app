@@ -81,7 +81,11 @@ class MovieHomeController {
                     let cacheKey = NSString(string: backDropImagePath)
                     // image caching하기!
                     if let cachedImage = ImageCacheManager.shared.object(forKey: cacheKey) {
-                        let genre = MovieGenre(backDropImage: cachedImage, genreTitle: genreEndPoint.genre.description)
+                        let genre = MovieGenre(
+                            backDropImage: cachedImage,
+                            genreTitle: genreEndPoint.genre.description,
+                            movies: movieItems
+                        )
                         if (0...5).contains(index){
                             genres[index] = genre
                         } else {
@@ -97,7 +101,11 @@ class MovieHomeController {
                     case .success(let data):
                         guard let backDropImage = UIImage(data: data) else { return }
                         ImageCacheManager.shared.setObject(backDropImage, forKey: cacheKey)
-                        let genre = MovieGenre(backDropImage: backDropImage, genreTitle: genreEndPoint.genre.description)
+                        let genre = MovieGenre(
+                            backDropImage: backDropImage,
+                            genreTitle: genreEndPoint.genre.description,
+                            movies: movieItems
+                        )
                         if (0...5).contains(index){
                             genres[index] = genre
                         } else {
