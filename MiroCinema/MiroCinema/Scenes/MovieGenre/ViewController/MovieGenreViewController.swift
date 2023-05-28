@@ -51,9 +51,13 @@ class MovieGenreViewController: UIViewController {
     }
 
     private func configureCollectionViewDataSource() {
-        datasource = UICollectionViewDiffableDataSource(collectionView: genreCollectionView) { collectionView, indexPath, movie in
-            print("힝....ㅜㅜ")
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: GenreListCell.identifier, for: indexPath) as? GenreListCell else { return UICollectionViewCell() }
+        datasource = UICollectionViewDiffableDataSource(
+            collectionView: genreCollectionView
+        ) { collectionView, indexPath, movie in
+            guard let cell = collectionView.dequeueReusableCell(
+                withReuseIdentifier: GenreListCell.identifier,
+                for: indexPath
+            ) as? GenreListCell else { return UICollectionViewCell() }
             cell.configure(with: movie)
             // movie로 컨피큐어하기~
             return cell
@@ -81,7 +85,6 @@ class MovieGenreViewController: UIViewController {
     @objc private func didFetchData(_ notification: Notification) {
         DispatchQueue.main.async {
             self.applySnapShot()
-
         }
     }
 
@@ -90,8 +93,9 @@ class MovieGenreViewController: UIViewController {
         snapShot.appendSections([.main])
 
         let movies = movieGenreController.movies
-        print(movies)
         snapShot.appendItems(movies)
+
+        datasource?.apply(snapShot)
     }
 
 }

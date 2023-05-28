@@ -13,19 +13,21 @@ class GenreListCell: UICollectionViewListCell {
 
     private let backDropImageView: UIImageView = {
         let imageView = UIImageView()
+        imageView.image = UIImage(systemName: "arrowshape.right.fill")
 
         return imageView
     }()
 
     private let movieTitleLabel: UILabel = {
         let label = UILabel()
+        label.text = "-"
 
         return label
     }()
 
     private let symbolImageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.image = UIImage(named: "arrowshape.right.fill")
+        imageView.image = UIImage(systemName: "arrowshape.right.fill")
 
         return imageView
     }()
