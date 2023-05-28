@@ -96,11 +96,16 @@ final class MovieDetailController {
                     endPoint: movieCertificationEndPoint
                 )
                 guard let movieCertification = decodedData as? MovieCertificationDTO else { return }
-                guard  let korenCertification = movieCertification.certifications.first(
-                    where: { $0.countryCode == "KR"}
+                guard  let USACertification = movieCertification.certifications.first(
+                    where: { $0.countryCode == "US"}
                 ) else { return }
+                guard let certification = USACertification.information.first(where: {
+                    $0.certificationRate != ""
+                }) else { return }
 
-                print(korenCertification.information.first?.certificationRate ?? "관람등급미정")
+                let rate = certification.certificationRate
+                print("🌱🌱🌱🌱🌱🌱🌱🌱🌱🌱🌱🌱🌱🌱🌱🌱🌱🌱🌱🌱🌱")
+                print(USACertifcation(rawValue: rate)?.koreanDescription ?? "💕")
             } catch {
                 print(error)
             }
