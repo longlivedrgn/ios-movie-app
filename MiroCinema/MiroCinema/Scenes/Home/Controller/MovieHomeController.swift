@@ -7,7 +7,7 @@
 
 import UIKit
 
-class MovieHomeController {
+final class MovieHomeController {
 
     private let movieNetworkManager = NetworkAPIManager()
     private let movieNetworkDispatcher = NetworkDispatcher()

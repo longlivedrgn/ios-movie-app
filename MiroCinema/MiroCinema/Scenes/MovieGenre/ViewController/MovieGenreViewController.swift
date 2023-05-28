@@ -9,18 +9,25 @@ import UIKit
 
 class MovieGenreViewController: UIViewController {
 
+    private enum Section {
+        case main
+    }
+
     private lazy var genreCollectionView: UICollectionView = {
         let collectionview = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
         collectionview.register(GenreListCell.self, forCellWithReuseIdentifier: GenreListCell.identifier)
-        collectionview.dataSource = self
 
         return collectionview
     }()
 
-    var genreMovies: [MovieDTO]?
+    private typealias DataSource = UICollectionViewDiffableDataSource<Section, Movie>
+    private typealias SnapShot = NSDiffableDataSourceSnapshot<Section, Movie>
+
+    private var datasource: DataSource?
+    private let movieGenreController: MovieGenreController
 
     init(genre: MovieGenre) {
-        self.genreMovies = genre.movies?.movies
+        self.movieGenreController = MovieGenreController(movies: genre.movies?.movies)
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -31,7 +38,6 @@ class MovieGenreViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         configureCollectionView()
-        print(genreMovies?.count)
     }
 
     private func configureCollectionView() {
@@ -47,23 +53,5 @@ class MovieGenreViewController: UIViewController {
 
         return layout
     }
-
-}
-
-extension MovieGenreViewController: UICollectionViewDataSource {
-
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return genreMovies?.count ?? 0
-    }
-
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let movieCell = collectionView.dequeueReusableCell(withReuseIdentifier: GenreListCell.identifier, for: indexPath) as? GenreListCell else { return UICollectionViewCell() }
-
-        return movieCell
-    }
-
-}
-
-extension MovieGenreViewController: UICollectionViewDelegate {
 
 }
