@@ -314,6 +314,7 @@ final class MovieHomeViewController: UIViewController {
 
     private func configureNavigationBar() {
         navigationController?.navigationBar.barTintColor = .black
+        navigationController?.navigationBar.isTranslucent = false
         configureNavigationTitle()
         configureNavigationButton()
         configureNavigationBackButton()
@@ -374,7 +375,6 @@ extension MovieHomeViewController: UICollectionViewDelegate {
                 let movieDetailViewController = MovieDetailViewController(movie: movie)
                 navigationController?.pushViewController(movieDetailViewController, animated: true)
             case .gerne(let genre):
-                print(genre)
                 print("genre!")
             }
         }

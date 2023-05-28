@@ -77,7 +77,6 @@ class MovieHomeController {
                     case .success(let data):
                         guard let backDropImage = UIImage(data: data) else { return }
                         let genre = MovieGenre(backDropImage: backDropImage, genreTitle: genreEndPoint.genre.description)
-                        print(genre)
                         if (0...5).contains(index){
                             genres[index] = genre
                         } else {
