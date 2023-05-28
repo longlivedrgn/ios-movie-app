@@ -9,7 +9,7 @@ import UIKit
 
 class PaddingLabel: UILabel {
 
-    private var padding = UIEdgeInsets(top: 0.0, left: 8, bottom: 0.0, right: 8)
+    private var padding = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
 
     convenience init(padding: UIEdgeInsets) {
         self.init()
@@ -23,6 +23,7 @@ class PaddingLabel: UILabel {
     override var intrinsicContentSize: CGSize {
         var contentSize = super.intrinsicContentSize
         contentSize.width += padding.left + padding.right
+        contentSize.height += padding.top + padding.bottom
         return contentSize
     }
 

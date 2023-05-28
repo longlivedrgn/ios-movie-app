@@ -153,7 +153,6 @@ class MovieDetailFirstSectionView: UIView {
         certificationLabel.snp.makeConstraints {
             $0.leading.equalToSuperview().offset(15)
             $0.top.equalTo(moviePosterImageView.snp.centerY)
-            $0.height.equalTo(30)
         }
 
         movieTitleVerticalStackView.snp.makeConstraints {

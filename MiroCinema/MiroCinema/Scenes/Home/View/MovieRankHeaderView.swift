@@ -33,7 +33,7 @@ class MovieRankHeaderView: UICollectionReusableView {
         let button = RankSortButton()
         button.addTarget(self, action: #selector(sortedByReservationRateButtonDidTapped), for: .touchUpInside)
         button.sort = .reservationRate
-        button.setTitle("예매율순", for: .normal)
+        button.setTitle("인기 상승 순", for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 15, weight: .bold)
         button.backgroundColor = UIColor(red: 0.902, green: 0.286, blue: 0.502, alpha: 1)
 
