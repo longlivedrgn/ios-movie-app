@@ -15,12 +15,12 @@ class MovieDetailFirstSectionView: UIView {
         return imageView
     }()
 
-    private let certificationLabel: UILabel = {
-        let label = UILabel()
-        label.text = "전체 관람가"
+    private let certificationLabel: PaddingLabel = {
+        let label = PaddingLabel()
+        label.text = "-"
         label.font = UIFont.systemFont(ofSize: 14)
-        label.textColor = .green
-        label.layer.borderColor = UIColor.green.cgColor
+        label.textColor = .gray
+        label.layer.borderColor = UIColor.gray.cgColor
         label.layer.borderWidth = 1
         label.layer.cornerRadius = 15
         label.textAlignment = .center
@@ -154,7 +154,6 @@ class MovieDetailFirstSectionView: UIView {
             $0.leading.equalToSuperview().offset(15)
             $0.top.equalTo(moviePosterImageView.snp.centerY)
             $0.height.equalTo(30)
-            $0.width.equalTo(90)
         }
 
         movieTitleVerticalStackView.snp.makeConstraints {
@@ -210,7 +209,8 @@ class MovieDetailFirstSectionView: UIView {
             certificationLabel.textColor = .red
             certificationLabel.layer.borderColor = UIColor.red.cgColor
         case .PG, .G:
-            return
+            certificationLabel.textColor = .green
+            certificationLabel.layer.borderColor = UIColor.green.cgColor
         case .NR:
             certificationLabel.textColor = .gray
             certificationLabel.layer.borderColor = UIColor.gray.cgColor
