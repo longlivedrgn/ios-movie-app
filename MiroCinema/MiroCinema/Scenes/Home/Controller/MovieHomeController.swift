@@ -35,12 +35,20 @@ class MovieHomeController {
                     let id = movieDTO.ID
                     let releaseDate = movieDTO.releaseDate.convertToDate()
                     guard let posterPath = movieDTO.posterPath else { return }
+                    let cacheKey = NSString(string: posterPath)
+                    // image caching하기!
+                    if let cachedImage = ImageCacheManager.shared.object(forKey: cacheKey) {
+                        let movie = Movie(id: id, title: title, releaseDate: releaseDate, posterImage: cachedImage)
+                        movies[index] = movie
+                        continue
+                    }
                     let imageEndPoint = MovieImageAPIEndPoint(imageURL: posterPath)
                     let imageResult = try await movieNetworkDispatcher.performRequest(imageEndPoint.urlRequest)
 
                     switch imageResult {
                     case .success(let data):
                         guard let posterImage = UIImage(data: data) else { return }
+                        ImageCacheManager.shared.setObject(posterImage, forKey: cacheKey)
                         let movie = Movie(id: id, title: title, releaseDate: releaseDate, posterImage: posterImage)
                         movies[index] = movie
                     case .failure(let error):
@@ -70,12 +78,25 @@ class MovieHomeController {
                     guard let movieItems = decodedData as? MoviesDTO else { return }
                     guard let bestMovie = movieItems.movies.first else { return }
                     guard let backDropImagePath = bestMovie.backDropImagePath else { return }
+                    let cacheKey = NSString(string: backDropImagePath)
+                    // image caching하기!
+                    if let cachedImage = ImageCacheManager.shared.object(forKey: cacheKey) {
+                        let genre = MovieGenre(backDropImage: cachedImage, genreTitle: genreEndPoint.genre.description)
+                        if (0...5).contains(index){
+                            genres[index] = genre
+                        } else {
+                            genres.append(genre)
+                        }
+                        continue
+                    }
                     let endPoint = MovieImageAPIEndPoint(imageURL: backDropImagePath)
+                    
                     let imageResult = try await movieNetworkDispatcher.performRequest(endPoint.urlRequest)
 
                     switch imageResult {
                     case .success(let data):
                         guard let backDropImage = UIImage(data: data) else { return }
+                        ImageCacheManager.shared.setObject(backDropImage, forKey: cacheKey)
                         let genre = MovieGenre(backDropImage: backDropImage, genreTitle: genreEndPoint.genre.description)
                         if (0...5).contains(index){
                             genres[index] = genre

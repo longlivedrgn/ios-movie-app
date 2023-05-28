@@ -42,6 +42,7 @@
 		875746292A2085DF00836F85 /* MovieDetailController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 875746282A2085DF00836F85 /* MovieDetailController.swift */; };
 		877D10EA2A1C586B00622C84 /* MovieDetailFirstSectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 877D10E92A1C586B00622C84 /* MovieDetailFirstSectionCell.swift */; };
 		877D10EC2A1C791B00622C84 /* MovieDetailHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 877D10EB2A1C791B00622C84 /* MovieDetailHeaderView.swift */; };
+		878119862A235DF4005EA728 /* ImageCacheManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 878119852A235DF4005EA728 /* ImageCacheManager.swift */; };
 		87B74CA22A2060F6002878BB /* MovieHomeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87B74CA12A2060F6002878BB /* MovieHomeController.swift */; };
 		87B74CA92A2061CD002878BB /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87B74CA82A2061CD002878BB /* Item.swift */; };
 		87B74CAB2A2061DA002878BB /* Section.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87B74CAA2A2061DA002878BB /* Section.swift */; };
@@ -130,6 +131,7 @@
 		875746282A2085DF00836F85 /* MovieDetailController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieDetailController.swift; sourceTree = "<group>"; };
 		877D10E92A1C586B00622C84 /* MovieDetailFirstSectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieDetailFirstSectionCell.swift; sourceTree = "<group>"; };
 		877D10EB2A1C791B00622C84 /* MovieDetailHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieDetailHeaderView.swift; sourceTree = "<group>"; };
+		878119852A235DF4005EA728 /* ImageCacheManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCacheManager.swift; sourceTree = "<group>"; };
 		87B74CA12A2060F6002878BB /* MovieHomeController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieHomeController.swift; sourceTree = "<group>"; };
 		87B74CA82A2061CD002878BB /* Item.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
 		87B74CAA2A2061DA002878BB /* Section.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Section.swift; sourceTree = "<group>"; };
@@ -225,6 +227,7 @@
 		8704A48F2A14DD68000AB7F5 /* MiroCinema */ = {
 			isa = PBXGroup;
 			children = (
+				878119872A235EFE005EA728 /* Cache */,
 				8737A9BD2A1A3BB40056C6A3 /* Model */,
 				87B9D8C52A1B09B900BB5609 /* Enum */,
 				8737A9D52A1A42940056C6A3 /* Extensions */,
@@ -261,7 +264,6 @@
 			isa = PBXGroup;
 			children = (
 				8737A9B92A1A3B480056C6A3 /* MovieDetail */,
-				875746272A2085CD00836F85 /* Controller */,
 				8737A9B82A1A3B390056C6A3 /* Home */,
 			);
 			path = Scenes;
@@ -283,6 +285,7 @@
 		8737A9B92A1A3B480056C6A3 /* MovieDetail */ = {
 			isa = PBXGroup;
 			children = (
+				875746272A2085CD00836F85 /* Controller */,
 				87523B522A1E63050002D471 /* Protocol */,
 				8755EE6C2A1B3A6200FA775E /* View */,
 				8755EE6B2A1B3A5D00FA775E /* Cell */,
@@ -430,6 +433,22 @@
 				875746282A2085DF00836F85 /* MovieDetailController.swift */,
 			);
 			path = Controller;
+			sourceTree = "<group>";
+		};
+		878119842A235DCF005EA728 /* ImageCache */ = {
+			isa = PBXGroup;
+			children = (
+				878119852A235DF4005EA728 /* ImageCacheManager.swift */,
+			);
+			path = ImageCache;
+			sourceTree = "<group>";
+		};
+		878119872A235EFE005EA728 /* Cache */ = {
+			isa = PBXGroup;
+			children = (
+				878119842A235DCF005EA728 /* ImageCache */,
+			);
+			path = Cache;
 			sourceTree = "<group>";
 		};
 		87B74CA02A2060CF002878BB /* Controller */ = {
@@ -717,6 +736,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				878119862A235DF4005EA728 /* ImageCacheManager.swift in Sources */,
 				87C408712A1DDC4B00C3F3D3 /* MovieCreditsDTO.swift in Sources */,
 				870C77202A160DF5009ACD92 /* MovieGenresHeaderView.swift in Sources */,
 				87C408752A1DDDE700C3F3D3 /* MovieCredit.swift in Sources */,

@@ -65,16 +65,21 @@ final class MovieDetailController {
                 for (index, actor) in sortedCredits.prefix(16).enumerated() {
                     let actorName = actor.name
                     let characterName = actor.characterName
-                    let imageProfilePath = actor.profilePath ?? ""
-                    let imageProfilePathEndPoint = MovieImageAPIEndPoint(imageURL: imageProfilePath)
-                    let actorImageResult = try await movieNetworkDispatcher.performRequest(imageProfilePathEndPoint.urlRequest)
-
                     movieCredits[index].name = actorName
                     movieCredits[index].characterName = characterName
+                    let imageProfilePath = actor.profilePath ?? ""
+                    let cachekey = NSString(string: imageProfilePath)
+                    if let cachedImage = ImageCacheManager.shared.object(forKey: cachekey) {
+                        movieCredits[index].profileImage = cachedImage
+                        continue
+                    }
+                    let imageProfilePathEndPoint = MovieImageAPIEndPoint(imageURL: imageProfilePath)
+                    let actorImageResult = try await movieNetworkDispatcher.performRequest(imageProfilePathEndPoint.urlRequest)
 
                     switch actorImageResult {
                     case .success(let data):
                         guard let profileImage = UIImage(data: data) else { return }
+                        ImageCacheManager.shared.setObject(profileImage, forKey: cachekey)
                         movieCredits[index].profileImage = profileImage
                     case .failure:
                         movieCredits[index].profileImage = UIImage(systemName: "x.square.fill")?
