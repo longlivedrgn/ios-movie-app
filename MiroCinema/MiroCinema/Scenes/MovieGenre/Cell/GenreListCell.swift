@@ -39,6 +39,11 @@ class GenreListCell: UICollectionViewListCell {
         fatalError("init(coder:) has not been implemented")
     }
 
+    func configure(with movie: Movie) {
+        backDropImageView.image = movie.posterImage
+        movieTitleLabel.text = movie.title
+    }
+
     private func configureViews() {
         addSubview(backDropImageView)
         addSubview(movieTitleLabel)

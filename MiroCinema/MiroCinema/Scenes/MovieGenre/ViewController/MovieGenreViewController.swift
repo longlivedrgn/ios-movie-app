@@ -38,20 +38,60 @@ class MovieGenreViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         configureCollectionView()
+        configureCollectionViewDataSource()
+        configureNotificationCenter()
+        applySnapShot()
     }
 
     private func configureCollectionView() {
         view.addSubview(genreCollectionView)
+        genreCollectionView.snp.makeConstraints {
+            $0.edges.equalToSuperview()
+        }
+    }
+
+    private func configureCollectionViewDataSource() {
+        datasource = UICollectionViewDiffableDataSource(collectionView: genreCollectionView) { collectionView, indexPath, movie in
+            print("힝....ㅜㅜ")
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: GenreListCell.identifier, for: indexPath) as? GenreListCell else { return UICollectionViewCell() }
+            cell.configure(with: movie)
+            // movie로 컨피큐어하기~
+            return cell
+        }
     }
     // layoutEnvironment 다시 공부해보기!
     private func createLayout() -> UICollectionViewCompositionalLayout {
         let layout = UICollectionViewCompositionalLayout { section, layoutEnvironment in
             let configuration = UICollectionLayoutListConfiguration(appearance: .plain)
-
             return NSCollectionLayoutSection.list(using: configuration, layoutEnvironment: layoutEnvironment)
         }
 
         return layout
+    }
+
+    private func configureNotificationCenter() {
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(didFetchData(_:)),
+            name: NSNotification.Name("MovieGenreControllerDidFetchData"),
+            object: nil
+        )
+    }
+
+    @objc private func didFetchData(_ notification: Notification) {
+        DispatchQueue.main.async {
+            self.applySnapShot()
+
+        }
+    }
+
+    private func applySnapShot() {
+        var snapShot = SnapShot()
+        snapShot.appendSections([.main])
+
+        let movies = movieGenreController.movies
+        print(movies)
+        snapShot.appendItems(movies)
     }
 
 }
