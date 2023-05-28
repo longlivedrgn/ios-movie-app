@@ -313,8 +313,10 @@ final class MovieHomeViewController: UIViewController {
     }
 
     private func configureNavigationBar() {
-        navigationController?.navigationBar.barTintColor = .black
-        navigationController?.navigationBar.isTranslucent = false
+        // 💥 왜 해결이됐나?.. 공부해보기
+        let navigationAppearance = UINavigationBarAppearance()
+        navigationAppearance.configureWithTransparentBackground()
+        navigationController?.navigationBar.standardAppearance = navigationAppearance
         configureNavigationTitle()
         configureNavigationButton()
         configureNavigationBackButton()
