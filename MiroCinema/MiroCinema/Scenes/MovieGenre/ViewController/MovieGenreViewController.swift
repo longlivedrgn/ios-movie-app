@@ -10,6 +10,7 @@ import UIKit
 class MovieGenreViewController: UIViewController {
 
     static let movieGenreSectionHeaderKind = "movieGenreSectionHeaderKind"
+    static let movieGenreSectionBackgroundKind = "movieGenreSectionBackgroundKind"
 
     private enum Section {
         case main
@@ -17,12 +18,14 @@ class MovieGenreViewController: UIViewController {
 
     private lazy var genreCollectionView: UICollectionView = {
         let collectionview = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
-        collectionview.register(GenreListCell.self, forCellWithReuseIdentifier: GenreListCell.identifier)
+        collectionview.backgroundColor = .black
+        collectionview.register(MovieGenreListCell.self, forCellWithReuseIdentifier: MovieGenreListCell.identifier)
         collectionview.register(
             MovieGenreHeaderView.self,
             forSupplementaryViewOfKind: MovieGenreViewController.movieGenreSectionHeaderKind,
             withReuseIdentifier: MovieGenreHeaderView.identifier
         )
+
         return collectionview
     }()
 
@@ -61,9 +64,9 @@ class MovieGenreViewController: UIViewController {
             collectionView: genreCollectionView
         ) { collectionView, indexPath, movie in
             guard let cell = collectionView.dequeueReusableCell(
-                withReuseIdentifier: GenreListCell.identifier,
+                withReuseIdentifier: MovieGenreListCell.identifier,
                 for: indexPath
-            ) as? GenreListCell else { return UICollectionViewCell() }
+            ) as? MovieGenreListCell else { return UICollectionViewCell() }
             cell.configure(with: movie)
             // movie로 컨피큐어하기~
             return cell
@@ -97,17 +100,21 @@ class MovieGenreViewController: UIViewController {
                 elementKind: MovieGenreViewController.movieGenreSectionHeaderKind,
                 alignment: .top
             )
-//            let sectionBackgroundDecoration = NSCollectionLayoutDecorationItem.background(
-//                elementKind: UICollectionView.sectionBackgroundDecorationElementKind)
-//            sectionBackgroundDecoration.contentInsets = NSDirectionalEdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5)
+            let sectionBackgroundDecoration = NSCollectionLayoutDecorationItem.background(
+                elementKind: MovieGenreViewController.movieGenreSectionBackgroundKind
+            )
             section.interGroupSpacing = 5
             section.contentInsets = NSDirectionalEdgeInsets(top: 5, leading: 20, bottom: 0, trailing: 20)
             section.boundarySupplementaryItems = [sectionHeader]
-//            section.decorationItems = [sectionBackgroundDecoration]
-
+            section.decorationItems = [sectionBackgroundDecoration]
 
             return section
         }
+
+        layout.register(
+            MovieGenreSectionBackgroundDecorationView.self,
+            forDecorationViewOfKind: MovieGenreViewController.movieGenreSectionBackgroundKind
+        )
 
         return layout
     }

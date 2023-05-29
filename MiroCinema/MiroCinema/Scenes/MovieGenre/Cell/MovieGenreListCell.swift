@@ -1,5 +1,5 @@
 //
-//  GenreListCell.swift
+//  MovieGenreListCell.swift
 //  MiroCinema
 //
 //  Created by 김용재 on 2023/05/28.
@@ -7,15 +7,14 @@
 
 import UIKit
 
-class GenreListCell: UICollectionViewListCell {
+class MovieGenreListCell: UICollectionViewListCell {
 
-    static let identifier = String(describing: GenreListCell.self)
+    static let identifier = String(describing: MovieGenreListCell.self)
 
     private let backDropImageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.image = UIImage(systemName: "arrowshape.right.fill")
         imageView.contentMode = .scaleToFill
-        imageView.layer.cornerRadius = 15
+        imageView.layer.cornerRadius = 10
         imageView.clipsToBounds = true
 
         return imageView
@@ -31,7 +30,7 @@ class GenreListCell: UICollectionViewListCell {
 
     private let symbolImageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.image = UIImage(systemName: "arrowshape.right.fill")
+        imageView.image = UIImage(systemName: "play.circle")?.withTintColor(.lightGray, renderingMode: .alwaysOriginal)
 
         return imageView
     }()
@@ -58,18 +57,21 @@ class GenreListCell: UICollectionViewListCell {
 
         backDropImageView.snp.makeConstraints {
             $0.top.bottom.leading.equalToSuperview()
-            $0.height.equalTo(100)
+            $0.height.equalTo(80)
             $0.width.equalTo(backDropImageView.snp.height).multipliedBy(1.5)
         }
 
         movieTitleLabel.snp.makeConstraints {
             $0.centerY.equalTo(backDropImageView.snp.centerY)
-            $0.leading.equalTo(backDropImageView.snp.trailing).offset(10)
+            $0.leading.equalTo(backDropImageView.snp.trailing).offset(15)
+            $0.trailing.equalTo(symbolImageView.snp.leading).offset(-10)
         }
 
         symbolImageView.snp.makeConstraints {
             $0.centerY.equalTo(backDropImageView.snp.centerY)
             $0.trailing.equalToSuperview().inset(10)
+            $0.width.equalTo(30)
+            $0.height.equalTo(symbolImageView.snp.width)
         }
     }
 
