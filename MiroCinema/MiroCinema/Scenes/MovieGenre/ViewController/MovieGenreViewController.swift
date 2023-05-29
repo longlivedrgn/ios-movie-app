@@ -97,8 +97,13 @@ class MovieGenreViewController: UIViewController {
                 elementKind: MovieGenreViewController.movieGenreSectionHeaderKind,
                 alignment: .top
             )
+//            let sectionBackgroundDecoration = NSCollectionLayoutDecorationItem.background(
+//                elementKind: UICollectionView.sectionBackgroundDecorationElementKind)
+//            sectionBackgroundDecoration.contentInsets = NSDirectionalEdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5)
             section.contentInsets = NSDirectionalEdgeInsets(top: 5, leading: 20, bottom: 0, trailing: 20)
             section.boundarySupplementaryItems = [sectionHeader]
+//            section.decorationItems = [sectionBackgroundDecoration]
+
 
             return section
         }

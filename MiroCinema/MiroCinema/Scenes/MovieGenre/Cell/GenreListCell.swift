@@ -14,7 +14,9 @@ class GenreListCell: UICollectionViewListCell {
     private let backDropImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.image = UIImage(systemName: "arrowshape.right.fill")
-        imageView.contentMode = .scaleAspectFit
+        imageView.contentMode = .scaleToFill
+        imageView.layer.cornerRadius = 15
+        imageView.clipsToBounds = true
 
         return imageView
     }()
@@ -22,6 +24,7 @@ class GenreListCell: UICollectionViewListCell {
     private let movieTitleLabel: UILabel = {
         let label = UILabel()
         label.text = "-"
+        label.textColor = .white
 
         return label
     }()
@@ -48,6 +51,7 @@ class GenreListCell: UICollectionViewListCell {
     }
 
     private func configureViews() {
+        contentView.backgroundColor = .black
         addSubview(backDropImageView)
         addSubview(movieTitleLabel)
         addSubview(symbolImageView)
