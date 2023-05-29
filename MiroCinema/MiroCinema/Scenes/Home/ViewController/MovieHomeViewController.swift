@@ -66,9 +66,9 @@ final class MovieHomeViewController: UIViewController {
             forCellWithReuseIdentifier: MovieGenresCollectionViewCell.identifier
         )
         collectionView.register(
-            MovieGenresHeaderView.self,
+            MovieHomeGenresHeaderView.self,
             forSupplementaryViewOfKind: MovieHomeViewController.movieGenresSectionHeaderKind,
-            withReuseIdentifier: MovieGenresHeaderView.identifier
+            withReuseIdentifier: MovieHomeGenresHeaderView.identifier
         )
 
         collectionView.register(
@@ -151,8 +151,8 @@ final class MovieHomeViewController: UIViewController {
                 case MovieHomeViewController.movieGenresSectionHeaderKind:
                     guard let supplementaryView = collectionView.dequeueReusableSupplementaryView(
                         ofKind: kind,
-                        withReuseIdentifier: MovieGenresHeaderView.identifier,
-                        for: indexPath) as? MovieGenresHeaderView
+                        withReuseIdentifier: MovieHomeGenresHeaderView.identifier,
+                        for: indexPath) as? MovieHomeGenresHeaderView
                     else { return UICollectionReusableView() }
                     return supplementaryView
                 case MovieHomeViewController.movieGenresSectionFooterKind:

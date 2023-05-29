@@ -1,5 +1,5 @@
 //
-//  MovieGenresCollectionReusableView.swift
+//  MovieHomeGenresHeaderView.swift
 //  MiroCinema
 //
 //  Created by 김용재 on 2023/05/18.
@@ -7,9 +7,9 @@
 
 import UIKit
 
-class MovieGenresHeaderView: UICollectionReusableView {
+class MovieHomeGenresHeaderView: UICollectionReusableView {
 
-    static let identifier = String(describing: MovieGenresHeaderView.self)
+    static let identifier = String(describing: MovieHomeGenresHeaderView.self)
 
     private let containerView: UIView = {
         let view = UIView()

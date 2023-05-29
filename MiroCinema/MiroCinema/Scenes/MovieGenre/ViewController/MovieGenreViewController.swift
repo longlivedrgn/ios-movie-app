@@ -9,6 +9,8 @@ import UIKit
 
 class MovieGenreViewController: UIViewController {
 
+    static let movieGenreSectionHeaderKind = "movieGenreSectionHeaderKind"
+
     private enum Section {
         case main
     }
@@ -16,7 +18,11 @@ class MovieGenreViewController: UIViewController {
     private lazy var genreCollectionView: UICollectionView = {
         let collectionview = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
         collectionview.register(GenreListCell.self, forCellWithReuseIdentifier: GenreListCell.identifier)
-
+        collectionview.register(
+            MovieGenreHeaderView.self,
+            forSupplementaryViewOfKind: MovieGenreViewController.movieGenreSectionHeaderKind,
+            withReuseIdentifier: MovieGenreHeaderView.identifier
+        )
         return collectionview
     }()
 
@@ -62,12 +68,39 @@ class MovieGenreViewController: UIViewController {
             // movie로 컨피큐어하기~
             return cell
         }
+
+        datasource?.supplementaryViewProvider = {
+            (collectionView, kind, indexPath) in
+            guard let supplementaryView = collectionView.dequeueReusableSupplementaryView(
+                ofKind: kind,
+                withReuseIdentifier: MovieGenreHeaderView.identifier,
+                for: indexPath
+            ) as? MovieGenreHeaderView else { return UICollectionReusableView() }
+
+            return supplementaryView
+        }
     }
     // layoutEnvironment 다시 공부해보기!
     private func createLayout() -> UICollectionViewCompositionalLayout {
         let layout = UICollectionViewCompositionalLayout { section, layoutEnvironment in
-            let configuration = UICollectionLayoutListConfiguration(appearance: .plain)
-            return NSCollectionLayoutSection.list(using: configuration, layoutEnvironment: layoutEnvironment)
+            let configuration = UICollectionLayoutListConfiguration(appearance: .insetGrouped)
+            let section = NSCollectionLayoutSection.list(
+                using: configuration,
+                layoutEnvironment: layoutEnvironment
+            )
+            let headerSize = NSCollectionLayoutSize(
+                widthDimension: .fractionalWidth(1.0),
+                heightDimension: .estimated(50)
+            )
+            let sectionHeader = NSCollectionLayoutBoundarySupplementaryItem(
+                layoutSize: headerSize,
+                elementKind: MovieGenreViewController.movieGenreSectionHeaderKind,
+                alignment: .top
+            )
+            section.contentInsets = NSDirectionalEdgeInsets(top: 5, leading: 20, bottom: 0, trailing: 20)
+            section.boundarySupplementaryItems = [sectionHeader]
+
+            return section
         }
 
         return layout
