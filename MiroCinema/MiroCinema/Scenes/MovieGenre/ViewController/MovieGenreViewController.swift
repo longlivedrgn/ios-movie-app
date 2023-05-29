@@ -49,7 +49,7 @@ class MovieGenreViewController: UIViewController {
         configureCollectionView()
         configureCollectionViewDataSource()
         configureNotificationCenter()
-        applySnapShot()
+        configureNavigationBar()
     }
 
     private func configureCollectionView() {
@@ -83,6 +83,14 @@ class MovieGenreViewController: UIViewController {
             return supplementaryView
         }
     }
+
+    private func configureNavigationBar() {
+        let navigationAppearance = UINavigationBarAppearance()
+        navigationController?.navigationBar.tintColor = .white
+        navigationAppearance.backgroundColor = .black
+        navigationController?.navigationBar.standardAppearance = navigationAppearance
+    }
+
     // layoutEnvironment 다시 공부해보기!
     private func createLayout() -> UICollectionViewCompositionalLayout {
         let layout = UICollectionViewCompositionalLayout { section, layoutEnvironment in

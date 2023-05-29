@@ -13,7 +13,7 @@ class MovieGenreListCell: UICollectionViewListCell {
 
     private let backDropImageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.contentMode = .scaleToFill
+        imageView.contentMode = .scaleAspectFill
         imageView.layer.cornerRadius = 10
         imageView.clipsToBounds = true
 
