@@ -90,6 +90,7 @@ class MovieGenreViewController: UIViewController {
         navigationController?.navigationBar.tintColor = .white
         navigationAppearance.backgroundColor = .black
         navigationController?.navigationBar.standardAppearance = navigationAppearance
+        configureNavigationBackButton()
     }
 
     // layoutEnvironment 다시 공부해보기!
@@ -126,6 +127,16 @@ class MovieGenreViewController: UIViewController {
         )
 
         return layout
+    }
+
+    private func configureNavigationBackButton() {
+        let backButtonBackgroundImage = UIImage(systemName: "list.bullet")
+        let barAppearance = UINavigationBar.appearance(
+            whenContainedInInstancesOf: [MovieDetailViewController.self]
+        )
+        barAppearance.backIndicatorImage = backButtonBackgroundImage
+        let backBarButton = UIBarButtonItem(title: "", style: .done, target: nil, action: nil)
+        navigationItem.backBarButtonItem = backBarButton
     }
 
     private func configureNotificationCenter() {

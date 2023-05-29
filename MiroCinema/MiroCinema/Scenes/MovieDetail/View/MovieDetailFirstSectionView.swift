@@ -11,13 +11,12 @@ class MovieDetailFirstSectionView: UIView {
 
     private lazy var moviePosterImageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.image = UIImage(named: "Dream")
         return imageView
     }()
 
     private let certificationLabel: PaddingLabel = {
         let label = PaddingLabel()
-        label.text = "-"
+        label.text = "영화관람 등급"
         label.font = UIFont.systemFont(ofSize: 14)
         label.textColor = .gray
         label.layer.borderColor = UIColor.gray.cgColor
@@ -61,7 +60,7 @@ class MovieDetailFirstSectionView: UIView {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 15, weight: .bold)
         label.textColor = .white
-        label.text = "-!"
+        label.text = "-"
 
         return label
     }()
