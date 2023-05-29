@@ -8,6 +8,7 @@ import UIKit
 
 struct MovieDetail {
 
+    let posterImage: UIImage
     let certificationRate: String
     let koreanTitle: String
     let originalTitle: String

@@ -9,7 +9,7 @@ import UIKit
 
 final class MovieDetailController {
 
-    let movie: Movie
+    private let movie: Movie
     private let movieNetworkAPIManager = NetworkAPIManager()
     private let movieNetworkDispatcher = NetworkDispatcher()
     var movieDetail: MovieDetail?
@@ -38,8 +38,23 @@ final class MovieDetailController {
                     endPoint: movieCertificationEndPoint
                 )
                 guard let movieCertification = decodedCertificationData as? MovieCertificationDTO else { return }
+                guard let posterPath = movieInformation.posterPath else { return }
+                let cacheKey = NSString(string: posterPath)
+                if let cachedImage = ImageCacheManager.shared.object(forKey: cacheKey) {
+                    movieDetail = generateMovieDetail(with: movieInformation, movieCertification, cachedImage)
+                } else {
+                    let imageEndPoint = MovieImageAPIEndPoint(imageURL: posterPath)
+                    let imageResult = try await movieNetworkDispatcher.performRequest(imageEndPoint.urlRequest)
 
-                movieDetail = generateMovieDetail(with: movieInformation, movieCertification)
+                    switch imageResult {
+                    case .success(let data):
+                        guard let posterImage = UIImage(data: data) else { return }
+                        ImageCacheManager.shared.setObject(posterImage, forKey: cacheKey)
+                        movieDetail = generateMovieDetail(with: movieInformation, movieCertification, posterImage)
+                    case .failure(let error):
+                        print(error)
+                    }
+                }
             } catch {
                 print(error)
             }
@@ -87,7 +102,6 @@ final class MovieDetailController {
                             .withRenderingMode(.alwaysOriginal)
                     }
                 }
-
             } catch {
                 print(error)
             }
@@ -98,7 +112,7 @@ final class MovieDetailController {
         }
     }
 
-    private func generateMovieDetail(with movieDetailsDTO: MovieDetailsDTO, _ movieCertificationDTO: MovieCertificationDTO) -> MovieDetail {
+    private func generateMovieDetail(with movieDetailsDTO: MovieDetailsDTO, _ movieCertificationDTO: MovieCertificationDTO, _ posterImage: UIImage) -> MovieDetail {
 
         let USACertification = movieCertificationDTO.certifications.first(
             where: { $0.countryCode == "US"}
@@ -109,16 +123,17 @@ final class MovieDetailController {
         let rate = certification?.certificationRate ?? "NR"
 
         return MovieDetail(
-                certificationRate: rate,
-                koreanTitle: movieDetailsDTO.koreanTitle,
-                originalTitle: movieDetailsDTO.originalTitle,
-                releaseDate: movieDetailsDTO.releaseDate,
-                countries: movieDetailsDTO.productionCountries,
-                genres: movieDetailsDTO.genres,
-                runtime: movieDetailsDTO.runTime,
-                tagLine: movieDetailsDTO.tagLine,
-                overview: movieDetailsDTO.overview
-            )
+            posterImage: posterImage,
+            certificationRate: rate,
+            koreanTitle: movieDetailsDTO.koreanTitle,
+            originalTitle: movieDetailsDTO.originalTitle,
+            releaseDate: movieDetailsDTO.releaseDate,
+            countries: movieDetailsDTO.productionCountries,
+            genres: movieDetailsDTO.genres,
+            runtime: movieDetailsDTO.runTime,
+            tagLine: movieDetailsDTO.tagLine,
+            overview: movieDetailsDTO.overview
+        )
     }
 
 }

@@ -15,6 +15,7 @@ struct MovieDetailsDTO: Decodable {
     let runTime: Int
     let tagLine: String
     let overview: String
+    let posterPath: String?
 
     enum CodingKeys: String, CodingKey {
         case originalTitle = "original_title"
@@ -25,6 +26,7 @@ struct MovieDetailsDTO: Decodable {
         case runTime = "runtime"
         case tagLine = "tagline"
         case overview
+        case posterPath = "poster_path"
     }
 
 }

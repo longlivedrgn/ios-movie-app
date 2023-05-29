@@ -180,8 +180,8 @@ class MovieDetailFirstSectionView: UIView {
         gradientLayer.frame = moviePosterImageView.bounds
     }
 
-    func configure(with movie: MovieDetail, image: UIImage) {
-        self.moviePosterImageView.image = image
+    func configure(with movie: MovieDetail) {
+        self.moviePosterImageView.image = movie.posterImage
         self.titleLabel.text = movie.koreanTitle
         self.englishTitleLabel.text = movie.originalTitle
         self.informationLabel.text  = generateInformationText(

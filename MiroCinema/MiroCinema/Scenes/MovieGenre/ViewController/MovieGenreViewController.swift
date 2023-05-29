@@ -19,6 +19,7 @@ class MovieGenreViewController: UIViewController {
     private lazy var genreCollectionView: UICollectionView = {
         let collectionview = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
         collectionview.backgroundColor = .black
+        collectionview.delegate = self
         collectionview.register(MovieGenreListCell.self, forCellWithReuseIdentifier: MovieGenreListCell.identifier)
         collectionview.register(
             MovieGenreHeaderView.self,
@@ -111,7 +112,7 @@ class MovieGenreViewController: UIViewController {
             let sectionBackgroundDecoration = NSCollectionLayoutDecorationItem.background(
                 elementKind: MovieGenreViewController.movieGenreSectionBackgroundKind
             )
-            section.interGroupSpacing = 5
+            section.interGroupSpacing = 7
             section.contentInsets = NSDirectionalEdgeInsets(top: 5, leading: 20, bottom: 0, trailing: 20)
             section.boundarySupplementaryItems = [sectionHeader]
             section.decorationItems = [sectionBackgroundDecoration]
@@ -150,6 +151,18 @@ class MovieGenreViewController: UIViewController {
         snapShot.appendItems(movies)
 
         datasource?.apply(snapShot)
+    }
+
+}
+
+extension MovieGenreViewController: UICollectionViewDelegate {
+
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        collectionView.deselectItem(at: indexPath, animated: true)
+        guard let movie = datasource?.itemIdentifier(for: indexPath) else { return }
+
+        let movieDetailViewController = MovieDetailViewController(movie: movie)
+        navigationController?.pushViewController(movieDetailViewController, animated: true)
     }
 
 }

@@ -194,9 +194,8 @@ extension MovieDetailViewController: UICollectionViewDataSource {
 
         switch sectionType {
         case .detail:
-            guard let image = movieDetailController.movie.posterImage else { return firstSectionCell }
             guard let movieDetail = movieDetailController.movieDetail else { return firstSectionCell }
-            firstSectionCell.configure(with: movieDetail, image: image)
+            firstSectionCell.configure(with: movieDetail)
             return firstSectionCell
         case .credit:
             creditCell.configure(with: movieDetailController.movieCredits[indexPath.row])

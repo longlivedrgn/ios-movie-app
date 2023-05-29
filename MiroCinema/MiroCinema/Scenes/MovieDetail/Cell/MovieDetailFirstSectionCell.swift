@@ -23,8 +23,8 @@ class MovieDetailFirstSectionCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func configure(with movieDetail: MovieDetail, image: UIImage) {
-        firstSectionView.configure(with: movieDetail, image: image)
+    func configure(with movieDetail: MovieDetail) {
+        firstSectionView.configure(with: movieDetail)
     }
 
     private func configureView() {
