@@ -14,6 +14,7 @@ class GenreListCell: UICollectionViewListCell {
     private let backDropImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.image = UIImage(systemName: "arrowshape.right.fill")
+        imageView.contentMode = .scaleAspectFit
 
         return imageView
     }()
@@ -53,12 +54,13 @@ class GenreListCell: UICollectionViewListCell {
 
         backDropImageView.snp.makeConstraints {
             $0.top.bottom.leading.equalToSuperview()
-            $0.width.equalTo(self.backDropImageView.snp.height).multipliedBy(1.7)
+            $0.height.equalTo(100)
+            $0.width.equalTo(backDropImageView.snp.height).multipliedBy(1.5)
         }
 
         movieTitleLabel.snp.makeConstraints {
             $0.centerY.equalTo(backDropImageView.snp.centerY)
-            $0.leading.equalTo(backDropImageView.snp.leading).offset(10)
+            $0.leading.equalTo(backDropImageView.snp.trailing).offset(10)
         }
 
         symbolImageView.snp.makeConstraints {
