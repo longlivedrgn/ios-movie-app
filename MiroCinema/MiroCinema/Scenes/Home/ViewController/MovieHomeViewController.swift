@@ -312,7 +312,7 @@ final class MovieHomeViewController: UIViewController {
 
     private func configureNavigationBar() {
         let navigationAppearance = UINavigationBarAppearance()
-        navigationAppearance.configureWithTransparentBackground()
+        navigationAppearance.backgroundColor = .black
         navigationAppearance.titleTextAttributes = [.foregroundColor: UIColor.white]
         navigationController?.navigationBar.standardAppearance = navigationAppearance
         configureNavigationTitle()

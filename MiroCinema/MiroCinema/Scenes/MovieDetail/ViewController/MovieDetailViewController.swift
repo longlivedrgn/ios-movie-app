@@ -54,6 +54,20 @@ class MovieDetailViewController: UIViewController {
         super.viewDidLoad()
         configureViews()
         configureNotificationCenter()
+        configureNavigationBar()
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        let navigationAppearance = UINavigationBarAppearance()
+        navigationAppearance.backgroundColor = .black
+        navigationAppearance.titleTextAttributes = [.foregroundColor: UIColor.white]
+        navigationController?.navigationBar.standardAppearance = navigationAppearance
+    }
+
+    private func configureNavigationBar() {
+        let navigationAppearance = UINavigationBarAppearance()
+        navigationAppearance.configureWithTransparentBackground()
+        navigationController?.navigationBar.standardAppearance = navigationAppearance
     }
 
     private func configureViews() {
