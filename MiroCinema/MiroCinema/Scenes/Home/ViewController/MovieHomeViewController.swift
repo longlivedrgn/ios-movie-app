@@ -45,8 +45,8 @@ final class MovieHomeViewController: UIViewController {
     private lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
         collectionView.translatesAutoresizingMaskIntoConstraints = false
-        collectionView.delegate = self
         collectionView.backgroundColor = .black
+        collectionView.delegate = self
         collectionView.register(
             MovieRankCollectionViewCell.self,
             forCellWithReuseIdentifier: MovieRankCollectionViewCell.identifier
@@ -86,7 +86,6 @@ final class MovieHomeViewController: UIViewController {
     }
 
     private func configureView() {
-        view.backgroundColor = .black
         view.addSubview(collectionView)
     }
 
@@ -312,9 +311,9 @@ final class MovieHomeViewController: UIViewController {
     }
 
     private func configureNavigationBar() {
-        // 💥 왜 해결이됐나?.. 공부해보기
         let navigationAppearance = UINavigationBarAppearance()
         navigationAppearance.configureWithTransparentBackground()
+        navigationAppearance.titleTextAttributes = [.foregroundColor: UIColor.white]
         navigationController?.navigationBar.standardAppearance = navigationAppearance
         configureNavigationTitle()
         configureNavigationButton()
@@ -360,6 +359,7 @@ final class MovieHomeViewController: UIViewController {
         )
         barAppearance.backIndicatorImage = backButtonBackgroundImage
         let backBarButton = UIBarButtonItem(title: "", style: .done, target: nil, action: nil)
+        backBarButton.tintColor = .white
         navigationItem.backBarButtonItem = backBarButton
     }
 

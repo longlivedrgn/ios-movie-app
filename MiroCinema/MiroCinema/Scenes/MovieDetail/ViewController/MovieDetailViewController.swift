@@ -61,7 +61,6 @@ class MovieDetailViewController: UIViewController {
         movieDetailCollectionView.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }
-        configureNavigationBar()
     }
 
     private func configureNotificationCenter() {
@@ -89,13 +88,6 @@ class MovieDetailViewController: UIViewController {
         DispatchQueue.main.async {
             self.movieDetailCollectionView.reloadSections([Section.credit.rawValue])
         }
-    }
-
-    private func configureNavigationBar() {
-        let navigationAppearance = UINavigationBarAppearance()
-        navigationController?.navigationBar.tintColor = .white
-        navigationAppearance.configureWithTransparentBackground()
-        navigationController?.navigationBar.standardAppearance = navigationAppearance
     }
 
     private func createlayout() -> UICollectionViewCompositionalLayout {
@@ -169,6 +161,7 @@ class MovieDetailViewController: UIViewController {
 }
 
 extension MovieDetailViewController: UICollectionViewDataSource {
+    
     func collectionView(
         _ collectionView: UICollectionView,
         numberOfItemsInSection section: Int

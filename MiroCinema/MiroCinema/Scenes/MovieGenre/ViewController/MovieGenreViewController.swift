@@ -50,7 +50,7 @@ class MovieGenreViewController: UIViewController {
         configureCollectionView()
         configureCollectionViewDataSource()
         configureNotificationCenter()
-        configureNavigationBar()
+        configureBackButton()
     }
 
     private func configureCollectionView() {
@@ -69,7 +69,6 @@ class MovieGenreViewController: UIViewController {
                 for: indexPath
             ) as? MovieGenreListCell else { return UICollectionViewCell() }
             cell.configure(with: movie)
-            // movie로 컨피큐어하기~
             return cell
         }
 
@@ -83,15 +82,6 @@ class MovieGenreViewController: UIViewController {
 
             return supplementaryView
         }
-    }
-
-    private func configureNavigationBar() {
-        let navigationAppearance = UINavigationBarAppearance()
-        navigationAppearance.backgroundColor = .black
-        navigationAppearance.titleTextAttributes = [.foregroundColor: UIColor.white]
-        navigationController?.navigationBar.tintColor = UIColor.white
-        navigationController?.navigationBar.standardAppearance = navigationAppearance
-        configureNavigationBackButton()
     }
 
     // layoutEnvironment 다시 공부해보기!
@@ -130,16 +120,6 @@ class MovieGenreViewController: UIViewController {
         return layout
     }
 
-    private func configureNavigationBackButton() {
-        let backButtonBackgroundImage = UIImage(systemName: "list.bullet")
-        let barAppearance = UINavigationBar.appearance(
-            whenContainedInInstancesOf: [MovieDetailViewController.self]
-        )
-        barAppearance.backIndicatorImage = backButtonBackgroundImage
-        let backBarButton = UIBarButtonItem(title: "", style: .done, target: nil, action: nil)
-        navigationItem.backBarButtonItem = backBarButton
-    }
-
     private func configureNotificationCenter() {
         NotificationCenter.default.addObserver(
             self,
@@ -163,6 +143,12 @@ class MovieGenreViewController: UIViewController {
         snapShot.appendItems(movies)
 
         datasource?.apply(snapShot)
+    }
+
+    private func configureBackButton() {
+        let backBarButton = UIBarButtonItem(title: "", style: .done, target: nil, action: nil)
+        backBarButton.tintColor = .white
+        navigationItem.backBarButtonItem = backBarButton
     }
 
 }
