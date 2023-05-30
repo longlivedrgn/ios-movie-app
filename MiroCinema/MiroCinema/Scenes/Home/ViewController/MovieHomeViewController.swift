@@ -22,10 +22,6 @@ final class MovieHomeViewController: UIViewController {
     private enum Section: CaseIterable {
         case rank
         case genre
-
-        static var allSections: [Section] {
-            return [.rank, .genre]
-        }
     }
 
     private typealias DataSource = UICollectionViewDiffableDataSource<Section, Item>
@@ -36,7 +32,6 @@ final class MovieHomeViewController: UIViewController {
 
     var isRankSortedByOpenDate = false
     var isMoreButtonTapped = false
-
 
     private let navigationTitle: UILabel = {
         let titleLabel = UILabel()
@@ -93,7 +88,7 @@ final class MovieHomeViewController: UIViewController {
 
     private func applySnapShot() {
         var snapShot = SnapShot()
-        snapShot.appendSections(Section.allSections)
+        snapShot.appendSections(Section.allCases)
 
         var rankMovies = movieHomeController.movies
         if isRankSortedByOpenDate {

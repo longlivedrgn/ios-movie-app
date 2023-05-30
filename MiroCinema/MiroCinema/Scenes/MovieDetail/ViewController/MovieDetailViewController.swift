@@ -113,7 +113,6 @@ class MovieDetailViewController: UIViewController {
             heightDimension: .estimated(600)
         )
 
-
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
 
         let section = NSCollectionLayoutSection(group: group)
@@ -123,7 +122,7 @@ class MovieDetailViewController: UIViewController {
 
     private func createCreditLayout() -> NSCollectionLayoutSection {
         let itemSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(0.8),
+            widthDimension: .fractionalWidth(1.0),
             heightDimension: .fractionalWidth(0.45)
         )
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
