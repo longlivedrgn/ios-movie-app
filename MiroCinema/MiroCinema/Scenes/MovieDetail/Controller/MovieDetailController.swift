@@ -59,54 +59,55 @@ final class MovieDetailController {
                 print(error)
             }
             NotificationCenter.default.post(
-                name: NSNotification.Name("MovieDetailControllerDidFetchData"),
+                name: NSNotification.Name("MovieDetailControllerDidFetchDetailData"),
                 object: nil
             )
         }
     }
 
     private func fetchMovieCredits() {
-        guard let movieID = movie.ID else { return }
-        let movieCreditsEndPoint = MovieCreditsAPIEndPoint(movieCode: movieID)
         Task {
             do {
+                guard let movieID = movie.ID else { return }
+                let movieCreditsEndPoint = MovieCreditsAPIEndPoint(movieCode: movieID)
                 let decodedData = try await movieNetworkAPIManager.fetchData(
                     to: MovieCreditsDTO.self,
                     endPoint: movieCreditsEndPoint
                 )
                 guard let credits = decodedData as? MovieCreditsDTO else { return }
+
                 let sortedCredits = credits.cast.sorted { return $0.popularity > $1.popularity }
 
                 for (index, actor) in sortedCredits.prefix(16).enumerated() {
                     let actorName = actor.name
                     let characterName = actor.characterName
-                    movieCredits[index].name = actorName
-                    movieCredits[index].characterName = characterName
                     let imageProfilePath = actor.profilePath ?? ""
                     let cachekey = NSString(string: imageProfilePath)
                     if let cachedImage = ImageCacheManager.shared.object(forKey: cachekey) {
                         movieCredits[index].profileImage = cachedImage
-                        continue
-                    }
-                    let imageProfilePathEndPoint = MovieImageAPIEndPoint(imageURL: imageProfilePath)
-                    let actorImageResult = try await movieNetworkDispatcher.performRequest(imageProfilePathEndPoint.urlRequest)
+                    } else {
+                        let imageProfilePathEndPoint = MovieImageAPIEndPoint(imageURL: imageProfilePath)
+                        let actorImageResult = try await movieNetworkDispatcher.performRequest(imageProfilePathEndPoint.urlRequest)
 
-                    switch actorImageResult {
-                    case .success(let data):
-                        guard let profileImage = UIImage(data: data) else { return }
-                        ImageCacheManager.shared.setObject(profileImage, forKey: cachekey)
-                        movieCredits[index].profileImage = profileImage
-                    case .failure:
-                        movieCredits[index].profileImage = UIImage(systemName: "person.fill")?
-                            .withTintColor(.gray)
-                            .withRenderingMode(.alwaysOriginal)
+                        switch actorImageResult {
+                        case .success(let data):
+                            guard let profileImage = UIImage(data: data) else { return }
+                            ImageCacheManager.shared.setObject(profileImage, forKey: cachekey)
+                            movieCredits[index].profileImage = profileImage
+                        case .failure:
+                            movieCredits[index].profileImage = UIImage(systemName: "person.fill")?
+                                .withTintColor(.gray)
+                                .withRenderingMode(.alwaysOriginal)
+                        }
                     }
+                    movieCredits[index].name = actorName
+                    movieCredits[index].characterName = characterName
                 }
             } catch {
                 print(error)
             }
             NotificationCenter.default.post(
-                name: NSNotification.Name("MovieDetailControllerDidFetchData"),
+                name: NSNotification.Name("MovieDetailControllerDidFetchCreditData"),
                 object: nil
             )
         }
@@ -139,5 +140,4 @@ final class MovieDetailController {
             overview: movieDetailsDTO.overview
         )
     }
-
 }

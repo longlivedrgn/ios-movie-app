@@ -9,9 +9,9 @@ import UIKit
 
 class MovieDetailViewController: UIViewController {
 
-    private enum Section: CaseIterable {
-        case detail
-        case credit
+    private enum Section: Int, CaseIterable {
+        case detail = 0
+        case credit = 1
     }
 
     static let movieDetailSectionHeaderKind = "movieDetailSectionHeaderKind"
@@ -58,7 +58,6 @@ class MovieDetailViewController: UIViewController {
 
     private func configureViews() {
         view.addSubview(movieDetailCollectionView)
-
         movieDetailCollectionView.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }
@@ -68,15 +67,27 @@ class MovieDetailViewController: UIViewController {
     private func configureNotificationCenter() {
         NotificationCenter.default.addObserver(
             self,
-            selector: #selector(didFetchData(_:)),
-            name: NSNotification.Name("MovieDetailControllerDidFetchData"),
+            selector: #selector(didFetchMovieDetailData(_:)),
+            name: NSNotification.Name("MovieDetailControllerDidFetchDetailData"),
+            object: nil
+        )
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(didFetchMovieCreditsData(_:)),
+            name: NSNotification.Name("MovieDetailControllerDidFetchCreditData"),
             object: nil
         )
     }
 
-    @objc private func didFetchData(_ notification: Notification) {
+    @objc private func didFetchMovieDetailData(_ notification: Notification) {
         DispatchQueue.main.async {
-            self.movieDetailCollectionView.reloadData()
+            self.movieDetailCollectionView.reloadSections([Section.detail.rawValue])
+        }
+    }
+
+    @objc private func didFetchMovieCreditsData(_ notification: Notification) {
+        DispatchQueue.main.async {
+            self.movieDetailCollectionView.reloadSections([Section.credit.rawValue])
         }
     }
 
@@ -88,9 +99,7 @@ class MovieDetailViewController: UIViewController {
     }
 
     private func createlayout() -> UICollectionViewCompositionalLayout {
-
         let layout = UICollectionViewCompositionalLayout { sectionIndex, layoutEnvironment in
-
             let sectionType = Section.allCases[sectionIndex]
             switch sectionType {
             case .detail:
