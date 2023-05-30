@@ -87,8 +87,9 @@ class MovieGenreViewController: UIViewController {
 
     private func configureNavigationBar() {
         let navigationAppearance = UINavigationBarAppearance()
-        navigationController?.navigationBar.tintColor = .white
         navigationAppearance.backgroundColor = .black
+        navigationAppearance.titleTextAttributes = [.foregroundColor: UIColor.white]
+        navigationController?.navigationBar.tintColor = UIColor.white
         navigationController?.navigationBar.standardAppearance = navigationAppearance
         configureNavigationBackButton()
     }

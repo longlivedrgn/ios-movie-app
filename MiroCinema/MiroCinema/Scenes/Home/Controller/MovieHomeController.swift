@@ -54,11 +54,11 @@ final class MovieHomeController {
                     case .failure(let error):
                         print(error)
                     }
+                    NotificationCenter.default.post(
+                        name: NSNotification.Name("MovieHomeControllerDidFetchData"),
+                        object: nil
+                    )
                 }
-                NotificationCenter.default.post(
-                    name: NSNotification.Name("MovieHomeControllerDidFetchData"),
-                    object: nil
-                )
             } catch {
                 print(error)
             }
@@ -114,11 +114,11 @@ final class MovieHomeController {
                     case .failure(let error):
                         print(error)
                     }
+                    NotificationCenter.default.post(
+                        name: NSNotification.Name("MovieHomeControllerDidFetchData"),
+                        object: nil
+                    )
                 }
-                NotificationCenter.default.post(
-                    name: NSNotification.Name("MovieHomeControllerDidFetchData"),
-                    object: nil
-                )
             } catch {
                 print(error)
             }

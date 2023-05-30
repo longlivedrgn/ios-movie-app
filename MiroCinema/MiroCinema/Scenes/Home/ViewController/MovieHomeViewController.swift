@@ -77,8 +77,7 @@ final class MovieHomeViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .black
-        view.addSubview(collectionView)
+        configureView()
         configureCollectionViewLayout()
         configureCollectionViewDataSource()
         applySnapShot()
@@ -86,25 +85,32 @@ final class MovieHomeViewController: UIViewController {
         configureNavigationBar()
     }
 
-    private func applySnapShot() {
-        var snapShot = SnapShot()
-        snapShot.appendSections(Section.allCases)
+    private func configureView() {
+        view.backgroundColor = .black
+        view.addSubview(collectionView)
+    }
 
-        var rankMovies = movieHomeController.movies
-        if isRankSortedByOpenDate {
-            rankMovies = rankMovies.sorted { $0.releaseDate ?? Date() > $1.releaseDate ?? Date() }
+    private func configureCollectionViewLayout() {
+        let safeAreaGuide = view.safeAreaLayoutGuide
+        collectionView.snp.makeConstraints {
+            $0.trailing.bottom.equalToSuperview()
+            $0.leading.equalToSuperview().offset(20)
+            $0.top.equalTo(safeAreaGuide.snp.top).offset(30)
         }
-        let movieItems = rankMovies.map { Item.rank($0) }
-        snapShot.appendItems(movieItems, toSection: .rank)
+    }
 
-        var allGenres = movieHomeController.genres
-        if !isMoreButtonTapped {
-            allGenres = Array(allGenres.prefix(6))
+    private func createLayout() -> UICollectionViewCompositionalLayout {
+        let layout = UICollectionViewCompositionalLayout { sectionIndex, layoutEnvironment in
+            let section = Section.allCases[sectionIndex]
+
+            switch section {
+            case .rank:
+                return self.createRankLayout()
+            case .genre:
+                return self.createGenresLayout()
+            }
         }
-        let genreItems = allGenres.map { Item.gerne($0) }
-        snapShot.appendItems(genreItems, toSection: .genre)
-
-        datasource?.apply(snapShot)
+        return layout
     }
 
     private func configureCollectionViewDataSource() {
@@ -165,27 +171,25 @@ final class MovieHomeViewController: UIViewController {
         }
     }
 
-    private func configureCollectionViewLayout() {
-        let safeAreaGuide = view.safeAreaLayoutGuide
-        collectionView.snp.makeConstraints {
-            $0.trailing.bottom.equalToSuperview()
-            $0.leading.equalToSuperview().offset(20)
-            $0.top.equalTo(safeAreaGuide.snp.top).offset(30)
-        }
-    }
+    private func applySnapShot() {
+        var snapShot = SnapShot()
+        snapShot.appendSections(Section.allCases)
 
-    private func createLayout() -> UICollectionViewCompositionalLayout {
-        let layout = UICollectionViewCompositionalLayout { sectionIndex, layoutEnvironment in
-            let section = Section.allCases[sectionIndex]
-
-            switch section {
-            case .rank:
-                return self.createRankLayout()
-            case .genre:
-                return self.createGenresLayout()
-            }
+        var rankMovies = movieHomeController.movies
+        if isRankSortedByOpenDate {
+            rankMovies = rankMovies.sorted { $0.releaseDate ?? Date() > $1.releaseDate ?? Date() }
         }
-        return layout
+        let movieItems = rankMovies.map { Item.rank($0) }
+        snapShot.appendItems(movieItems, toSection: .rank)
+
+        var allGenres = movieHomeController.genres
+        if !isMoreButtonTapped {
+            allGenres = Array(allGenres.prefix(6))
+        }
+        let genreItems = allGenres.map { Item.gerne($0) }
+        snapShot.appendItems(genreItems, toSection: .genre)
+
+        datasource?.apply(snapShot)
     }
 
     private func createRankLayout() -> NSCollectionLayoutSection {
@@ -317,16 +321,6 @@ final class MovieHomeViewController: UIViewController {
         configureNavigationBackButton()
     }
 
-    private func configureNavigationBackButton() {
-        let backButtonBackgroundImage = UIImage(systemName: "list.bullet")
-        let barAppearance = UINavigationBar.appearance(
-            whenContainedInInstancesOf: [MovieDetailViewController.self]
-        )
-        barAppearance.backIndicatorImage = backButtonBackgroundImage
-        let backBarButton = UIBarButtonItem(title: "", style: .done, target: nil, action: nil)
-        navigationItem.backBarButtonItem = backBarButton
-    }
-
     private func configureNavigationTitle() {
         self.navigationItem.leftBarButtonItem = UIBarButtonItem.init(customView: navigationTitle)
     }
@@ -359,6 +353,16 @@ final class MovieHomeViewController: UIViewController {
         ]
     }
 
+    private func configureNavigationBackButton() {
+        let backButtonBackgroundImage = UIImage(systemName: "list.bullet")
+        let barAppearance = UINavigationBar.appearance(
+            whenContainedInInstancesOf: [MovieDetailViewController.self]
+        )
+        barAppearance.backIndicatorImage = backButtonBackgroundImage
+        let backBarButton = UIBarButtonItem(title: "", style: .done, target: nil, action: nil)
+        navigationItem.backBarButtonItem = backBarButton
+    }
+
 }
 
 extension MovieHomeViewController: UICollectionViewDelegate {
@@ -373,6 +377,7 @@ extension MovieHomeViewController: UICollectionViewDelegate {
                 navigationController?.pushViewController(movieDetailViewController, animated: true)
             case .gerne(let genre):
                 let movieGenreViewController = MovieGenreViewController(genre: genre)
+                movieGenreViewController.title = genre.genreTitle
                 navigationController?.pushViewController(movieGenreViewController, animated: true)
             }
         }

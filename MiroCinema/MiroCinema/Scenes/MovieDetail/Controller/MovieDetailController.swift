@@ -97,7 +97,7 @@ final class MovieDetailController {
                         ImageCacheManager.shared.setObject(profileImage, forKey: cachekey)
                         movieCredits[index].profileImage = profileImage
                     case .failure:
-                        movieCredits[index].profileImage = UIImage(systemName: "x.square.fill")?
+                        movieCredits[index].profileImage = UIImage(systemName: "person.fill")?
                             .withTintColor(.gray)
                             .withRenderingMode(.alwaysOriginal)
                     }
@@ -112,7 +112,11 @@ final class MovieDetailController {
         }
     }
 
-    private func generateMovieDetail(with movieDetailsDTO: MovieDetailsDTO, _ movieCertificationDTO: MovieCertificationDTO, _ posterImage: UIImage) -> MovieDetail {
+    private func generateMovieDetail(
+        with movieDetailsDTO: MovieDetailsDTO,
+        _ movieCertificationDTO: MovieCertificationDTO,
+        _ posterImage: UIImage
+    ) -> MovieDetail {
 
         let USACertification = movieCertificationDTO.certifications.first(
             where: { $0.countryCode == "US"}
