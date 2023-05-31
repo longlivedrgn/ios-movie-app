@@ -9,7 +9,7 @@ import UIKit
 
 struct MovieGenre: ItemIdenfiable {
 
-//    let id = UUID()
+    var identity = UUID()
     var backDropImage: UIImage?
     var genreTitle: String?
     var movies: MoviesDTO?
@@ -20,13 +20,13 @@ struct MovieGenre: ItemIdenfiable {
         self.movies = movies
     }
 
-//    static func == (lhs: MovieGenre, rhs: MovieGenre) -> Bool {
-//        return lhs.id == rhs.id
-//    }
-//
-//    func hash(into hasher: inout Hasher) {
-//        hasher.combine(id)
-//    }
+    static func == (lhs: MovieGenre, rhs: MovieGenre) -> Bool {
+        return lhs.identity == rhs.identity
+    }
+
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(identity)
+    }
 
     static let skeletonModels: [MovieGenre] = [
         MovieGenre(backDropImage: UIImage(named: "grayImage"), genreTitle: "-"),

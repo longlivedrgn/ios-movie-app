@@ -7,11 +7,12 @@
 
 import UIKit
 
-protocol ItemIdenfiable {
-
+protocol ItemIdenfiable: Hashable {
+    var identity: UUID { get set }
 }
-struct Movie: ItemIdenfiable {
 
+struct Movie: ItemIdenfiable {
+    var identity = UUID()
     var ID: Int?
     var title: String
     let releaseDate: Date?
@@ -28,7 +29,7 @@ struct Movie: ItemIdenfiable {
         self.releaseDate = releaseDate
         self.posterImage = posterImage
     }
-//
+
 //    static func == (lhs: Movie, rhs: Movie) -> Bool {
 //        return lhs.id == rhs.id
 //    }

@@ -14,21 +14,18 @@ final class MovieHomeViewController: UIViewController {
     static let movieGenresSectionHeaderKind = "movieGenresSectionHeaderKind"
     static let movieGenresSectionFooterKind = "movieGenresSectionFooterKind"
 
-//    private enum Item: Hashable {
-//        case rank(Movie)
-//        case gerne(MovieGenre)
-//    }
-
     private struct ItemType: Hashable {
-        var id = UUID()
+
         var item: any ItemIdenfiable
 
         static func == (lhs: MovieHomeViewController.ItemType, rhs: MovieHomeViewController.ItemType) -> Bool {
-            return lhs.id == rhs.id
+            return lhs.item.identity == rhs.item.identity
         }
+
         func hash(into hasher: inout Hasher) {
-            hasher.combine(id)
+            hasher.combine(item)
         }
+
     }
 
     private enum Section: CaseIterable {
