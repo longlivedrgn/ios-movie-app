@@ -7,9 +7,9 @@
 
 import UIKit
 
-struct MovieGenre: Hashable {
+struct MovieGenre: ItemIdenfiable {
 
-    let id = UUID()
+//    let id = UUID()
     var backDropImage: UIImage?
     var genreTitle: String?
     var movies: MoviesDTO?
@@ -20,13 +20,13 @@ struct MovieGenre: Hashable {
         self.movies = movies
     }
 
-    static func == (lhs: MovieGenre, rhs: MovieGenre) -> Bool {
-        return lhs.id == rhs.id
-    }
-
-    func hash(into hasher: inout Hasher) {
-        hasher.combine(id)
-    }
+//    static func == (lhs: MovieGenre, rhs: MovieGenre) -> Bool {
+//        return lhs.id == rhs.id
+//    }
+//
+//    func hash(into hasher: inout Hasher) {
+//        hasher.combine(id)
+//    }
 
     static let skeletonModels: [MovieGenre] = [
         MovieGenre(backDropImage: UIImage(named: "grayImage"), genreTitle: "-"),

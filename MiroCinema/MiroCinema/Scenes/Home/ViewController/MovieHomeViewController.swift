@@ -14,9 +14,21 @@ final class MovieHomeViewController: UIViewController {
     static let movieGenresSectionHeaderKind = "movieGenresSectionHeaderKind"
     static let movieGenresSectionFooterKind = "movieGenresSectionFooterKind"
 
-    private enum Item: Hashable {
-        case rank(Movie)
-        case gerne(MovieGenre)
+//    private enum Item: Hashable {
+//        case rank(Movie)
+//        case gerne(MovieGenre)
+//    }
+
+    private struct ItemType: Hashable {
+        var id = UUID()
+        var item: any ItemIdenfiable
+
+        static func == (lhs: MovieHomeViewController.ItemType, rhs: MovieHomeViewController.ItemType) -> Bool {
+            return lhs.id == rhs.id
+        }
+        func hash(into hasher: inout Hasher) {
+            hasher.combine(id)
+        }
     }
 
     private enum Section: CaseIterable {
@@ -24,8 +36,8 @@ final class MovieHomeViewController: UIViewController {
         case genre
     }
 
-    private typealias DataSource = UICollectionViewDiffableDataSource<Section, Item>
-    private typealias SnapShot = NSDiffableDataSourceSnapshot<Section, Item>
+    private typealias DataSource = UICollectionViewDiffableDataSource<Section, ItemType>
+    private typealias SnapShot = NSDiffableDataSourceSnapshot<Section, ItemType>
 
     private var datasource: DataSource?
     private let movieHomeController = MovieHomeController()
@@ -115,20 +127,23 @@ final class MovieHomeViewController: UIViewController {
     private func configureCollectionViewDataSource() {
         datasource = UICollectionViewDiffableDataSource(collectionView: collectionView)
         { collectionView, indexPath, item in
-
-            switch item {
-            case .rank(let movie):
-                let cell = collectionView.dequeueReusableCell(
+            switch item.item {
+            case is Movie:
+                guard let cell = collectionView.dequeueReusableCell(
                     withReuseIdentifier: MovieRankCollectionViewCell.identifier,
-                    for: indexPath) as? MovieRankCollectionViewCell
-                cell?.configure(with: movie)
+                    for: indexPath) as? MovieRankCollectionViewCell else { return UICollectionViewCell() }
+                guard let items = item.item as? Movie else { return UICollectionViewCell() }
+                cell.configure(with: items)
                 return cell
-            case .gerne(let genre):
-                let cell = collectionView.dequeueReusableCell(
+            case is MovieGenre:
+                guard let cell = collectionView.dequeueReusableCell(
                     withReuseIdentifier: MovieGenresCollectionViewCell.identifier,
-                    for: indexPath) as? MovieGenresCollectionViewCell
-                cell?.configure(with: genre)
+                    for: indexPath) as? MovieGenresCollectionViewCell else { return UICollectionViewCell()}
+                guard let items = item.item as? MovieGenre else { return UICollectionViewCell() }
+                cell.configure(with: items)
                 return cell
+            default:
+                return UICollectionViewCell()
             }
         }
 
@@ -175,17 +190,11 @@ final class MovieHomeViewController: UIViewController {
         snapShot.appendSections(Section.allCases)
 
         var rankMovies = movieHomeController.movies
-        if isRankSortedByOpenDate {
-            rankMovies = rankMovies.sorted { $0.releaseDate ?? Date() > $1.releaseDate ?? Date() }
-        }
-        let movieItems = rankMovies.map { Item.rank($0) }
+        let movieItems = rankMovies.map { ItemType(item:$0) }
         snapShot.appendItems(movieItems, toSection: .rank)
 
         var allGenres = movieHomeController.genres
-        if !isMoreButtonTapped {
-            allGenres = Array(allGenres.prefix(6))
-        }
-        let genreItems = allGenres.map { Item.gerne($0) }
+        let genreItems = allGenres.map { ItemType(item: $0) }
         snapShot.appendItems(genreItems, toSection: .genre)
 
         datasource?.apply(snapShot)
@@ -367,20 +376,20 @@ final class MovieHomeViewController: UIViewController {
 
 extension MovieHomeViewController: UICollectionViewDelegate {
 
-        func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-            collectionView.deselectItem(at: indexPath, animated: true)
-            guard let movie = datasource?.itemIdentifier(for: indexPath) else { return }
-
-            switch movie {
-            case .rank(let movie):
-                let movieDetailViewController = MovieDetailViewController(movie: movie)
-                navigationController?.pushViewController(movieDetailViewController, animated: true)
-            case .gerne(let genre):
-                let movieGenreViewController = MovieGenreViewController(genre: genre)
-                movieGenreViewController.title = genre.genreTitle
-                navigationController?.pushViewController(movieGenreViewController, animated: true)
-            }
-        }
+//        func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+//            collectionView.deselectItem(at: indexPath, animated: true)
+//            guard let movie = datasource?.itemIdentifier(for: indexPath) else { return }
+//
+//            switch movie {
+//            case .rank(let movie):
+//                let movieDetailViewController = MovieDetailViewController(movie: movie)
+//                navigationController?.pushViewController(movieDetailViewController, animated: true)
+//            case .gerne(let genre):
+//                let movieGenreViewController = MovieGenreViewController(genre: genre)
+//                movieGenreViewController.title = genre.genreTitle
+//                navigationController?.pushViewController(movieGenreViewController, animated: true)
+//            }
+//        }
 
 }
 

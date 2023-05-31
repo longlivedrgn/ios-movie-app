@@ -7,11 +7,13 @@
 
 import UIKit
 
-struct Movie: Hashable {
+protocol ItemIdenfiable {
+
+}
+struct Movie: ItemIdenfiable {
 
     var ID: Int?
     var title: String
-    let id = UUID()
     let releaseDate: Date?
     var posterImage: UIImage?
 
@@ -26,10 +28,10 @@ struct Movie: Hashable {
         self.releaseDate = releaseDate
         self.posterImage = posterImage
     }
-
-    static func == (lhs: Movie, rhs: Movie) -> Bool {
-        return lhs.id == rhs.id
-    }
+//
+//    static func == (lhs: Movie, rhs: Movie) -> Bool {
+//        return lhs.id == rhs.id
+//    }
 
     static let skeletonModels: [Movie] = [
         Movie(title: "-", posterImage: UIImage(named: "grayImage")),
