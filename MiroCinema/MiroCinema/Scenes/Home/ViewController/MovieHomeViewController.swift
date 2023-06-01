@@ -28,7 +28,7 @@ final class MovieHomeViewController: UIViewController {
     private typealias SnapShot = NSDiffableDataSourceSnapshot<Section, Item>
 
     private var datasource: DataSource?
-    private let movieHomeController = MovieHomeController()
+    private let movieHomeController = MovieHomeModel()
 
     var isRankSortedByOpenDate = false
     var isMoreButtonTapped = false
@@ -355,7 +355,7 @@ final class MovieHomeViewController: UIViewController {
     private func configureNavigationBackButton() {
         let backButtonBackgroundImage = UIImage(systemName: "list.bullet")
         let barAppearance = UINavigationBar.appearance(
-            whenContainedInInstancesOf: [MovieDetailViewController.self]
+            whenContainedInInstancesOf: [MovieDetailModel.self]
         )
         barAppearance.backIndicatorImage = backButtonBackgroundImage
         let backBarButton = UIBarButtonItem(title: "", style: .done, target: nil, action: nil)
@@ -373,10 +373,10 @@ extension MovieHomeViewController: UICollectionViewDelegate {
 
             switch movie {
             case .rank(let movie):
-                let movieDetailViewController = MovieDetailViewController(movie: movie)
+                let movieDetailViewController = MovieDetailModel(movie: movie)
                 navigationController?.pushViewController(movieDetailViewController, animated: true)
             case .gerne(let genre):
-                let movieGenreViewController = MovieGenreViewController(genre: genre)
+                let movieGenreViewController = MovieGenreModel(genre: genre)
                 movieGenreViewController.title = genre.genreTitle
                 navigationController?.pushViewController(movieGenreViewController, animated: true)
             }

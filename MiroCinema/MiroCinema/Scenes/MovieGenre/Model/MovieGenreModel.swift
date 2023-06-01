@@ -7,7 +7,7 @@
 
 import UIKit
 
-class MovieGenreViewController: UIViewController {
+class MovieGenreModel: UIViewController {
 
     static let movieGenreSectionHeaderKind = "movieGenreSectionHeaderKind"
     static let movieGenreSectionBackgroundKind = "movieGenreSectionBackgroundKind"
@@ -23,7 +23,7 @@ class MovieGenreViewController: UIViewController {
         collectionview.register(MovieGenreListCell.self, forCellWithReuseIdentifier: MovieGenreListCell.identifier)
         collectionview.register(
             MovieGenreHeaderView.self,
-            forSupplementaryViewOfKind: MovieGenreViewController.movieGenreSectionHeaderKind,
+            forSupplementaryViewOfKind: MovieGenreModel.movieGenreSectionHeaderKind,
             withReuseIdentifier: MovieGenreHeaderView.identifier
         )
 
@@ -98,11 +98,11 @@ class MovieGenreViewController: UIViewController {
             )
             let sectionHeader = NSCollectionLayoutBoundarySupplementaryItem(
                 layoutSize: headerSize,
-                elementKind: MovieGenreViewController.movieGenreSectionHeaderKind,
+                elementKind: MovieGenreModel.movieGenreSectionHeaderKind,
                 alignment: .top
             )
             let sectionBackgroundDecoration = NSCollectionLayoutDecorationItem.background(
-                elementKind: MovieGenreViewController.movieGenreSectionBackgroundKind
+                elementKind: MovieGenreModel.movieGenreSectionBackgroundKind
             )
             section.interGroupSpacing = 7
             section.contentInsets = NSDirectionalEdgeInsets(top: 5, leading: 20, bottom: 0, trailing: 20)
@@ -114,7 +114,7 @@ class MovieGenreViewController: UIViewController {
 
         layout.register(
             MovieGenreSectionBackgroundDecorationView.self,
-            forDecorationViewOfKind: MovieGenreViewController.movieGenreSectionBackgroundKind
+            forDecorationViewOfKind: MovieGenreModel.movieGenreSectionBackgroundKind
         )
 
         return layout
@@ -153,13 +153,13 @@ class MovieGenreViewController: UIViewController {
 
 }
 
-extension MovieGenreViewController: UICollectionViewDelegate {
+extension MovieGenreModel: UICollectionViewDelegate {
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: true)
         guard let movie = datasource?.itemIdentifier(for: indexPath) else { return }
 
-        let movieDetailViewController = MovieDetailViewController(movie: movie)
+        let movieDetailViewController = MovieDetailModel(movie: movie)
         navigationController?.pushViewController(movieDetailViewController, animated: true)
     }
 

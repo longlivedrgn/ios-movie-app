@@ -1,5 +1,5 @@
 //
-//  MovieDetailViewController.swift
+//  MovieDetailModel.swift
 //  MiroCinema
 //
 //  Created by 김용재 on 2023/05/22.
@@ -7,7 +7,7 @@
 
 import UIKit
 
-class MovieDetailViewController: UIViewController {
+class MovieDetailModel: UIViewController {
 
     private enum Section: Int, CaseIterable {
         case detail = 0
@@ -29,7 +29,7 @@ class MovieDetailViewController: UIViewController {
         )
         collectionview.register(
             MovieDetailHeaderView.self,
-            forSupplementaryViewOfKind: MovieDetailViewController.movieDetailSectionHeaderKind,
+            forSupplementaryViewOfKind: MovieDetailModel.movieDetailSectionHeaderKind,
             withReuseIdentifier: MovieDetailHeaderView.identifier
         )
         collectionview.dataSource = self
@@ -158,7 +158,7 @@ class MovieDetailViewController: UIViewController {
         )
         let header = NSCollectionLayoutBoundarySupplementaryItem(
             layoutSize: headerSize,
-            elementKind: MovieDetailViewController.movieDetailSectionHeaderKind,
+            elementKind: MovieDetailModel.movieDetailSectionHeaderKind,
             alignment: .top
         )
         header.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 15, bottom: 0, trailing: 0)
@@ -174,7 +174,7 @@ class MovieDetailViewController: UIViewController {
 
 }
 
-extension MovieDetailViewController: UICollectionViewDataSource {
+extension MovieDetailModel: UICollectionViewDataSource {
     
     func collectionView(
         _ collectionView: UICollectionView,
@@ -220,7 +220,7 @@ extension MovieDetailViewController: UICollectionViewDataSource {
 
 }
 
-extension MovieDetailViewController: UICollectionViewDelegate {
+extension MovieDetailModel: UICollectionViewDelegate {
 
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return Section.allCases.count
@@ -241,7 +241,7 @@ extension MovieDetailViewController: UICollectionViewDelegate {
 
 }
 
-extension MovieDetailViewController: MovieDetailFirstSectionViewDelegate {
+extension MovieDetailModel: MovieDetailFirstSectionViewDelegate {
 
     func movieDetailFirstSectionView(
         _ movieDetailFirstSectionView: MovieDetailFirstSectionView,
