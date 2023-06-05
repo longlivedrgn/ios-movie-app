@@ -28,6 +28,7 @@
   * [💥 Collection View 레이아웃 짜기](#-collection-view-레이아웃-짜기)
   * [💥 가변적인 cell 구현하기](#-가변적인-cell-구현하기)
   * [💥 무거워진 view controller 덜어내기](#-무거워진-view-controller-덜어내기)
+  * [💥 View controller의 순환 참조 문제](#-view-controller의-순환-참조-문제)
 
 ## 💥 하나의 datasource를 활용하여 서로 다른 API 데이터 모델 처리하기
 
@@ -338,3 +339,41 @@ NotificationCenter.default.addObserver(
 ```
 
 💬 이를 통해서, view controller는 view와 관련 없는 코드를 덜어낼 수 있었고, view controller의 역할이 많아져서 떨어지던 코드의 가독성 개선할 수 있었어요.
+
+## 💥 View controller의 순환 참조 문제
+
+- 해당 앱은 NotificationCenter를 활용하여 view를 업데이트하는 로직을 활용해요.
+- 그리고 navigation controller를 활용하여 push가 되고 pop이되면 pop된 view controller는 자동으로 deinit이 되면서 NotificationCenter가 자동으로 remove가 돼요.
+
+아래의 애플 공식문서를 읽어보면 개발자가 직접적으로 NotificationCenter를 remove하지 않아도 됨을 알 수 있어요.
+
+[애플 공식문서](https://developer.apple.com/documentation/foundation/notificationcenter/1415360-addobserver)
+
+> Unregister an observer to stop receiving notifications.
+To unregister an observer, use removeObserver(*:) or removeObserver(*:name:object:) with the most specific detail possible. For example, if you used a name and object to register the observer, use the name and object to remove it.
+**If your app targets iOS 9.0 and later or macOS 10.11 and later, you do not need to unregister an observer that you created with this function. If you forget or are unable to remove an observer, the system cleans up the next time it would have posted to it.**
+> 
+
+- 그러나, 프로젝트 진행 중 Notification이 중복으로 받아지는 경우를 확인했어요.
+    - Home viewcontroller에서 detail viewcontroller로 넘어갈 때, NotificationCenter를 addObserver를 하는 데, detail view controller가 pop될 때에 Notification center가 remove가 되지 않으므로, 계속해서 Notification이 중복으로 받아지는 것이었어요.
+
+**🖐️ 위와 같은 상황이 일어나는 이유는 detail view controller가 pop될 때, view controller 속 클로져나 delegate 변수에 의해서 순환참조가 일어나 메모리에서 할당 해제(deinit)이 되지 않기 때문이었어요.**
+
+- 따라서 아래와 같이 약한 참조(weak)를 활용하여 view controller가 pop될 때, 메모리에서 할당 해제가 될 수 있게 변경해주었어요.
+
+```swift
+private func createlayout() -> UICollectionViewCompositionalLayout {
+    let layout = UICollectionViewCompositionalLayout { [weak self] sectionIndex, layoutEnvironment in
+        let sectionType = Section.allCases[sectionIndex]
+        switch sectionType {
+        case .detail:
+            return self?.createDetailLayout()
+        case .credit:
+            return self?.createCreditLayout()
+        }
+    }
+    return layout
+}
+```
+
+💬 이를 통해서, pop될 때, 정상적으로 view controller가 메모리에서 할당 해제가 되어 Notification이 중복으로 받아지는 문제를 해결할 수 있었어요.
