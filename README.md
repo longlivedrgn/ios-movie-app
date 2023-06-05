@@ -23,7 +23,11 @@
 | Snapkit |
 - Autolayout을 잡아줄 때 사용되는 boilerplate 코드를 줄이기위하여 Snapkit 라이브러리를 활용했어요.
 
-# ⚽️ 고민과 해결
+# 🤨 고민과 해결
+  * [💥 하나의 datasource를 활용하여 서로 다른 API 데이터 모델 처리하기](#-하나의-datasource를-활용하여-서로-다른-api-데이터-모델-처리하기)
+  * [💥 Collection View 레이아웃 짜기](#-collection-view-레이아웃-짜기)
+  * [💥 가변적인 cell 구현하기(feat. cell 안에 Button 넣기)](#-가변적인-cell-구현하기(feat.-cell-안에-button-넣기))
+  * [💥 무거워진 view controller 덜어내기](#-무거워진-view-controller-덜어내기)
 
 ## 💥 하나의 datasource를 활용하여 서로 다른 API 데이터 모델 처리하기
 
