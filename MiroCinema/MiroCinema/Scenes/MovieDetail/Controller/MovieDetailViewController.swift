@@ -81,13 +81,13 @@ class MovieDetailViewController: UIViewController {
         NotificationCenter.default.addObserver(
             self,
             selector: #selector(didFetchMovieDetailData(_:)),
-            name: NSNotification.Name("MovieDetailModelDidFetchDetailData"),
+            name: NSNotification.Name.detailModelDidFetchDetailData,
             object: nil
         )
         NotificationCenter.default.addObserver(
             self,
             selector: #selector(didFetchMovieCreditsData(_:)),
-            name: NSNotification.Name("MovieDetailModelDidFetchCreditData"),
+            name: NSNotification.Name.detailModelDidFetchCreditData,
             object: nil
         )
     }

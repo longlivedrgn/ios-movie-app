@@ -40,7 +40,7 @@ final class MovieGenreModel {
                         print(error)
                     }
                     NotificationCenter.default.post(
-                        name: NSNotification.Name("MovieGenreModelDidFetchData"),
+                        name: NSNotification.Name.genreModelDidFetchData,
                         object: nil
                     )
                 }

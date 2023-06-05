@@ -124,7 +124,7 @@ class MovieGenreViewController: UIViewController {
         NotificationCenter.default.addObserver(
             self,
             selector: #selector(didFetchData(_:)),
-            name: NSNotification.Name("MovieGenreModelDidFetchData"),
+            name: NSNotification.Name.genreModelDidFetchData,
             object: nil
         )
     }

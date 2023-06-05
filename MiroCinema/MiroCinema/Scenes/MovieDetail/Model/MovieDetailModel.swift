@@ -59,7 +59,7 @@ final class MovieDetailModel {
                 print(error)
             }
             NotificationCenter.default.post(
-                name: NSNotification.Name("MovieDetailModelDidFetchDetailData"),
+                name: NSNotification.Name.detailModelDidFetchDetailData,
                 object: nil
             )
         }
@@ -107,7 +107,7 @@ final class MovieDetailModel {
                 print(error)
             }
             NotificationCenter.default.post(
-                name: NSNotification.Name("MovieDetailModelDidFetchCreditData"),
+                name: NSNotification.Name.detailModelDidFetchCreditData,
                 object: nil
             )
         }

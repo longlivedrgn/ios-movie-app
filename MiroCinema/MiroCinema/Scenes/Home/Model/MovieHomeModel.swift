@@ -55,7 +55,7 @@ final class MovieHomeModel {
                         print(error)
                     }
                     NotificationCenter.default.post(
-                        name: NSNotification.Name("MovieHomeModelDidFetchData"),
+                        name: NSNotification.Name.homeModelDidFetchData,
                         object: nil
                     )
                 }
