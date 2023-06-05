@@ -26,7 +26,7 @@
 # 🤨 고민과 해결
   * [💥 하나의 datasource를 활용하여 서로 다른 API 데이터 모델 처리하기](#-하나의-datasource를-활용하여-서로-다른-api-데이터-모델-처리하기)
   * [💥 Collection View 레이아웃 짜기](#-collection-view-레이아웃-짜기)
-  * [💥 가변적인 cell 구현하기(feat. cell 안에 Button 넣기)](#-가변적인-cell-구현하기feat.-cell-안에-Button 넣기)
+  * [💥 가변적인 cell 구현하기](#-가변적인-cell-구현하기)
   * [💥 무거워진 view controller 덜어내기](#-무거워진-view-controller-덜어내기)
 
 ## 💥 하나의 datasource를 활용하여 서로 다른 API 데이터 모델 처리하기
@@ -237,7 +237,8 @@ private func applySnapShot() {
 
 - 첫 번째 section에는 detail view cell 하나만을 보여주고, 두 번째 section에서는 credit view를 보여주는 방식으로 구현을 했어요. 해당 방법을 활용하니, 전체 화면이 scroll이 되면서 원하는 layout을 구현할 수 있었어요.
 
-## 💥 가변적인 cell 구현하기(feat. cell 안에 Button 넣기)
+## 💥 가변적인 cell 구현하기
+- feat. cell안에 버튼 넣기
 
 | 디테일 뷰 |
 | --- |
