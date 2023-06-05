@@ -28,7 +28,7 @@ final class MovieHomeViewController: UIViewController {
     private typealias SnapShot = NSDiffableDataSourceSnapshot<Section, Item>
 
     private var datasource: DataSource?
-    private let movieHomeController = MovieHomeModel()
+    private let movieHomeModel = MovieHomeModel()
 
     var isRankSortedByOpenDate = false
     var isMoreButtonTapped = false
@@ -174,14 +174,14 @@ final class MovieHomeViewController: UIViewController {
         var snapShot = SnapShot()
         snapShot.appendSections(Section.allCases)
 
-        var rankMovies = movieHomeController.movies
+        var rankMovies = movieHomeModel.movies
         if isRankSortedByOpenDate {
             rankMovies = rankMovies.sorted { $0.releaseDate ?? Date() > $1.releaseDate ?? Date() }
         }
         let movieItems = rankMovies.map { Item.rank($0) }
         snapShot.appendItems(movieItems, toSection: .rank)
 
-        var allGenres = movieHomeController.genres
+        var allGenres = movieHomeModel.genres
         if !isMoreButtonTapped {
             allGenres = Array(allGenres.prefix(6))
         }
@@ -299,7 +299,7 @@ final class MovieHomeViewController: UIViewController {
         NotificationCenter.default.addObserver(
             self,
             selector: #selector(didFetchData(_:)),
-            name: NSNotification.Name("MovieHomeControllerDidFetchData"),
+            name: NSNotification.Name("MovieHomeModelDidFetchData"),
             object: nil
         )
     }
@@ -355,7 +355,7 @@ final class MovieHomeViewController: UIViewController {
     private func configureNavigationBackButton() {
         let backButtonBackgroundImage = UIImage(systemName: "list.bullet")
         let barAppearance = UINavigationBar.appearance(
-            whenContainedInInstancesOf: [MovieDetailModel.self]
+            whenContainedInInstancesOf: [MovieDetailViewController.self]
         )
         barAppearance.backIndicatorImage = backButtonBackgroundImage
         let backBarButton = UIBarButtonItem(title: "", style: .done, target: nil, action: nil)
@@ -373,10 +373,10 @@ extension MovieHomeViewController: UICollectionViewDelegate {
 
             switch movie {
             case .rank(let movie):
-                let movieDetailViewController = MovieDetailModel(movie: movie)
+                let movieDetailViewController = MovieDetailViewController(movie: movie)
                 navigationController?.pushViewController(movieDetailViewController, animated: true)
             case .gerne(let genre):
-                let movieGenreViewController = MovieGenreModel(genre: genre)
+                let movieGenreViewController = MovieGenreViewController(genre: genre)
                 movieGenreViewController.title = genre.genreTitle
                 navigationController?.pushViewController(movieGenreViewController, animated: true)
             }

@@ -1,5 +1,5 @@
 //
-//  MovieHomeController.swift
+//  MovieHomeModel.swift
 //  MiroCinema
 //
 //  Created by 김용재 on 2023/05/26.
@@ -55,7 +55,7 @@ final class MovieHomeModel {
                         print(error)
                     }
                     NotificationCenter.default.post(
-                        name: NSNotification.Name("MovieHomeControllerDidFetchData"),
+                        name: NSNotification.Name("MovieHomeModelDidFetchData"),
                         object: nil
                     )
                 }
@@ -115,7 +115,7 @@ final class MovieHomeModel {
                         print(error)
                     }
                     NotificationCenter.default.post(
-                        name: NSNotification.Name("MovieHomeControllerDidFetchData"),
+                        name: NSNotification.Name("MovieHomeModelDidFetchData"),
                         object: nil
                     )
                 }

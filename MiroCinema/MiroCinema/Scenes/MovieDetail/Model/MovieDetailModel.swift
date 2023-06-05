@@ -1,265 +1,143 @@
 //
-//  MovieDetailModel.swift
+//  MovieDetailController.swift
 //  MiroCinema
 //
-//  Created by 김용재 on 2023/05/22.
+//  Created by 김용재 on 2023/05/26.
 //
 
 import UIKit
 
-class MovieDetailModel: UIViewController {
+final class MovieDetailModel {
 
-    private enum Section: Int, CaseIterable {
-        case detail = 0
-        case credit = 1
-    }
-
-    static let movieDetailSectionHeaderKind = "movieDetailSectionHeaderKind"
-
-    private lazy var movieDetailCollectionView: UICollectionView = {
-        let collectionview = UICollectionView(frame: .zero, collectionViewLayout: createlayout())
-        collectionview.backgroundColor = .black
-        collectionview.register(
-            MovieDetailCreditCell.self,
-            forCellWithReuseIdentifier: MovieDetailCreditCell.identifier
-        )
-        collectionview.register(
-            MovieDetailFirstSectionCell.self,
-            forCellWithReuseIdentifier: MovieDetailFirstSectionCell.identifier
-        )
-        collectionview.register(
-            MovieDetailHeaderView.self,
-            forSupplementaryViewOfKind: MovieDetailModel.movieDetailSectionHeaderKind,
-            withReuseIdentifier: MovieDetailHeaderView.identifier
-        )
-        collectionview.dataSource = self
-        collectionview.delegate = self
-        collectionview.contentInsetAdjustmentBehavior = .never
-
-        return collectionview
-    }()
-
-    private let movieDetailController: MovieDetailController
+    private let movie: Movie
+    private let movieNetworkAPIManager = NetworkAPIManager()
+    private let movieNetworkDispatcher = NetworkDispatcher()
+    var movieDetail: MovieDetail?
+    var movieCredits = MovieCredit.skeletonModels
 
     init(movie: Movie) {
-        self.movieDetailController = MovieDetailController(movie: movie)
-        super.init(nibName: nil, bundle: nil)
+        self.movie = movie
+        fetchMovieDetails()
+        fetchMovieCredits()
     }
 
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
+    private func fetchMovieDetails() {
+        guard let movieID = movie.ID else { return }
+        let movieDetailEndPoint = MovieDetailsAPIEndPoint(movieCode: movieID)
+        let movieCertificationEndPoint = MovieCertificationAPIEndPoint(movieCode: movieID)
+        Task {
+            do {
+                let decodedDetailData = try await movieNetworkAPIManager.fetchData(
+                    to: MovieDetailsDTO.self,
+                    endPoint: movieDetailEndPoint
+                )
+                guard let movieInformation = decodedDetailData as? MovieDetailsDTO else { return }
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        configureViews()
-        configureNotificationCenter()
-        configureNavigationBar()
-    }
+                let decodedCertificationData = try await movieNetworkAPIManager.fetchData(
+                    to: MovieCertificationDTO.self,
+                    endPoint: movieCertificationEndPoint
+                )
+                guard let movieCertification = decodedCertificationData as? MovieCertificationDTO else { return }
+                guard let posterPath = movieInformation.posterPath else { return }
+                let cacheKey = NSString(string: posterPath)
+                if let cachedImage = ImageCacheManager.shared.object(forKey: cacheKey) {
+                    movieDetail = generateMovieDetail(with: movieInformation, movieCertification, cachedImage)
+                } else {
+                    let imageEndPoint = MovieImageAPIEndPoint(imageURL: posterPath)
+                    let imageResult = try await movieNetworkDispatcher.performRequest(imageEndPoint.urlRequest)
 
-    override func viewWillDisappear(_ animated: Bool) {
-        let navigationAppearance = UINavigationBarAppearance()
-        navigationAppearance.backgroundColor = .black
-        navigationAppearance.titleTextAttributes = [.foregroundColor: UIColor.white]
-        navigationController?.navigationBar.standardAppearance = navigationAppearance
-    }
-
-    private func configureNavigationBar() {
-        let navigationAppearance = UINavigationBarAppearance()
-        navigationAppearance.configureWithTransparentBackground()
-        navigationController?.navigationBar.standardAppearance = navigationAppearance
-    }
-
-    private func configureViews() {
-        view.addSubview(movieDetailCollectionView)
-        movieDetailCollectionView.snp.makeConstraints {
-            $0.edges.equalToSuperview()
-        }
-    }
-
-    private func configureNotificationCenter() {
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(didFetchMovieDetailData(_:)),
-            name: NSNotification.Name("MovieDetailControllerDidFetchDetailData"),
-            object: nil
-        )
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(didFetchMovieCreditsData(_:)),
-            name: NSNotification.Name("MovieDetailControllerDidFetchCreditData"),
-            object: nil
-        )
-    }
-
-    @objc private func didFetchMovieDetailData(_ notification: Notification) {
-        DispatchQueue.main.async {
-            self.movieDetailCollectionView.reloadSections([Section.detail.rawValue])
-        }
-    }
-
-    @objc private func didFetchMovieCreditsData(_ notification: Notification) {
-        DispatchQueue.main.async {
-            self.movieDetailCollectionView.reloadSections([Section.credit.rawValue])
-        }
-    }
-
-    private func createlayout() -> UICollectionViewCompositionalLayout {
-        let layout = UICollectionViewCompositionalLayout { sectionIndex, layoutEnvironment in
-            let sectionType = Section.allCases[sectionIndex]
-            switch sectionType {
-            case .detail:
-                return self.createDetailLayout()
-            case .credit:
-                return self.createCreditLayout()
+                    switch imageResult {
+                    case .success(let data):
+                        guard let posterImage = UIImage(data: data) else { return }
+                        ImageCacheManager.shared.setObject(posterImage, forKey: cacheKey)
+                        movieDetail = generateMovieDetail(with: movieInformation, movieCertification, posterImage)
+                    case .failure(let error):
+                        print(error)
+                    }
+                }
+            } catch {
+                print(error)
             }
-        }
-        return layout
-    }
-
-    private func createDetailLayout() -> NSCollectionLayoutSection {
-        let itemSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(1),
-            heightDimension: .estimated(600)
-        )
-        let item = NSCollectionLayoutItem(layoutSize: itemSize)
-        let groupSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(1),
-            heightDimension: .estimated(600)
-        )
-
-        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
-
-        let section = NSCollectionLayoutSection(group: group)
-
-        return section
-    }
-
-    private func createCreditLayout() -> NSCollectionLayoutSection {
-        let itemSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(1.0),
-            heightDimension: .fractionalWidth(0.45)
-        )
-        let item = NSCollectionLayoutItem(layoutSize: itemSize)
-
-        let groupSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(0.4),
-            heightDimension: .fractionalHeight(0.2)
-        )
-        let group = NSCollectionLayoutGroup.vertical(
-            layoutSize: groupSize,
-            subitems: [item, item]
-        )
-        group.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 15, bottom: 0, trailing: 0)
-
-        let headerSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(1),
-            heightDimension: .absolute(60)
-        )
-        let header = NSCollectionLayoutBoundarySupplementaryItem(
-            layoutSize: headerSize,
-            elementKind: MovieDetailModel.movieDetailSectionHeaderKind,
-            alignment: .top
-        )
-        header.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 15, bottom: 0, trailing: 0)
-
-        let section = NSCollectionLayoutSection(group: group)
-        section.orthogonalScrollingBehavior = .continuous
-        section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 0)
-        section.interGroupSpacing = 15
-        section.boundarySupplementaryItems = [header]
-
-        return section
-    }
-
-}
-
-extension MovieDetailModel: UICollectionViewDataSource {
-    
-    func collectionView(
-        _ collectionView: UICollectionView,
-        numberOfItemsInSection section: Int
-    ) -> Int {
-        let sectionType = Section.allCases[section]
-
-        switch sectionType {
-        case .detail:
-            return 1
-        case .credit:
-            return movieDetailController.movieCredits.count
+            NotificationCenter.default.post(
+                name: NSNotification.Name("MovieDetailModelDidFetchDetailData"),
+                object: nil
+            )
         }
     }
 
-    func collectionView(
-        _ collectionView: UICollectionView,
-        cellForItemAt indexPath: IndexPath
-    ) -> UICollectionViewCell {
-        guard let firstSectionCell = movieDetailCollectionView.dequeueReusableCell(
-            withReuseIdentifier: MovieDetailFirstSectionCell.identifier,
-            for: indexPath) as? MovieDetailFirstSectionCell
-        else { return UICollectionViewCell() }
-        firstSectionCell.firstSectionView.delegate = self
+    private func fetchMovieCredits() {
+        Task {
+            do {
+                guard let movieID = movie.ID else { return }
+                let movieCreditsEndPoint = MovieCreditsAPIEndPoint(movieCode: movieID)
+                let decodedData = try await movieNetworkAPIManager.fetchData(
+                    to: MovieCreditsDTO.self,
+                    endPoint: movieCreditsEndPoint
+                )
+                guard let credits = decodedData as? MovieCreditsDTO else { return }
 
-        guard let creditCell = movieDetailCollectionView.dequeueReusableCell(
-            withReuseIdentifier: MovieDetailCreditCell.identifier,
-            for: indexPath) as? MovieDetailCreditCell
-        else { return UICollectionViewCell() }
+                let sortedCredits = credits.cast.sorted { return $0.popularity > $1.popularity }
 
-        let sectionType = Section.allCases[indexPath.section]
+                for (index, actor) in sortedCredits.prefix(16).enumerated() {
+                    let actorName = actor.name
+                    let characterName = actor.characterName
+                    let imageProfilePath = actor.profilePath ?? ""
+                    let cachekey = NSString(string: imageProfilePath)
+                    if let cachedImage = ImageCacheManager.shared.object(forKey: cachekey) {
+                        movieCredits[index].profileImage = cachedImage
+                    } else {
+                        let imageProfilePathEndPoint = MovieImageAPIEndPoint(imageURL: imageProfilePath)
+                        let actorImageResult = try await movieNetworkDispatcher.performRequest(imageProfilePathEndPoint.urlRequest)
 
-        switch sectionType {
-        case .detail:
-            guard let movieDetail = movieDetailController.movieDetail else { return firstSectionCell }
-            firstSectionCell.configure(with: movieDetail)
-            return firstSectionCell
-        case .credit:
-            creditCell.configure(with: movieDetailController.movieCredits[indexPath.row])
-            return creditCell
+                        switch actorImageResult {
+                        case .success(let data):
+                            guard let profileImage = UIImage(data: data) else { return }
+                            ImageCacheManager.shared.setObject(profileImage, forKey: cachekey)
+                            movieCredits[index].profileImage = profileImage
+                        case .failure:
+                            movieCredits[index].profileImage = UIImage(systemName: "person.fill")?
+                                .withTintColor(.gray)
+                                .withRenderingMode(.alwaysOriginal)
+                        }
+                    }
+                    movieCredits[index].name = actorName
+                    movieCredits[index].characterName = characterName
+                }
+            } catch {
+                print(error)
+            }
+            NotificationCenter.default.post(
+                name: NSNotification.Name("MovieDetailModelDidFetchCreditData"),
+                object: nil
+            )
         }
     }
 
-}
+    private func generateMovieDetail(
+        with movieDetailsDTO: MovieDetailsDTO,
+        _ movieCertificationDTO: MovieCertificationDTO,
+        _ posterImage: UIImage
+    ) -> MovieDetail {
 
-extension MovieDetailModel: UICollectionViewDelegate {
-
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return Section.allCases.count
-    }
-
-    func collectionView(
-        _ collectionView: UICollectionView,
-        viewForSupplementaryElementOfKind kind: String,
-        at indexPath: IndexPath
-    ) -> UICollectionReusableView {
-        let header = collectionView.dequeueReusableSupplementaryView(
-            ofKind: kind,
-            withReuseIdentifier: MovieDetailHeaderView.identifier,
-            for: indexPath
+        let USACertification = movieCertificationDTO.certifications.first(
+            where: { $0.countryCode == "US"}
         )
-        return header
+        let certification = USACertification?.information.first(where: {
+            $0.certificationRate != ""
+        })
+        let rate = certification?.certificationRate ?? "NR"
+
+        return MovieDetail(
+            posterImage: posterImage,
+            certificationRate: rate,
+            koreanTitle: movieDetailsDTO.koreanTitle,
+            originalTitle: movieDetailsDTO.originalTitle,
+            releaseDate: movieDetailsDTO.releaseDate,
+            countries: movieDetailsDTO.productionCountries,
+            genres: movieDetailsDTO.genres,
+            runtime: movieDetailsDTO.runTime,
+            tagLine: movieDetailsDTO.tagLine,
+            overview: movieDetailsDTO.overview
+        )
     }
-
 }
-
-extension MovieDetailModel: MovieDetailFirstSectionViewDelegate {
-
-    func movieDetailFirstSectionView(
-        _ movieDetailFirstSectionView: MovieDetailFirstSectionView,
-        didButtonTapped sender: UIButton
-    ) {
-        guard let button = sender as? ViewMoreButton else { return }
-
-        switch button.isTapped {
-        case true:
-            movieDetailFirstSectionView.overViewLabel.numberOfLines = 2
-        case false:
-            movieDetailFirstSectionView.overViewLabel.numberOfLines = 0
-        }
-        button.isTapped.toggle()
-        button.setButtonTitle()
-        self.movieDetailCollectionView.reloadData()
-    }
-
-}
-
-
