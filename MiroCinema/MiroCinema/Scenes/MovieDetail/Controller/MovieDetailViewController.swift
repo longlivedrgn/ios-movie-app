@@ -105,13 +105,13 @@ class MovieDetailViewController: UIViewController {
     }
 
     private func createlayout() -> UICollectionViewCompositionalLayout {
-        let layout = UICollectionViewCompositionalLayout { sectionIndex, layoutEnvironment in
+        let layout = UICollectionViewCompositionalLayout { [weak self] sectionIndex, layoutEnvironment in
             let sectionType = Section.allCases[sectionIndex]
             switch sectionType {
             case .detail:
-                return self.createDetailLayout()
+                return self?.createDetailLayout()
             case .credit:
-                return self.createCreditLayout()
+                return self?.createCreditLayout()
             }
         }
         return layout

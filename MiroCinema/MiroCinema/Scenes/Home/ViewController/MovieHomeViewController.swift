@@ -99,14 +99,14 @@ final class MovieHomeViewController: UIViewController {
     }
 
     private func createLayout() -> UICollectionViewCompositionalLayout {
-        let layout = UICollectionViewCompositionalLayout { sectionIndex, layoutEnvironment in
+        let layout = UICollectionViewCompositionalLayout { [weak self] sectionIndex, layoutEnvironment in
             let section = Section.allCases[sectionIndex]
 
             switch section {
             case .rank:
-                return self.createRankLayout()
+                return self?.createRankLayout()
             case .genre:
-                return self.createGenresLayout()
+                return self?.createGenresLayout()
             }
         }
         return layout
