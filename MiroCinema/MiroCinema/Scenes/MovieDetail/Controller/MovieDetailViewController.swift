@@ -19,19 +19,13 @@ class MovieDetailViewController: UIViewController {
     private lazy var movieDetailCollectionView: UICollectionView = {
         let collectionview = UICollectionView(frame: .zero, collectionViewLayout: createlayout())
         collectionview.backgroundColor = .black
+        collectionview.register(cell: MovieDetailCreditCell.self)
+        collectionview.register(cell: MovieDetailFirstSectionCell.self)
         collectionview.register(
-            MovieDetailCreditCell.self,
-            forCellWithReuseIdentifier: MovieDetailCreditCell.identifier
+            supplementaryView: MovieDetailHeaderView.self,
+            kind: MovieDetailViewController.movieDetailSectionHeaderKind
         )
-        collectionview.register(
-            MovieDetailFirstSectionCell.self,
-            forCellWithReuseIdentifier: MovieDetailFirstSectionCell.identifier
-        )
-        collectionview.register(
-            MovieDetailHeaderView.self,
-            forSupplementaryViewOfKind: MovieDetailViewController.movieDetailSectionHeaderKind,
-            withReuseIdentifier: MovieDetailHeaderView.identifier
-        )
+
         collectionview.dataSource = self
         collectionview.delegate = self
         collectionview.contentInsetAdjustmentBehavior = .never
@@ -194,17 +188,16 @@ extension MovieDetailViewController: UICollectionViewDataSource {
         _ collectionView: UICollectionView,
         cellForItemAt indexPath: IndexPath
     ) -> UICollectionViewCell {
-        guard let firstSectionCell = movieDetailCollectionView.dequeueReusableCell(
-            withReuseIdentifier: MovieDetailFirstSectionCell.identifier,
-            for: indexPath) as? MovieDetailFirstSectionCell
-        else { return UICollectionViewCell() }
+        let firstSectionCell = movieDetailCollectionView.dequeue(
+            cell: MovieDetailFirstSectionCell.self,
+            for: indexPath
+        )
         firstSectionCell.firstSectionView.delegate = self
 
-        guard let creditCell = movieDetailCollectionView.dequeueReusableCell(
-            withReuseIdentifier: MovieDetailCreditCell.identifier,
-            for: indexPath) as? MovieDetailCreditCell
-        else { return UICollectionViewCell() }
-
+        let creditCell = movieDetailCollectionView.dequeue(
+            cell: MovieDetailCreditCell.self,
+            for: indexPath
+        )
         let sectionType = Section.allCases[indexPath.section]
 
         switch sectionType {
@@ -231,11 +224,12 @@ extension MovieDetailViewController: UICollectionViewDelegate {
         viewForSupplementaryElementOfKind kind: String,
         at indexPath: IndexPath
     ) -> UICollectionReusableView {
-        let header = collectionView.dequeueReusableSupplementaryView(
-            ofKind: kind,
-            withReuseIdentifier: MovieDetailHeaderView.identifier,
-            for: indexPath
+        let header = collectionView.dequeue(
+            supplementaryView: MovieDetailHeaderView.self,
+            for: indexPath,
+            kind: kind
         )
+
         return header
     }
 

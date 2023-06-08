@@ -9,8 +9,6 @@ import UIKit
 
 class MovieDetailHeaderView: UICollectionReusableView {
 
-    static let identifier = String(describing: MovieDetailHeaderView.self)
-
     private let headerTextLabel: UILabel = {
         let label = UILabel()
         label.text = "감독 및 등장인물"

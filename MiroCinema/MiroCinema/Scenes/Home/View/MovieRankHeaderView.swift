@@ -9,8 +9,6 @@ import UIKit
 
 class MovieRankHeaderView: UICollectionReusableView {
 
-    static let identifier = String(describing: MovieRankHeaderView.self)
-
     private let containerView: UIView = {
         let view = UIView()
 

@@ -9,8 +9,6 @@ import UIKit
 
 class MovieGenresCollectionViewCell: UICollectionViewCell {
 
-    static let identifier = String(describing: MovieGenresCollectionViewCell.self)
-
     private let containerView: UIView = {
         let containerView = UIView()
 

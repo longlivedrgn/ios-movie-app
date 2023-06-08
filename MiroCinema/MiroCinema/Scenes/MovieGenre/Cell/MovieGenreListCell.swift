@@ -9,8 +9,6 @@ import UIKit
 
 class MovieGenreListCell: UICollectionViewListCell {
 
-    static let identifier = String(describing: MovieGenreListCell.self)
-
     private let backDropImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill

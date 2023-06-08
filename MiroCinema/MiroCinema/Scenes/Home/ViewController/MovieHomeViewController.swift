@@ -47,29 +47,19 @@ final class MovieHomeViewController: UIViewController {
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.backgroundColor = .black
         collectionView.delegate = self
+        collectionView.register(cell: MovieRankCollectionViewCell.self)
+        collectionView.register(cell: MovieGenresCollectionViewCell.self)
         collectionView.register(
-            MovieRankCollectionViewCell.self,
-            forCellWithReuseIdentifier: MovieRankCollectionViewCell.identifier
+            supplementaryView: MovieRankHeaderView.self,
+            kind: MovieHomeViewController.movieRankSectionHeaderKind
         )
         collectionView.register(
-            MovieRankHeaderView.self,
-            forSupplementaryViewOfKind: MovieHomeViewController.movieRankSectionHeaderKind,
-            withReuseIdentifier: MovieRankHeaderView.identifier
+            supplementaryView: MovieHomeGenresHeaderView.self,
+            kind: MovieHomeViewController.movieGenresSectionHeaderKind
         )
         collectionView.register(
-            MovieGenresCollectionViewCell.self,
-            forCellWithReuseIdentifier: MovieGenresCollectionViewCell.identifier
-        )
-        collectionView.register(
-            MovieHomeGenresHeaderView.self,
-            forSupplementaryViewOfKind: MovieHomeViewController.movieGenresSectionHeaderKind,
-            withReuseIdentifier: MovieHomeGenresHeaderView.identifier
-        )
-
-        collectionView.register(
-            MovieGenresFooterView.self,
-            forSupplementaryViewOfKind: MovieHomeViewController.movieGenresSectionFooterKind,
-            withReuseIdentifier: MovieGenresFooterView.identifer
+            supplementaryView: MovieGenresFooterView.self,
+            kind: MovieHomeViewController.movieGenresSectionFooterKind
         )
 
         return collectionView
@@ -118,16 +108,12 @@ final class MovieHomeViewController: UIViewController {
 
             switch item {
             case .rank(let movie):
-                let cell = collectionView.dequeueReusableCell(
-                    withReuseIdentifier: MovieRankCollectionViewCell.identifier,
-                    for: indexPath) as? MovieRankCollectionViewCell
-                cell?.configure(with: movie)
+                let cell = collectionView.dequeue(cell: MovieRankCollectionViewCell.self, for: indexPath)
+                cell.configure(with: movie)
                 return cell
             case .gerne(let genre):
-                let cell = collectionView.dequeueReusableCell(
-                    withReuseIdentifier: MovieGenresCollectionViewCell.identifier,
-                    for: indexPath) as? MovieGenresCollectionViewCell
-                cell?.configure(with: genre)
+                let cell = collectionView.dequeue(cell: MovieGenresCollectionViewCell.self, for: indexPath)
+                cell.configure(with: genre)
                 return cell
             }
         }
@@ -139,28 +125,28 @@ final class MovieHomeViewController: UIViewController {
 
             switch sectionType {
             case .rank:
-                guard let supplementaryView = collectionView.dequeueReusableSupplementaryView(
-                    ofKind: kind,
-                    withReuseIdentifier: MovieRankHeaderView.identifier,
-                    for: indexPath) as? MovieRankHeaderView
-                else { return UICollectionReusableView() }
+                let supplementaryView = collectionView.dequeue(
+                    supplementaryView: MovieRankHeaderView.self,
+                    for: indexPath,
+                    kind: kind
+                )
                 supplementaryView.delegate = self
                 return supplementaryView
             case .genre:
                 switch kind {
                 case MovieHomeViewController.movieGenresSectionHeaderKind:
-                    guard let supplementaryView = collectionView.dequeueReusableSupplementaryView(
-                        ofKind: kind,
-                        withReuseIdentifier: MovieHomeGenresHeaderView.identifier,
-                        for: indexPath) as? MovieHomeGenresHeaderView
-                    else { return UICollectionReusableView() }
+                    let supplementaryView = collectionView.dequeue(
+                        supplementaryView: MovieHomeGenresHeaderView.self,
+                        for: indexPath,
+                        kind: kind
+                    )
                     return supplementaryView
                 case MovieHomeViewController.movieGenresSectionFooterKind:
-                    guard let supplementaryView = collectionView.dequeueReusableSupplementaryView(
-                        ofKind: kind,
-                        withReuseIdentifier: MovieGenresFooterView.identifer,
-                        for: indexPath) as? MovieGenresFooterView
-                    else { return UICollectionReusableView() }
+                    let supplementaryView = collectionView.dequeue(
+                        supplementaryView: MovieGenresFooterView.self,
+                        for: indexPath,
+                        kind: kind
+                    )
                     supplementaryView.delegate = self
                     return supplementaryView
                 default:
@@ -305,7 +291,6 @@ final class MovieHomeViewController: UIViewController {
     }
 
     @objc private func didFetchData(_ notification: Notification) {
-        print("💥")
         DispatchQueue.main.async {
             self.applySnapShot()
         }

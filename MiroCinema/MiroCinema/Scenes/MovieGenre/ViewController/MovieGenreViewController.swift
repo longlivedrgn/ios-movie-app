@@ -20,11 +20,10 @@ class MovieGenreViewController: UIViewController {
         let collectionview = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
         collectionview.backgroundColor = .black
         collectionview.delegate = self
-        collectionview.register(MovieGenreListCell.self, forCellWithReuseIdentifier: MovieGenreListCell.identifier)
+        collectionview.register(cell: MovieGenreListCell.self)
         collectionview.register(
-            MovieGenreHeaderView.self,
-            forSupplementaryViewOfKind: MovieGenreViewController.movieGenreSectionHeaderKind,
-            withReuseIdentifier: MovieGenreHeaderView.identifier
+            supplementaryView: MovieGenreHeaderView.self,
+            kind: MovieGenreViewController.movieGenreSectionHeaderKind
         )
 
         return collectionview
@@ -64,21 +63,18 @@ class MovieGenreViewController: UIViewController {
         datasource = UICollectionViewDiffableDataSource(
             collectionView: genreCollectionView
         ) { collectionView, indexPath, movie in
-            guard let cell = collectionView.dequeueReusableCell(
-                withReuseIdentifier: MovieGenreListCell.identifier,
-                for: indexPath
-            ) as? MovieGenreListCell else { return UICollectionViewCell() }
+            let cell = collectionView.dequeue(cell: MovieGenreListCell.self, for: indexPath)
             cell.configure(with: movie)
             return cell
         }
 
         datasource?.supplementaryViewProvider = {
             (collectionView, kind, indexPath) in
-            guard let supplementaryView = collectionView.dequeueReusableSupplementaryView(
-                ofKind: kind,
-                withReuseIdentifier: MovieGenreHeaderView.identifier,
-                for: indexPath
-            ) as? MovieGenreHeaderView else { return UICollectionReusableView() }
+            let supplementaryView = collectionView.dequeue(
+                supplementaryView: MovieGenreHeaderView.self,
+                for: indexPath,
+                kind: kind
+            )
 
             return supplementaryView
         }

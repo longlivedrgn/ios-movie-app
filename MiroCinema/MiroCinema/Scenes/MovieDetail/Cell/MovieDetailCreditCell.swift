@@ -9,8 +9,6 @@ import UIKit
 
 class MovieDetailCreditCell: UICollectionViewCell {
 
-    static let identifier = String(describing: MovieDetailCreditCell.self)
-
     private let actorImageView: CircleImageView = {
         let imageView = CircleImageView()
         imageView.image = UIImage(systemName: "grayImage")

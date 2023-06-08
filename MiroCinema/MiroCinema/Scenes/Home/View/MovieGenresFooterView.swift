@@ -9,8 +9,6 @@ import UIKit
 
 class MovieGenresFooterView: UICollectionReusableView {
     
-    static let identifer = String(describing: MovieGenresFooterView.self)
-
     private lazy var viewMoreButton: ViewMoreButton = {
         let button = ViewMoreButton()
         button.addTarget(self, action: #selector(moreButtonDidTapped), for: .touchUpInside)

@@ -9,8 +9,6 @@ import UIKit
 
 class MovieDetailFirstSectionCell: UICollectionViewCell {
 
-    static let identifier = String(describing: MovieDetailFirstSectionCell.self)
-
     let firstSectionView = MovieDetailFirstSectionView()
 
     override init(frame: CGRect) {
