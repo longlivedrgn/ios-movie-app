@@ -9,8 +9,8 @@ import UIKit
 
 struct DiskStorage {
 
-    let fileManager = FileManager.default
-    let directoryURL: URL
+    private let fileManager = FileManager.default
+    private let directoryURL: URL
 
     init() {
         let documentURL = fileManager.urls(for: .documentDirectory, in: .userDomainMask)[0]
