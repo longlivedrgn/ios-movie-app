@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		4551A153836C312D6422553F /* Pods_MiroCinema.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 216F68053EABA016385AC329 /* Pods_MiroCinema.framework */; };
 		808232DCC0B16E1751DFBD64 /* Pods_MiroCinema_MiroCinemaUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0B0B66B41DC6BBD2EC131A53 /* Pods_MiroCinema_MiroCinemaUITests.framework */; };
+		8702BD1B2A31BA3C002D24E2 /* DiskStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8702BD1A2A31BA3C002D24E2 /* DiskStorage.swift */; };
 		8704A4912A14DD68000AB7F5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8704A4902A14DD68000AB7F5 /* AppDelegate.swift */; };
 		8704A4932A14DD68000AB7F5 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8704A4922A14DD68000AB7F5 /* SceneDelegate.swift */; };
 		8704A4952A14DD68000AB7F5 /* MovieHomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8704A4942A14DD68000AB7F5 /* MovieHomeViewController.swift */; };
@@ -101,6 +102,7 @@
 		19989E486737415106FB45D8 /* Pods-MiroCinema.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MiroCinema.release.xcconfig"; path = "Target Support Files/Pods-MiroCinema/Pods-MiroCinema.release.xcconfig"; sourceTree = "<group>"; };
 		216F68053EABA016385AC329 /* Pods_MiroCinema.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MiroCinema.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		864256051838767F7A93B860 /* Pods-MiroCinemaTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MiroCinemaTests.release.xcconfig"; path = "Target Support Files/Pods-MiroCinemaTests/Pods-MiroCinemaTests.release.xcconfig"; sourceTree = "<group>"; };
+		8702BD1A2A31BA3C002D24E2 /* DiskStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiskStorage.swift; sourceTree = "<group>"; };
 		8704A48D2A14DD68000AB7F5 /* MiroCinema.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MiroCinema.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8704A4902A14DD68000AB7F5 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		8704A4922A14DD68000AB7F5 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -454,6 +456,7 @@
 			isa = PBXGroup;
 			children = (
 				878119852A235DF4005EA728 /* ImageCacheManager.swift */,
+				8702BD1A2A31BA3C002D24E2 /* DiskStorage.swift */,
 			);
 			path = ImageCache;
 			sourceTree = "<group>";
@@ -809,6 +812,7 @@
 				87E53F2C2A1F3AA000D78160 /* ButtonKind.swift in Sources */,
 				87B9D8C72A1B09C900BB5609 /* Genre.swift in Sources */,
 				87C4086F2A1DCB7F00C3F3D3 /* MovieDetailsDTO.swift in Sources */,
+				8702BD1B2A31BA3C002D24E2 /* DiskStorage.swift in Sources */,
 				87B74CA92A2061CD002878BB /* Item.swift in Sources */,
 				872E39DC2A258A3D00812283 /* MovieGenre.swift in Sources */,
 				8755EE692A1B209100FA775E /* MovieDetailViewController.swift in Sources */,
