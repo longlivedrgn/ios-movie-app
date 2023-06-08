@@ -39,8 +39,8 @@ final class MovieDetailModel {
                 )
                 guard let movieCertification = decodedCertificationData as? MovieCertificationDTO else { return }
                 guard let posterPath = movieInformation.posterPath else { return }
-                let cacheKey = NSString(string: posterPath)
-                if let cachedImage = ImageCacheManager.shared.object(forKey: cacheKey) {
+                if ImageCacheManager.shared.isCached(resourceKey: posterPath) {
+                    let cachedImage = ImageCacheManager.shared.value(forResoureceKey: posterPath)
                     movieDetail = generateMovieDetail(with: movieInformation, movieCertification, cachedImage)
                 } else {
                     let imageEndPoint = MovieImageAPIEndPoint(imageURL: posterPath)
@@ -49,8 +49,9 @@ final class MovieDetailModel {
                     switch imageResult {
                     case .success(let data):
                         guard let posterImage = UIImage(data: data) else { return }
-                        ImageCacheManager.shared.setObject(posterImage, forKey: cacheKey)
                         movieDetail = generateMovieDetail(with: movieInformation, movieCertification, posterImage)
+                        ImageCacheManager.shared.store(image: posterImage, forResourceKey: posterPath, in: .disk)
+                        ImageCacheManager.shared.store(image: posterImage, forResourceKey: posterPath, in: .memory)
                     case .failure(let error):
                         print(error)
                     }
@@ -82,8 +83,8 @@ final class MovieDetailModel {
                     let actorName = actor.name
                     let characterName = actor.characterName
                     let imageProfilePath = actor.profilePath ?? ""
-                    let cachekey = NSString(string: imageProfilePath)
-                    if let cachedImage = ImageCacheManager.shared.object(forKey: cachekey) {
+                    if ImageCacheManager.shared.isCached(resourceKey: imageProfilePath) {
+                        let cachedImage = ImageCacheManager.shared.value(forResoureceKey: imageProfilePath)
                         movieCredits[index].profileImage = cachedImage
                     } else {
                         let imageProfilePathEndPoint = MovieImageAPIEndPoint(imageURL: imageProfilePath)
@@ -92,8 +93,9 @@ final class MovieDetailModel {
                         switch actorImageResult {
                         case .success(let data):
                             guard let profileImage = UIImage(data: data) else { return }
-                            ImageCacheManager.shared.setObject(profileImage, forKey: cachekey)
                             movieCredits[index].profileImage = profileImage
+                            ImageCacheManager.shared.store(image: profileImage, forResourceKey: imageProfilePath, in: .disk)
+                            ImageCacheManager.shared.store(image: profileImage, forResourceKey: imageProfilePath, in: .disk)
                         case .failure:
                             movieCredits[index].profileImage = UIImage(systemName: "person.fill")?
                                 .withTintColor(.gray)
