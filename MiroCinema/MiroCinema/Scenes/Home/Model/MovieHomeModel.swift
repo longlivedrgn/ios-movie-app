@@ -38,7 +38,6 @@ final class MovieHomeModel {
 
                     if ImageCacheManager.shared.isCached(resourceKey: posterPath) {
                         let cachedImage = ImageCacheManager.shared.value(forResoureceKey: posterPath)
-                        print(cachedImage)
                         let movie = Movie(id: id, title: title, releaseDate: releaseDate, posterImage: cachedImage)
                         movies[index] = movie
                         continue
@@ -57,12 +56,11 @@ final class MovieHomeModel {
                             print(error)
                         }
                     }
-
-                    NotificationCenter.default.post(
-                        name: NSNotification.Name.homeModelDidFetchData,
-                        object: nil
-                    )
                 }
+                NotificationCenter.default.post(
+                    name: NSNotification.Name.homeModelDidFetchData,
+                    object: nil
+                )
             } catch {
                 print(error)
             }
@@ -119,11 +117,11 @@ final class MovieHomeModel {
                             print(error)
                         }
                     }
-                    NotificationCenter.default.post(
-                        name: NSNotification.Name("MovieHomeModelDidFetchData"),
-                        object: nil
-                    )
                 }
+                NotificationCenter.default.post(
+                    name: NSNotification.Name.homeModelDidFetchData,
+                    object: nil
+                )
             } catch {
                 print(error)
             }

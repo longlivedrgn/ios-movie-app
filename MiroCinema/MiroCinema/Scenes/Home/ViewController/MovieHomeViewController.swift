@@ -299,12 +299,13 @@ final class MovieHomeViewController: UIViewController {
         NotificationCenter.default.addObserver(
             self,
             selector: #selector(didFetchData(_:)),
-            name: NSNotification.Name("MovieHomeModelDidFetchData"),
+            name: NSNotification.Name.homeModelDidFetchData,
             object: nil
         )
     }
 
     @objc private func didFetchData(_ notification: Notification) {
+        print("💥")
         DispatchQueue.main.async {
             self.applySnapShot()
         }
