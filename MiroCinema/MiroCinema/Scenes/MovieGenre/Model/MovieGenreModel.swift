@@ -28,16 +28,22 @@ final class MovieGenreModel {
                     let movieTitle = movieDTO.koreanTitle
                     let movieID = movieDTO.ID
                     guard let backDropImagePath = movieDTO.backDropImagePath else { return }
-                    let endPoint = MovieImageAPIEndPoint(imageURL: backDropImagePath)
-
-                    let imageResult = try await movieNetworkDispatcher.performRequest(endPoint.urlRequest)
-                    switch imageResult {
-                    case .success(let data):
-                        guard let backDropImage = UIImage(data: data) else { return }
-                        let movie = Movie(id: movieID, title: movieTitle, posterImage: backDropImage)
+                    if ImageCacheManager.shared.isCached(resourceKey: backDropImagePath) {
+                        let cachedImage = ImageCacheManager.shared.value(forResoureceKey: backDropImagePath)
+                        let movie = Movie(id: movieID, title: movieTitle, posterImage: cachedImage)
                         movies.append(movie)
-                    case .failure(let error):
-                        print(error)
+                    } else {
+                        let endPoint = MovieImageAPIEndPoint(imageURL: backDropImagePath)
+                        let imageResult = try await movieNetworkDispatcher.performRequest(endPoint.urlRequest)
+                        switch imageResult {
+                        case .success(let data):
+                            guard let backDropImage = UIImage(data: data) else { return }
+                            ImageCacheManager.shared.store(image: backDropImage, forResourceKey: backDropImagePath, in: .memory)
+                            let movie = Movie(id: movieID, title: movieTitle, posterImage: backDropImage)
+                            movies.append(movie)
+                        case .failure(let error):
+                            print(error)
+                        }
                     }
                     NotificationCenter.default.post(
                         name: NSNotification.Name.genreModelDidFetchData,
