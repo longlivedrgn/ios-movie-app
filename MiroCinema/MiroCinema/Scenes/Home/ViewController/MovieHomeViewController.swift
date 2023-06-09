@@ -346,7 +346,8 @@ final class MovieHomeViewController: UIViewController {
     }
 
     @objc func magnifyingglassButtonTapped() {
-        print("돋보기 버튼 눌렸다~")
+        let movieSearchViewController = MovieSearchViewController()
+        navigationController?.pushViewController(movieSearchViewController, animated: true)
     }
 
     private func configureNavigationBackButton() {
