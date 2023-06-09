@@ -1,36 +1,39 @@
 //
-//  MovieRankCollectionViewCell.swift
+//  SearchCollectionViewCell.swift
 //  MiroCinema
 //
-//  Created by 김용재 on 2023/05/18.
+//  Created by 김용재 on 2023/06/09.
 //
 
 import UIKit
 
-class MovieRankCollectionViewCell: UICollectionViewCell {
+class SearchCollectionViewCell: UICollectionViewCell {
 
     private let containerView: UIView = {
         let containerView = UIView()
+        containerView.backgroundColor = .gray
 
         return containerView
     }()
 
     private let movieImageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.image = UIImage()
+        imageView.image = UIImage(systemName: "square.and.arrow.up.fill")
         imageView.layer.cornerRadius = 15
         imageView.clipsToBounds = true
         imageView.contentMode = .scaleAspectFill
+        imageView.backgroundColor = .red
 
         return imageView
     }()
 
     let movieNameLabel: UILabel = {
         let label = UILabel()
-        label.text = ""
+        label.text = "-"
         label.font = UIFont.systemFont(ofSize: 15)
         label.textAlignment = .center
         label.textColor = .lightGray
+        label.backgroundColor = .green
 
         return label
     }()

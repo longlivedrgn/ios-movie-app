@@ -20,7 +20,7 @@ class MovieSearchViewController: UIViewController {
         let collectionview = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
         collectionview.backgroundColor = .black
         collectionview.delegate = self
-        collectionview.register(cell: MovieGenreListCell.self)
+        collectionview.register(cell: SearchCollectionViewCell.self)
 
         return collectionview
     }()
@@ -34,6 +34,8 @@ class MovieSearchViewController: UIViewController {
         super.viewDidLoad()
         configureViews()
         configureSearchBar()
+        configureCollectionViewDataSource()
+        applySnapShot()
     }
 
     private func configureViews() {
@@ -55,38 +57,38 @@ class MovieSearchViewController: UIViewController {
         navigationItem.titleView = searchBar
     }
 
+    private func configureCollectionViewDataSource() {
+        datasource = UICollectionViewDiffableDataSource(collectionView: searchCollectionView) { collectionView, indexPath, itemIdentifier in
+            let cell = collectionView.dequeue(cell: SearchCollectionViewCell.self, for: indexPath)
+            return cell
+        }
+    }
+
     private func createLayout() -> UICollectionViewCompositionalLayout {
         let layout = UICollectionViewCompositionalLayout { section, layoutEnvironment in
 
             let movieItemSize = NSCollectionLayoutSize(
                 widthDimension: .fractionalWidth(1/3),
-                heightDimension: .fractionalWidth(0.35)
+                heightDimension: .fractionalHeight(1)
             )
 
             let movieItem = NSCollectionLayoutItem(layoutSize: movieItemSize)
 
             movieItem.contentInsets = NSDirectionalEdgeInsets(
                 top: 10,
-                leading: 10,
-                bottom: 10,
-                trailing: 10
+                leading: 5,
+                bottom: 5,
+                trailing: 5
             )
 
             let movieGroupSize = NSCollectionLayoutSize(
                 widthDimension: .fractionalWidth(1),
-                heightDimension: .fractionalWidth(1/3)
+                heightDimension: .fractionalHeight(1/3.6)
             )
 
             let movieGroup = NSCollectionLayoutGroup.horizontal(
                 layoutSize: movieGroupSize,
                 subitems: [movieItem, movieItem, movieItem]
-            )
-
-            movieGroup.contentInsets = NSDirectionalEdgeInsets(
-                top: 0,
-                leading: 0,
-                bottom: 0,
-                trailing: 20
             )
 
             let movieSection = NSCollectionLayoutSection(group: movieGroup)
@@ -95,6 +97,16 @@ class MovieSearchViewController: UIViewController {
         }
 
         return layout
+    }
+
+    private func applySnapShot() {
+        var snapShot = SnapShot()
+        snapShot.appendSections([.main])
+        var movies = Movie.skeletonModels
+
+        snapShot.appendItems(movies)
+
+        datasource?.apply(snapShot)
     }
 
 }
