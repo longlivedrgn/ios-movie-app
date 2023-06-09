@@ -137,5 +137,10 @@ extension MovieSearchViewController: UISearchBarDelegate {
         let endPoint = MovieSearchAPIEndPoint(input: text)
         movieSearchModel.searchEndPoint = endPoint
     }
+    // 요거를 어떻게 구현할 지 고민해보기!!
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+//        let endPoint = MovieSearchAPIEndPoint(input: searchText)
+//        movieSearchModel.searchEndPoint = endPoint
+    }
 
 }
