@@ -55,6 +55,5 @@ final class MovieSearchModel {
                 print(error)
             }
         }
-        movies.removeAll()
     }
 }
