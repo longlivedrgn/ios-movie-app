@@ -311,12 +311,19 @@ final class MovieHomeViewController: UIViewController {
     }
 
     private func configureNavigationButton() {
-        let ticketButtonIcon = UIImage(named: "ticketButtonIcon")
-        let ticketButtonIconItem = UIBarButtonItem(customView: UIImageView(image: ticketButtonIcon))
+        let buttonColor = UIColor(red: 0.8, green: 0.8, blue: 0.8, alpha: 1)
 
-        let mapButtonColor = UIColor(red: 0.8, green: 0.8, blue: 0.8, alpha: 1)
+        let magnifyingglassButtonIcon = UIImage(systemName: "magnifyingglass")?.withTintColor(
+            buttonColor,
+            renderingMode: .alwaysOriginal
+        )
+        let button = UIButton(type: .custom)
+        button.setImage(magnifyingglassButtonIcon, for: .normal)
+        button.addTarget(self, action: #selector(magnifyingglassButtonTapped), for: .touchUpInside)
+        let magnifyingglassButtonIconItem = UIBarButtonItem(customView: button)
+
         let mapButtonIcon = UIImage(systemName: "map")?.withTintColor(
-            mapButtonColor,
+            buttonColor,
             renderingMode: .alwaysOriginal
         )
         let mapButtonIconItem = UIBarButtonItem(customView: UIImageView(image: mapButtonIcon))
@@ -334,8 +341,12 @@ final class MovieHomeViewController: UIViewController {
             spacer,
             mapButtonIconItem,
             spacer,
-            ticketButtonIconItem,
+            magnifyingglassButtonIconItem,
         ]
+    }
+
+    @objc func magnifyingglassButtonTapped() {
+        print("돋보기 버튼 눌렸다~")
     }
 
     private func configureNavigationBackButton() {
