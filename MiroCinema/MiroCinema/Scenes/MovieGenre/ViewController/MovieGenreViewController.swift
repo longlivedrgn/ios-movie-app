@@ -141,12 +141,6 @@ class MovieGenreViewController: UIViewController {
         datasource?.apply(snapShot)
     }
 
-    private func configureBackButton() {
-        let backBarButton = UIBarButtonItem(title: "", style: .done, target: nil, action: nil)
-        backBarButton.tintColor = .white
-        navigationItem.backBarButtonItem = backBarButton
-    }
-
 }
 
 extension MovieGenreViewController: UICollectionViewDelegate {

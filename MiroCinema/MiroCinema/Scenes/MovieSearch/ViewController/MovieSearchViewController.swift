@@ -38,6 +38,7 @@ class MovieSearchViewController: UIViewController {
         configureSearchBar()
         configureCollectionViewDataSource()
         configureNotificationCenter()
+        configureBackButton()
         applySnapShot()
     }
 
@@ -139,7 +140,13 @@ class MovieSearchViewController: UIViewController {
 }
 
 extension MovieSearchViewController: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        searchCollectionView.deselectItem(at: indexPath, animated: true)
+        guard let movie = datasource?.itemIdentifier(for: indexPath) else { return }
 
+        let movieDetailViewController = MovieDetailViewController(movie: movie)
+        navigationController?.pushViewController(movieDetailViewController, animated: true)
+    }
 }
 
 extension MovieSearchViewController: UISearchBarDelegate {
