@@ -345,11 +345,6 @@ final class MovieHomeViewController: UIViewController {
         ]
     }
 
-    @objc func magnifyingglassButtonTapped() {
-        let movieSearchViewController = MovieSearchViewController()
-        navigationController?.pushViewController(movieSearchViewController, animated: true)
-    }
-
     private func configureNavigationBackButton() {
         let backButtonBackgroundImage = UIImage(systemName: "list.bullet")
         let barAppearance = UINavigationBar.appearance(
@@ -359,6 +354,11 @@ final class MovieHomeViewController: UIViewController {
         let backBarButton = UIBarButtonItem(title: "", style: .done, target: nil, action: nil)
         backBarButton.tintColor = .white
         navigationItem.backBarButtonItem = backBarButton
+    }
+
+    @objc func magnifyingglassButtonTapped() {
+        let movieSearchViewController = MovieSearchViewController()
+        navigationController?.pushViewController(movieSearchViewController, animated: true)
     }
 
 }
