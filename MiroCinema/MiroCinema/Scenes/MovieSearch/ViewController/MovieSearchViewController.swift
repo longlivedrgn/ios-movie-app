@@ -15,6 +15,7 @@ class MovieSearchViewController: UIViewController {
 
     private let movieNetworkAPIManager = NetworkAPIManager()
     private let movieNetworkDispatcher = NetworkDispatcher()
+    private let movieSearchModel = MovieSearchModel()
 
     private lazy var searchCollectionView: UICollectionView = {
         let collectionview = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
@@ -35,6 +36,7 @@ class MovieSearchViewController: UIViewController {
         configureViews()
         configureSearchBar()
         configureCollectionViewDataSource()
+        configureNotificationCenter()
         applySnapShot()
     }
 
@@ -58,8 +60,11 @@ class MovieSearchViewController: UIViewController {
     }
 
     private func configureCollectionViewDataSource() {
-        datasource = UICollectionViewDiffableDataSource(collectionView: searchCollectionView) { collectionView, indexPath, itemIdentifier in
+        datasource = UICollectionViewDiffableDataSource(
+            collectionView: searchCollectionView
+        ) { collectionView, indexPath, movie in
             let cell = collectionView.dequeue(cell: SearchCollectionViewCell.self, for: indexPath)
+            cell.configure(with: movie)
             return cell
         }
     }
@@ -101,12 +106,22 @@ class MovieSearchViewController: UIViewController {
 
     private func applySnapShot() {
         var snapShot = SnapShot()
-        snapShot.appendSections([.main])
-        var movies = Movie.skeletonModels
+        let movies = movieSearchModel.movies
 
+        snapShot.appendSections([.main])
         snapShot.appendItems(movies)
 
         datasource?.apply(snapShot)
+    }
+
+    private func configureNotificationCenter() {
+        NotificationCenter.default.addObserver(self, selector: #selector(didFetchSearchData), name: NSNotification.Name.searchModelDidFetchData, object: nil)
+    }
+
+    @objc private func didFetchSearchData(_ notification: Notification) {
+        DispatchQueue.main.async {
+            self.applySnapShot()
+        }
     }
 
 }
@@ -120,14 +135,7 @@ extension MovieSearchViewController: UISearchBarDelegate {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         guard let text = searchBar.text?.lowercased() else { return }
         let endPoint = MovieSearchAPIEndPoint(input: text)
-
-        Task {
-            do {
-                let decodedData = try await movieNetworkAPIManager.fetchData(to: MoviesDTO.self, endPoint: endPoint)
-                guard let movie = decodedData as? MoviesDTO else { return }
-                print(movie.movies.first ?? 0)
-            }
-        }
+        movieSearchModel.searchEndPoint = endPoint
     }
 
 }

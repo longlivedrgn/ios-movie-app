@@ -11,29 +11,26 @@ class SearchCollectionViewCell: UICollectionViewCell {
 
     private let containerView: UIView = {
         let containerView = UIView()
-        containerView.backgroundColor = .gray
 
         return containerView
     }()
 
     private let movieImageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.image = UIImage(systemName: "square.and.arrow.up.fill")
+        imageView.image = UIImage()
         imageView.layer.cornerRadius = 15
         imageView.clipsToBounds = true
         imageView.contentMode = .scaleAspectFill
-        imageView.backgroundColor = .red
 
         return imageView
     }()
 
     let movieNameLabel: UILabel = {
         let label = UILabel()
-        label.text = "-"
+        label.text = ""
         label.font = UIFont.systemFont(ofSize: 15)
         label.textAlignment = .center
         label.textColor = .lightGray
-        label.backgroundColor = .green
 
         return label
     }()

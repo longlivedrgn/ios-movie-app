@@ -13,5 +13,6 @@ extension NSNotification.Name {
     static let detailModelDidFetchDetailData = Notification.Name("MovieDetailModelDidFetchDetailData")
     static let detailModelDidFetchCreditData = Notification.Name("MovieDetailModelDidFetchCreditData")
     static let homeModelDidFetchData = Notification.Name("MovieHomeModelDidFetchData")
+    static let searchModelDidFetchData = Notification.Name("MovieSearchModelDidFetchData")
 
 }

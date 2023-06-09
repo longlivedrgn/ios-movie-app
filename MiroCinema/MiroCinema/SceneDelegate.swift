@@ -19,6 +19,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let navigationContoller = UINavigationController(rootViewController: miroCinemaViewController)
 
         window?.rootViewController = navigationContoller
+        window?.overrideUserInterfaceStyle = .dark
         window?.makeKeyAndVisible()
     }
 
