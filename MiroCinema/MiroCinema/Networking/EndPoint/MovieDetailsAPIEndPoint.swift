@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct MovieDetailsAPIEndPoint: MovieAPIEndPoint {
+struct MovieDetailsAPIEndPoint: TMDBAPIEndPoint {
 
     let movieCode: String
 

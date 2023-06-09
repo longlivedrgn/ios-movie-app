@@ -8,7 +8,7 @@
 import Foundation
 
 
-struct MovieImageAPIEndPoint: MovieAPIEndPoint {
+struct MovieImageAPIEndPoint: TMDBAPIEndPoint {
 
     let imageURL: String
 

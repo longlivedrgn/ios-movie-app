@@ -15,6 +15,7 @@ struct NetworkDispatcher {
         let session = URLSession.shared
 
         guard let urlRequest else { return .failure(.invalidURL) }
+        print(urlRequest)
 
         let (data, response) = try await session.data(for: urlRequest)
         guard response.isValidResponse else { return .failure(.outOfResponseCode) }

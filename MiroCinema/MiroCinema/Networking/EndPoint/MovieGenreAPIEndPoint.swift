@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct MovieGenreAPIEndPoint: MovieAPIEndPoint {
+struct MovieGenreAPIEndPoint: TMDBAPIEndPoint {
 
     let genre: Genre
 

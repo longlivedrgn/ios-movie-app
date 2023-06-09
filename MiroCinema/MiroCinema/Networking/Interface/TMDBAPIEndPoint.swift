@@ -7,11 +7,11 @@
 
 import Foundation
 
-protocol MovieAPIEndPoint: APIEndpoint {
+protocol TMDBAPIEndPoint: APIEndpoint {
 
 }
 
-extension MovieAPIEndPoint {
+extension TMDBAPIEndPoint {
 
     func makeHeaders() -> [String : String]? {
         let authorizationHeaderKey = "Authorization"

@@ -1,18 +1,25 @@
 //
-//  MovieRankAPIEndPoint.swift
+//  MovieSearchAPIEndPoint.swift
 //  MiroCinema
 //
-//  Created by 김용재 on 2023/05/21.
+//  Created by 김용재 on 2023/06/09.
 //
 
 import Foundation
 
-struct MovieRankAPIEndPoint: TMDBAPIEndPoint {
+struct MovieSearchAPIEndPoint: TMDBAPIEndPoint {
+
+    let searchQuery: String
+
+    init(input: String) {
+        self.searchQuery = input
+    }
 
     private enum URLConstants {
         static let baseURL = "https://api.themoviedb.org"
-        static let URLPath = "/3/movie/popular"
+        static let URLPath = "/3/search/movie"
     }
+
 
     var endPoint: EndPoint {
         return EndPoint(
@@ -25,8 +32,9 @@ struct MovieRankAPIEndPoint: TMDBAPIEndPoint {
     func makeQueryItems() -> [URLQueryItem]? {
         let languageQueryItem = URLQueryItem(name: "language", value: "ko-KR")
         let pageNumberQueryItem = URLQueryItem(name: "page", value: "1")
+        let searchQueryItem = URLQueryItem(name: "query", value: searchQuery)
 
-        return [languageQueryItem, pageNumberQueryItem]
+        return [languageQueryItem, pageNumberQueryItem, searchQueryItem]
     }
 
 }

@@ -10,7 +10,7 @@ import Foundation
 
 import Foundation
 
-struct MovieCreditsAPIEndPoint: MovieAPIEndPoint {
+struct MovieCreditsAPIEndPoint: TMDBAPIEndPoint {
 
     let movieCode: String
 
