@@ -17,6 +17,7 @@ class MovieSearchViewController: UIViewController {
     private let movieNetworkDispatcher = NetworkDispatcher()
     private let movieSearchModel = MovieSearchModel()
 
+    private let loadingIndicatorView = UIActivityIndicatorView()
     private lazy var searchCollectionView: UICollectionView = {
         let collectionview = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
         collectionview.backgroundColor = .black
@@ -41,7 +42,6 @@ class MovieSearchViewController: UIViewController {
     }
 
     private func configureViews() {
-        view.backgroundColor = .green
         configureCollectionView()
     }
 
@@ -119,9 +119,21 @@ class MovieSearchViewController: UIViewController {
     }
 
     @objc private func didFetchSearchData(_ notification: Notification) {
-        DispatchQueue.main.async {
-            self.applySnapShot()
+        applySnapShot()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            self.hideIndicatorView()
         }
+    }
+
+    private func showIndicatorview() {
+        loadingIndicatorView.frame = view.frame
+        loadingIndicatorView.backgroundColor = .black
+        view.addSubview(loadingIndicatorView)
+        loadingIndicatorView.startAnimating()
+    }
+
+    private func hideIndicatorView() {
+        loadingIndicatorView.removeFromSuperview()
     }
 
 }
@@ -138,6 +150,7 @@ extension MovieSearchViewController: UISearchBarDelegate {
         movieSearchModel.movies.removeAll()
         movieSearchModel.searchEndPoint = endPoint
         searchBar.endEditing(true)
+        showIndicatorview()
     }
 
 }

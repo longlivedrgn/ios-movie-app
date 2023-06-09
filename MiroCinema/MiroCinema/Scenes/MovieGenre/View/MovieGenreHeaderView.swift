@@ -9,8 +9,6 @@ import UIKit
 
 class MovieGenreHeaderView: UICollectionReusableView {
 
-    static let identifier = String(describing: MovieGenreHeaderView.self)
-
     private let containerView: UIView = {
         let view = UIView()
 
