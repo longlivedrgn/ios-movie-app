@@ -136,6 +136,7 @@ extension MovieSearchViewController: UISearchBarDelegate {
         guard let text = searchBar.text?.lowercased() else { return }
         let endPoint = MovieSearchAPIEndPoint(input: text)
         movieSearchModel.searchEndPoint = endPoint
+        searchBar.endEditing(true)
     }
     // 요거를 어떻게 구현할 지 고민해보기!!
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
