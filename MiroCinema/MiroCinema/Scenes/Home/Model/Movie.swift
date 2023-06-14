@@ -27,10 +27,6 @@ struct Movie: Hashable {
         self.posterImage = posterImage
     }
 
-    static func == (lhs: Movie, rhs: Movie) -> Bool {
-        return lhs.id == rhs.id
-    }
-
     static let skeletonModels: [Movie] = [
         Movie(title: "-", posterImage: UIImage(named: "grayImage")),
         Movie(title: "-", posterImage: UIImage(named: "grayImage")),
