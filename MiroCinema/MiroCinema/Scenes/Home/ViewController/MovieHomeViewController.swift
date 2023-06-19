@@ -328,18 +328,19 @@ final class MovieHomeViewController: UIViewController {
         )
         let mapButtonIconItem = UIBarButtonItem(customView: UIImageView(image: mapButtonIcon))
 
-        let hamburgerButtonIcon = UIImage(named: "hamburgerButtonIcon")
-        let hamburgerButtonIconItem = UIBarButtonItem(
-            customView: UIImageView(image: hamburgerButtonIcon)
+        let starButtonIcon = UIImage(systemName: "star")?.withTintColor(
+            buttonColor,
+            renderingMode: .alwaysOriginal
         )
+        let starButtonIconItem = UIBarButtonItem(customView: UIImageView(image: starButtonIcon))
 
         let spacer = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
         spacer.width = 16
 
         self.navigationItem.rightBarButtonItems = [
-            hamburgerButtonIconItem,
-            spacer,
             mapButtonIconItem,
+            spacer,
+            starButtonIconItem,
             spacer,
             magnifyingglassButtonIconItem,
         ]
