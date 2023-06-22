@@ -7,6 +7,7 @@
 
 struct MovieDetailsDTO: Decodable {
 
+    let ID: Int
     let originalTitle: String
     let koreanTitle: String
     let releaseDate: String
@@ -18,6 +19,7 @@ struct MovieDetailsDTO: Decodable {
     let posterPath: String?
 
     enum CodingKeys: String, CodingKey {
+        case ID = "id"
         case originalTitle = "original_title"
         case koreanTitle = "title"
         case releaseDate = "release_date"

@@ -33,11 +33,13 @@ final class MovieHomeModel {
                 for (index, movieDTO) in movieList.enumerated() {
                     let title = movieDTO.koreanTitle
                     let id = movieDTO.ID
+                    let posterImageKey = MovieImage.poster(ID: id).resourceKey
+
                     let releaseDate = movieDTO.releaseDate.convertToDate()
                     guard let posterPath = movieDTO.posterPath else { return }
 
-                    if ImageCacheManager.shared.isCached(resourceKey: posterPath) {
-                        let cachedImage = ImageCacheManager.shared.value(forResoureceKey: posterPath)
+                    if ImageCacheManager.shared.isCached(resourceKey: posterImageKey) {
+                        let cachedImage = ImageCacheManager.shared.value(forResoureceKey: posterImageKey)
                         let movie = Movie(id: id, title: title, releaseDate: releaseDate, posterImage: cachedImage)
                         movies[index] = movie
                         continue
@@ -50,8 +52,8 @@ final class MovieHomeModel {
                             guard let posterImage = UIImage(data: data) else { return }
                             let movie = Movie(id: id, title: title, releaseDate: releaseDate, posterImage: posterImage)
                             movies[index] = movie
-                            ImageCacheManager.shared.store(image: posterImage, forResourceKey: posterPath, in: .disk)
-                            ImageCacheManager.shared.store(image: posterImage, forResourceKey: posterPath, in: .memory)
+                            ImageCacheManager.shared.store(image: posterImage, forResourceKey: posterImageKey, in: .disk)
+                            ImageCacheManager.shared.store(image: posterImage, forResourceKey: posterImageKey, in: .memory)
                         case .failure(let error):
                             print(error)
                         }
@@ -80,8 +82,10 @@ final class MovieHomeModel {
                     guard let movieItems = decodedData as? MoviesDTO else { return }
                     guard let bestMovie = movieItems.movies.first else { return }
                     guard let backDropImagePath = bestMovie.backDropImagePath else { return }
-                    if ImageCacheManager.shared.isCached(resourceKey: backDropImagePath) {
-                        let cachedImage = ImageCacheManager.shared.value(forResoureceKey: backDropImagePath)
+                    let backgroundImageKey = MovieImage.background(ID: bestMovie.ID).resourceKey
+
+                    if ImageCacheManager.shared.isCached(resourceKey: backgroundImageKey) {
+                        let cachedImage = ImageCacheManager.shared.value(forResoureceKey: backgroundImageKey)
                         let genre = MovieGenre(
                             backDropImage: cachedImage,
                             genreTitle: genreEndPoint.genre.description,
@@ -111,8 +115,8 @@ final class MovieHomeModel {
                             } else {
                                 genres.append(genre)
                             }
-                            ImageCacheManager.shared.store(image: backDropImage, forResourceKey: backDropImagePath, in: .disk)
-                            ImageCacheManager.shared.store(image: backDropImage, forResourceKey: backDropImagePath, in: .memory)
+                            ImageCacheManager.shared.store(image: backDropImage, forResourceKey: backgroundImageKey, in: .disk)
+                            ImageCacheManager.shared.store(image: backDropImage, forResourceKey: backgroundImageKey, in: .memory)
                         case .failure(let error):
                             print(error)
                         }

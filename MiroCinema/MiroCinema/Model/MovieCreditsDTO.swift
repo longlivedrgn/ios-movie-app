@@ -16,6 +16,7 @@ struct MovieCreditsDTO: Codable {
 
 struct Cast: Codable {
 
+    let ID: Int
     let name: String
     let profilePath: String?
     let characterName: String?
@@ -23,6 +24,7 @@ struct Cast: Codable {
     let popularity: Double
 
     enum CodingKeys: String, CodingKey {
+        case ID = "id"
         case name
         case profilePath = "profile_path"
         case characterName = "character"

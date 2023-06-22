@@ -311,6 +311,7 @@ final class MovieHomeViewController: UIViewController {
     }
 
     private func configureNavigationButton() {
+        // TODO: 요것도 빼자!
         let buttonColor = UIColor(red: 0.8, green: 0.8, blue: 0.8, alpha: 1)
 
         let magnifyingglassButtonIcon = UIImage(systemName: "magnifyingglass")?.withTintColor(

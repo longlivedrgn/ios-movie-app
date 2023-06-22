@@ -27,9 +27,11 @@ final class MovieGenreModel {
                 for movieDTO in movieDTOs {
                     let movieTitle = movieDTO.koreanTitle
                     let movieID = movieDTO.ID
+                    let resourceKey = MovieImage.background(ID: movieID).resourceKey
                     guard let backDropImagePath = movieDTO.backDropImagePath else { return }
-                    if ImageCacheManager.shared.isCached(resourceKey: backDropImagePath) {
-                        let cachedImage = ImageCacheManager.shared.value(forResoureceKey: backDropImagePath)
+
+                    if ImageCacheManager.shared.isCached(resourceKey: resourceKey) {
+                        let cachedImage = ImageCacheManager.shared.value(forResoureceKey: resourceKey)
                         let movie = Movie(id: movieID, title: movieTitle, posterImage: cachedImage)
                         movies.append(movie)
                     } else {
@@ -38,7 +40,7 @@ final class MovieGenreModel {
                         switch imageResult {
                         case .success(let data):
                             guard let backDropImage = UIImage(data: data) else { return }
-                            ImageCacheManager.shared.store(image: backDropImage, forResourceKey: backDropImagePath, in: .memory)
+                            ImageCacheManager.shared.store(image: backDropImage, forResourceKey: resourceKey, in: .memory)
                             let movie = Movie(id: movieID, title: movieTitle, posterImage: backDropImage)
                             movies.append(movie)
                         case .failure(let error):
