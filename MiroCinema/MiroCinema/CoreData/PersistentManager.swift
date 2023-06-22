@@ -40,8 +40,7 @@ final class PersistenceManager {
         }
     }
 
-    @discardableResult
-    func star(movie: Movie) -> Bool {
+    func star(movie: Movie) {
         let entity = NSEntityDescription.entity(forEntityName: "StarredMovie", in: self.context)
 
         if let entity = entity {
@@ -52,36 +51,30 @@ final class PersistenceManager {
 
             do {
                 try self.context.save()
-                return true
             } catch {
                 print(error.localizedDescription)
-                return false
             }
         } else {
-            return false
+            return
         }
     }
 
-    @discardableResult
-    func delete(object: NSManagedObject) -> Bool {
+    func delete(object: NSManagedObject) {
         self.context.delete(object)
         do {
             try context.save()
-            return true
         } catch {
-            return false
+            print(error.localizedDescription)
         }
     }
 
-    @discardableResult
-    func deleteAll<T: NSManagedObject>(request: NSFetchRequest<T>) -> Bool {
+    func deleteAll<T: NSManagedObject>(request: NSFetchRequest<T>) {
         let request: NSFetchRequest<NSFetchRequestResult> = T.fetchRequest()
         let delete = NSBatchDeleteRequest(fetchRequest: request)
         do {
             try self.context.execute(delete)
-            return true
         } catch {
-            return false
+            print(error.localizedDescription)
         }
     }
 
