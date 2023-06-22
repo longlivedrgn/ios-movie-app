@@ -7,6 +7,8 @@
 
 import Foundation
 import CoreData
+// 그냥 view controller에 들어갈 때, Core data에 있는 지 확인하기!
+// 그래서 만약 Core data에 있으면 그냥 star하기!
 
 final class PersistenceManager {
 

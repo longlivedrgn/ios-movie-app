@@ -4,4 +4,5 @@
         <attribute name="id" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="posterImage" optional="YES" attributeType="Binary"/>
     </entity>
+    <fetchRequest name="FetchRequest" entity="StarredMovie" predicateString="id == 0"/>
 </model>

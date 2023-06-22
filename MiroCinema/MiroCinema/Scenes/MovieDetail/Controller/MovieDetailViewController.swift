@@ -7,14 +7,14 @@
 
 import UIKit
 
-class MovieDetailViewController: UIViewController {
+final class MovieDetailViewController: UIViewController {
 
     private enum Section: Int, CaseIterable {
         case detail = 0
         case credit = 1
     }
 
-    static let movieDetailSectionHeaderKind = "movieDetailSectionHeaderKind"
+    static private let movieDetailSectionHeaderKind = "movieDetailSectionHeaderKind"
 
     private lazy var movieDetailCollectionView: UICollectionView = {
         let collectionview = UICollectionView(frame: .zero, collectionViewLayout: createlayout())
@@ -31,6 +31,12 @@ class MovieDetailViewController: UIViewController {
         collectionview.contentInsetAdjustmentBehavior = .never
 
         return collectionview
+    }()
+    private lazy var starButton: StarButton = {
+        let button = StarButton()
+        button.addTarget(self, action: #selector(starButtonTapped), for: .touchUpInside)
+
+        return button
     }()
 
     private let movieDetailModel: MovieDetailModel
@@ -59,9 +65,19 @@ class MovieDetailViewController: UIViewController {
     }
 
     private func configureNavigationBar() {
+        configureRightBarButtonItem()
         let navigationAppearance = UINavigationBarAppearance()
         navigationAppearance.configureWithTransparentBackground()
         navigationController?.navigationBar.standardAppearance = navigationAppearance
+    }
+
+    private func configureRightBarButtonItem() {
+        let starButtonIconItem = UIBarButtonItem(customView: starButton)
+        navigationItem.rightBarButtonItem = starButtonIconItem
+    }
+
+    @objc func starButtonTapped() {
+        starButton.changeStarredState()
     }
 
     private func configureViews() {
