@@ -9,11 +9,11 @@ import UIKit
 
 final class MovieDetailModel {
 
-    private let movie: Movie
     private let movieNetworkAPIManager = NetworkAPIManager()
     private let movieNetworkDispatcher = NetworkDispatcher()
     var movieDetail: MovieDetail?
     var movieCredits = MovieCredit.skeletonModels
+    let movie: Movie
 
     init(movie: Movie) {
         self.movie = movie

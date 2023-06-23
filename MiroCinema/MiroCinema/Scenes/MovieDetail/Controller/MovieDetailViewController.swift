@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import CoreData
 
 final class MovieDetailViewController: UIViewController {
 
@@ -78,6 +79,8 @@ final class MovieDetailViewController: UIViewController {
 
     @objc func starButtonTapped() {
         starButton.changeStarredState()
+        let movie = movieDetailModel.movie
+        PersistenceManager.shared.star(movie: movie)
     }
 
     private func configureViews() {

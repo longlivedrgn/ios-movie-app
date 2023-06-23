@@ -13,10 +13,10 @@ import CoreData
 extension StarredMovie {
 
     @nonobjc public class func fetchRequest() -> NSFetchRequest<StarredMovie> {
-        return NSFetchRequest<StarredMovie>(entityName: "StarredMovie")
+        let request = NSFetchRequest<StarredMovie>(entityName: "StarredMovie")
+        return request
     }
 
-    @NSManaged public var id: Int16
-    @NSManaged public var posterImage: Data?
+    @NSManaged public var id: Int32
 
 }

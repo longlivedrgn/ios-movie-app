@@ -16,7 +16,7 @@ final class PersistenceManager {
 
     private init() {}
 
-    lazy var persistentContainer: NSPersistentContainer = {
+    var persistentContainer: NSPersistentContainer = {
         let container = NSPersistentContainer(name: "MiroCinema")
         container.loadPersistentStores(completionHandler: { (storeDescription, error) in
             if let error = error as NSError? {
@@ -42,13 +42,11 @@ final class PersistenceManager {
 
     func star(movie: Movie) {
         let entity = NSEntityDescription.entity(forEntityName: "StarredMovie", in: self.context)
-
+        guard let movieID = movie.ID else { return }
         if let entity = entity {
             let managedObject = NSManagedObject(entity: entity, insertInto: self.context)
 
-            managedObject.setValue(movie.ID, forKey: "id")
-            managedObject.setValue(movie.posterImage, forKey: "posterImage")
-
+            managedObject.setValue(movieID, forKey: "id")
             do {
                 try self.context.save()
             } catch {
@@ -69,8 +67,7 @@ final class PersistenceManager {
     }
 
     func deleteAll<T: NSManagedObject>(request: NSFetchRequest<T>) {
-        let request: NSFetchRequest<NSFetchRequestResult> = T.fetchRequest()
-        let delete = NSBatchDeleteRequest(fetchRequest: request)
+        let delete = NSBatchDeleteRequest(fetchRequest: T.fetchRequest())
         do {
             try self.context.execute(delete)
         } catch {
