@@ -7,8 +7,6 @@
 
 import Foundation
 import CoreData
-// 그냥 view controller에 들어갈 때, Core data에 있는 지 확인하기!
-// 그래서 만약 Core data에 있으면 그냥 star하기!
 
 final class PersistenceManager {
 
@@ -30,13 +28,18 @@ final class PersistenceManager {
         return self.persistentContainer.viewContext
     }
 
-    func fetch<T: NSManagedObject>(request: NSFetchRequest<T>) -> [T] {
+    func fetch(movie: Movie) -> StarredMovie? {
+        guard let movieID = movie.ID else { return nil }
+        let request: NSFetchRequest<StarredMovie> = StarredMovie.fetchRequest()
+        let id = "\(movieID)"
+        request.predicate = NSPredicate(format: "id == %@", id)
+
         do {
             let fetchResult = try self.context.fetch(request)
-            return fetchResult
+            return fetchResult.first
         } catch {
             print(error.localizedDescription)
-            return []
+            return nil
         }
     }
 
@@ -57,8 +60,14 @@ final class PersistenceManager {
         }
     }
 
-    func delete(object: NSManagedObject) {
-        self.context.delete(object)
+    func isInPersistentContainer(movie: Movie) -> Bool {
+        let fetchResult = self.fetch(movie: movie)
+        return (fetchResult != nil)
+    }
+
+    func delete(movie: Movie) {
+        guard let starredMovie = self.fetch(movie: movie) else { return }
+        self.context.delete(starredMovie)
         do {
             try context.save()
         } catch {
@@ -66,8 +75,8 @@ final class PersistenceManager {
         }
     }
 
-    func deleteAll<T: NSManagedObject>(request: NSFetchRequest<T>) {
-        let delete = NSBatchDeleteRequest(fetchRequest: T.fetchRequest())
+    func deleteAll() {
+        let delete = NSBatchDeleteRequest(fetchRequest: StarredMovie.fetchRequest())
         do {
             try self.context.execute(delete)
         } catch {

@@ -33,6 +33,7 @@ final class MovieDetailViewController: UIViewController {
 
         return collectionview
     }()
+
     private lazy var starButton: StarButton = {
         let button = StarButton()
         button.addTarget(self, action: #selector(starButtonTapped), for: .touchUpInside)
@@ -74,13 +75,22 @@ final class MovieDetailViewController: UIViewController {
 
     private func configureRightBarButtonItem() {
         let starButtonIconItem = UIBarButtonItem(customView: starButton)
+        configureStarButtonColor(movieDetailModel.movie)
         navigationItem.rightBarButtonItem = starButtonIconItem
     }
 
-    @objc func starButtonTapped() {
+    private func configureStarButtonColor(_ movie: Movie) {
+        guard PersistenceManager.shared.isInPersistentContainer(movie: movie) else { return }
         starButton.changeStarredState()
-        let movie = movieDetailModel.movie
-        PersistenceManager.shared.star(movie: movie)
+    }
+
+    @objc func starButtonTapped() {
+        if starButton.isStarred {
+            PersistenceManager.shared.delete(movie: movieDetailModel.movie)
+        } else {
+            PersistenceManager.shared.star(movie: movieDetailModel.movie)
+        }
+        starButton.changeStarredState()
     }
 
     private func configureViews() {
