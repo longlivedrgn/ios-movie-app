@@ -19,7 +19,16 @@ final class MovieStarredModel {
     }
 
     private func fetchMovies() {
-        print(PersistenceManager.shared.fetchAllMovieIDs())
+        let starredMovieData = PersistenceManager.shared.fetchAllData()
+        for movieData in starredMovieData {
+            let movieTitle = movieData.title
+            let movieID = Int(movieData.id)
+            let posterImageKey = MovieImage.poster(ID: movieID).resourceKey
+            let cachedImage = ImageCacheManager.shared.value(forResoureceKey: posterImageKey)
+            
+            movies.append(Movie(id: movieID, title: movieTitle, posterImage: cachedImage))
+        }
+        print(movies)
     }
 
 }

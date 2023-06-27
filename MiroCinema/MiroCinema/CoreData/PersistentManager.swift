@@ -43,11 +43,11 @@ final class PersistenceManager {
         }
     }
 
-    func fetchAllMovieIDs() -> [Int] {
+    func fetchAllData() -> [StarredMovie] {
         let request: NSFetchRequest<StarredMovie> = StarredMovie.fetchRequest()
         do {
             let fetchResult = try self.context.fetch(request)
-            return fetchResult.map{ Int($0.id) }
+            return fetchResult
         } catch {
             print(error.localizedDescription)
             return []
@@ -61,6 +61,7 @@ final class PersistenceManager {
             let managedObject = NSManagedObject(entity: entity, insertInto: self.context)
 
             managedObject.setValue(movieID, forKey: "id")
+            managedObject.setValue(movie.title, forKey: "title")
             do {
                 try self.context.save()
             } catch {

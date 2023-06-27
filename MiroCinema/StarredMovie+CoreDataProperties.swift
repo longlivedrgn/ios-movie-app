@@ -18,5 +18,6 @@ extension StarredMovie {
     }
 
     @NSManaged public var id: Int32
+    @NSManaged public var title: String
 
 }
