@@ -32,6 +32,7 @@ class MovieStarredViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         configureCollectionView()
+        configureNavigationBar()
         applySnapShot()
     }
 
@@ -92,10 +93,14 @@ class MovieStarredViewController: UIViewController {
         var snapShot = SnapShot()
         snapShot.appendSections([Section.main])
 
-        var movies = movieStarredModel.movies
+        let movies = movieStarredModel.movies
         snapShot.appendItems(movies, toSection: .main)
 
         datasource?.apply(snapShot)
+    }
+
+    private func configureNavigationBar() {
+        navigationItem.title = "내가 찜한 영화들"
     }
 
 }
