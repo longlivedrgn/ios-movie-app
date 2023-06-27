@@ -33,7 +33,6 @@ class MovieSearchViewController: UIViewController {
         super.viewDidLoad()
         configureCollectionView()
         configureSearchBar()
-        configureCollectionViewDataSource()
         configureNotificationCenter()
         configureBackButton()
         applySnapShot()
@@ -44,6 +43,7 @@ class MovieSearchViewController: UIViewController {
         searchCollectionView.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }
+        configureCollectionViewDataSource()
     }
 
     private func configureSearchBar() {

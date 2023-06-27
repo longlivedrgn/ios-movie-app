@@ -32,6 +32,7 @@ class MovieStarredViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         configureCollectionView()
+        applySnapShot()
     }
 
     private func configureCollectionView() {
@@ -39,6 +40,7 @@ class MovieStarredViewController: UIViewController {
         starredCollectionView.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }
+        configureCollectionViewDataSource()
     }
 
     private func createLayout() -> UICollectionViewCompositionalLayout {
@@ -84,6 +86,16 @@ class MovieStarredViewController: UIViewController {
             cell.configure(with: movie)
             return cell
         }
+    }
+
+    private func applySnapShot() {
+        var snapShot = SnapShot()
+        snapShot.appendSections([Section.main])
+
+        var movies = movieStarredModel.movies
+        snapShot.appendItems(movies, toSection: .main)
+
+        datasource?.apply(snapShot)
     }
 
 }

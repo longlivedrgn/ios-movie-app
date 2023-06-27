@@ -25,10 +25,9 @@ final class MovieStarredModel {
             let movieID = Int(movieData.id)
             let posterImageKey = MovieImage.poster(ID: movieID).resourceKey
             let cachedImage = ImageCacheManager.shared.value(forResoureceKey: posterImageKey)
-            
+
             movies.append(Movie(id: movieID, title: movieTitle, posterImage: cachedImage))
         }
-        print(movies)
     }
 
 }
