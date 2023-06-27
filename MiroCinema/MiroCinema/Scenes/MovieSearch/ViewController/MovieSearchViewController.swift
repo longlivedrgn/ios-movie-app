@@ -12,9 +12,6 @@ class MovieSearchViewController: UIViewController {
     private enum Section {
         case main
     }
-
-    private let movieNetworkAPIManager = NetworkAPIManager()
-    private let movieNetworkDispatcher = NetworkDispatcher()
     private let movieSearchModel = MovieSearchModel()
 
     private let loadingIndicatorView = UIActivityIndicatorView()

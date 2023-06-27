@@ -32,7 +32,6 @@ class MovieStarredViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         configureCollectionView()
-
     }
 
     private func configureCollectionView() {

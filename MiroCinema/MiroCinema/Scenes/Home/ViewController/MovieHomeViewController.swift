@@ -318,10 +318,10 @@ final class MovieHomeViewController: UIViewController {
             buttonColor,
             renderingMode: .alwaysOriginal
         )
-        let button = UIButton(type: .custom)
-        button.setImage(magnifyingglassButtonIcon, for: .normal)
-        button.addTarget(self, action: #selector(magnifyingglassButtonTapped), for: .touchUpInside)
-        let magnifyingglassButtonIconItem = UIBarButtonItem(customView: button)
+        let magnifyingglassButton = UIButton(type: .custom)
+        magnifyingglassButton.setImage(magnifyingglassButtonIcon, for: .normal)
+        magnifyingglassButton.addTarget(self, action: #selector(magnifyingglassButtonTapped), for: .touchUpInside)
+        let magnifyingglassButtonIconItem = UIBarButtonItem(customView: magnifyingglassButton)
 
         let mapButtonIcon = UIImage(systemName: "map")?.withTintColor(
             buttonColor,
@@ -333,7 +333,10 @@ final class MovieHomeViewController: UIViewController {
             buttonColor,
             renderingMode: .alwaysOriginal
         )
-        let starButtonIconItem = UIBarButtonItem(customView: UIImageView(image: starButtonIcon))
+        let starButton = UIButton(type: .custom)
+        starButton.setImage(starButtonIcon, for: .normal)
+        starButton.addTarget(self, action: #selector(starButtonTapped), for: .touchUpInside)
+        let starButtonIconItem = UIBarButtonItem(customView: starButton)
 
         let spacer = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
         spacer.width = 16
@@ -361,6 +364,11 @@ final class MovieHomeViewController: UIViewController {
     @objc func magnifyingglassButtonTapped() {
         let movieSearchViewController = MovieSearchViewController()
         navigationController?.pushViewController(movieSearchViewController, animated: true)
+    }
+
+    @objc func starButtonTapped() {
+        let movieStarredViewController = MovieStarredViewController()
+        navigationController?.pushViewController(movieStarredViewController, animated: true)
     }
 
 }

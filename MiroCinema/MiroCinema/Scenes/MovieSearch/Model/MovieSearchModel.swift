@@ -14,13 +14,13 @@ final class MovieSearchModel {
 
     var searchEndPoint = MovieSearchAPIEndPoint(input: "-") {
         didSet {
-            fetchMoviesData()
+            fetchMovies()
         }
     }
 
     var movies = [Movie]()
 
-    private func fetchMoviesData() {
+    private func fetchMovies() {
         Task {
             do {
                 guard let moviesDTO = try await movieNetworkManager.fetchData(

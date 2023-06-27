@@ -43,6 +43,17 @@ final class PersistenceManager {
         }
     }
 
+    func fetchAllMovieIDs() -> [Int] {
+        let request: NSFetchRequest<StarredMovie> = StarredMovie.fetchRequest()
+        do {
+            let fetchResult = try self.context.fetch(request)
+            return fetchResult.map{ Int($0.id) }
+        } catch {
+            print(error.localizedDescription)
+            return []
+        }
+    }
+
     func star(movie: Movie) {
         let entity = NSEntityDescription.entity(forEntityName: "StarredMovie", in: self.context)
         guard let movieID = movie.ID else { return }
