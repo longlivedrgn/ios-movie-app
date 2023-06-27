@@ -22,7 +22,7 @@ class MovieSearchViewController: UIViewController {
         let collectionview = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
         collectionview.backgroundColor = .black
         collectionview.delegate = self
-        collectionview.register(cell: SearchCollectionViewCell.self)
+        collectionview.register(cell: MovieListViewCell.self)
 
         return collectionview
     }()
@@ -34,16 +34,12 @@ class MovieSearchViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        configureViews()
+        configureCollectionView()
         configureSearchBar()
         configureCollectionViewDataSource()
         configureNotificationCenter()
         configureBackButton()
         applySnapShot()
-    }
-
-    private func configureViews() {
-        configureCollectionView()
     }
 
     private func configureCollectionView() {
@@ -64,7 +60,7 @@ class MovieSearchViewController: UIViewController {
         datasource = UICollectionViewDiffableDataSource(
             collectionView: searchCollectionView
         ) { collectionView, indexPath, movie in
-            let cell = collectionView.dequeue(cell: SearchCollectionViewCell.self, for: indexPath)
+            let cell = collectionView.dequeue(cell: MovieListViewCell.self, for: indexPath)
             cell.configure(with: movie)
             return cell
         }
