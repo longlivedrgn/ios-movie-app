@@ -41,7 +41,11 @@
   * [💥 View controller의 순환 참조 문제](#-view-controller의-순환-참조-문제)
 
 ## 💥 하나의 datasource를 활용하여 서로 다른 API 데이터 모델 처리하기
+<details>
+<summary>📝 Please Open</summary>
 
+
+ 
 ⁉️ `DiffableDatasource`를 사용한 이유
 
 - Home scene 속 상단 section은 인기 있는 영화 보여주고, 하단 section은 전체 영화를 장르 별로 나눴어요.
@@ -211,8 +215,15 @@ private func applySnapShot() {
 
 ➡️ 두 가지 방법 다 장점이 존재하지만, enum을 활용한 방법이 case를 통하여 한눈에 활용된 item type이 보인다는 점과, cell 재사용 시 분기처리에서 불필요한 default 케이스를 써주지 않아도 된다는 점에서 해당 프로젝트에서는 enum 케이스를 활용하여 item identifier 타입을 구현했어요.
 
+</details>
+
 ## 💥 Collection View 레이아웃 짜기
 
+<details>
+<summary>📝 Please Open</summary>
+
+
+ 
 - 저는 상단에 영화 정보를 띄어주는 부분(이하 detail view)과 하단의 영화인 정보를 보여주는 부분(이하 credits view)을 compositonal layout으로 구현하기 위하여 네 가지 방법을 고민해보았어요.
 
 1. Detail view 아래 collection view 넣기
@@ -248,7 +259,13 @@ private func applySnapShot() {
 
 - 첫 번째 section에는 detail view cell 하나만을 보여주고, 두 번째 section에서는 credit view를 보여주는 방식으로 구현을 했어요. 해당 방법을 활용하니, 전체 화면이 scroll이 되면서 원하는 layout을 구현할 수 있었어요.
 
+</details>
+
 ## 💥 가변적인 cell 구현하기
+<details>
+<summary>📝 Please Open</summary>
+
+
 - feat. cell안에 버튼 넣기
 
 | 디테일 뷰 |
@@ -291,9 +308,14 @@ private func createDetailLayout() -> NSCollectionLayoutSection {
         return section
     }
 ```
+</details>
+
 
 ## 💥 무거워진 view controller 덜어내기
+<details>
+<summary>📝 Please Open</summary>
 
+ 
 - MVC 구조로 로직을 짜다보니, view controller가 많이 무거워졌어요. View controller는 collection view를 구현하는 다양한 로직과 다른 delegate을 채택한 다양한 메소드가 존재했어요. 또한, Networking을 하며 필요한 data를 받아오는 로직 또한 view controller가 관장하고 있었어요.
 - 저는 너무 커진 view controller의 역할을 줄이기 위하여 controller라는 모델 타입을 생성했어요. 해당 타입은 MVC 구조에서 Model의 역할이며 데이터와 관련된 내용 및 로직을 가지고 있지만, UI와는 직접적으로 연결되지 않아요. 즉, Model 타입은 view controller를 모르지만, view controller는 model을 내부 프로퍼티로 가지고 있어요.
 - Model은 API 통신을 통하여 view controller가 collection view에 띄울 때 활용하는 데이터 모델 타입을 생성해요. 그리고 model 타입을 완성하면 observer 패턴을 통하여 view controller에게 model이 완성되었음을 알려주고, view controller는 해당 model을 통하여 collection view를 띄우게 돼요.
@@ -350,8 +372,15 @@ NotificationCenter.default.addObserver(
 
 💬 이를 통해서, view controller는 view와 관련 없는 코드를 덜어낼 수 있었고, view controller의 역할이 많아져서 떨어지던 코드의 가독성 개선할 수 있었어요.
 
+
+</details>
+
 ## 💥 View controller의 순환 참조 문제
 
+<details>
+<summary>📝 Please Open</summary>
+
+ 
 - 해당 앱은 NotificationCenter를 활용하여 view를 업데이트하는 로직을 활용해요.
 - 그리고 navigation controller를 활용하여 push가 되고 pop이되면 pop된 view controller는 자동으로 deinit이 되면서 NotificationCenter가 자동으로 remove가 돼요.
 
@@ -387,3 +416,6 @@ private func createlayout() -> UICollectionViewCompositionalLayout {
 ```
 
 💬 이를 통해서, pop될 때, 정상적으로 view controller가 메모리에서 할당 해제가 되어 Notification이 중복으로 받아지는 문제를 해결할 수 있었어요.
+
+</details>
+
