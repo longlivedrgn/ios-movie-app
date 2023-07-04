@@ -22,6 +22,13 @@ class MovieStarredViewController: UIViewController {
 
         return collectionview
     }()
+    private lazy var deleteBarButtonItem: UIBarButtonItem = {
+        let buttonItem = UIBarButtonItem(title: "영화 선택", style: .plain, target: self, action: #selector(deleteButtonTapped))
+
+        return buttonItem
+    }()
+
+    private var isDeleteButtonTapped: Bool = false
 
     private typealias DataSource = UICollectionViewDiffableDataSource<Section, Movie>
     private typealias SnapShot = NSDiffableDataSourceSnapshot<Section, Movie>
@@ -99,6 +106,22 @@ class MovieStarredViewController: UIViewController {
 
     private func configureNavigationBar() {
         navigationItem.title = "내가 찜한 영화들"
+        configureNavigationButton()
+    }
+
+    private func configureNavigationButton() {
+        navigationItem.rightBarButtonItem = deleteBarButtonItem
+    }
+
+    @objc private func deleteButtonTapped() {
+        isDeleteButtonTapped.toggle()
+        switch isDeleteButtonTapped {
+        case true:
+            deleteBarButtonItem.title = "선택 삭제"
+        case false:
+            deleteBarButtonItem.title = "영화 선택"
+        }
     }
 
 }
+
