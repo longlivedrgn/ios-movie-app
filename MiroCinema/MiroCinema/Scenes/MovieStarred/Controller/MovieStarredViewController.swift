@@ -13,8 +13,6 @@ class MovieStarredViewController: UIViewController {
         case main
     }
 
-    private let movieNetworkAPIManager = NetworkAPIManager()
-    private let movieNetworkDispatcher = NetworkDispatcher()
     private let movieStarredModel = MovieStarredModel()
 
     private lazy var starredCollectionView: UICollectionView = {

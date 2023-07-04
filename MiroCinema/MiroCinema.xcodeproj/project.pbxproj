@@ -329,7 +329,7 @@
 				87E53F262A1EF81C00D78160 /* Protocol */,
 				8737A9BC2A1A3B980056C6A3 /* View */,
 				8737A9BB2A1A3B7F0056C6A3 /* Cell */,
-				8737A9BA2A1A3B5B0056C6A3 /* ViewController */,
+				8737A9BA2A1A3B5B0056C6A3 /* Controller */,
 				87B74CA02A2060CF002878BB /* Model */,
 			);
 			path = Home;
@@ -348,12 +348,12 @@
 			path = MovieDetail;
 			sourceTree = "<group>";
 		};
-		8737A9BA2A1A3B5B0056C6A3 /* ViewController */ = {
+		8737A9BA2A1A3B5B0056C6A3 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
 				8704A4942A14DD68000AB7F5 /* MovieHomeViewController.swift */,
 			);
-			path = ViewController;
+			path = Controller;
 			sourceTree = "<group>";
 		};
 		8737A9BB2A1A3B7F0056C6A3 /* Cell */ = {
@@ -539,7 +539,7 @@
 			isa = PBXGroup;
 			children = (
 				8781198F2A23999F005EA728 /* Cell */,
-				8781198B2A239772005EA728 /* ViewController */,
+				8781198B2A239772005EA728 /* Controller */,
 				8781198C2A23977E005EA728 /* View */,
 				8781198A2A23975F005EA728 /* Model */,
 			);
@@ -555,12 +555,12 @@
 			path = Model;
 			sourceTree = "<group>";
 		};
-		8781198B2A239772005EA728 /* ViewController */ = {
+		8781198B2A239772005EA728 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
 				8781198D2A239801005EA728 /* MovieGenreViewController.swift */,
 			);
-			path = ViewController;
+			path = Controller;
 			sourceTree = "<group>";
 		};
 		8781198C2A23977E005EA728 /* View */ = {
@@ -584,17 +584,17 @@
 			isa = PBXGroup;
 			children = (
 				879ACFD82A498936002FED3B /* Model */,
-				879ACFD72A49892C002FED3B /* ViewController */,
+				879ACFD72A49892C002FED3B /* Controller */,
 			);
 			path = MovieStarred;
 			sourceTree = "<group>";
 		};
-		879ACFD72A49892C002FED3B /* ViewController */ = {
+		879ACFD72A49892C002FED3B /* Controller */ = {
 			isa = PBXGroup;
 			children = (
 				87E285AC2A4AB95800B2DA21 /* MovieStarredViewController.swift */,
 			);
-			path = ViewController;
+			path = Controller;
 			sourceTree = "<group>";
 		};
 		879ACFD82A498936002FED3B /* Model */ = {
@@ -631,17 +631,17 @@
 			isa = PBXGroup;
 			children = (
 				87CED0B52A331AF100BDC06E /* Model */,
-				87CED0B12A3311A600BDC06E /* ViewController */,
+				87CED0B12A3311A600BDC06E /* Controller */,
 			);
 			path = MovieSearch;
 			sourceTree = "<group>";
 		};
-		87CED0B12A3311A600BDC06E /* ViewController */ = {
+		87CED0B12A3311A600BDC06E /* Controller */ = {
 			isa = PBXGroup;
 			children = (
 				87CED0AB2A32FDEC00BDC06E /* MovieSearchViewController.swift */,
 			);
-			path = ViewController;
+			path = Controller;
 			sourceTree = "<group>";
 		};
 		87CED0B22A3311B300BDC06E /* Cell */ = {
