@@ -16,7 +16,7 @@ class MovieStarredViewController: UIViewController {
     private let movieStarredModel = MovieStarredModel()
 
     private lazy var starredCollectionView: UICollectionView = {
-        let collectionview = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
+        let collectionview = UICollectionView(frame: .zero, collectionViewLayout: createBasicLayout())
         collectionview.backgroundColor = .black
         collectionview.register(cell: MovieListViewCell.self)
 
@@ -49,11 +49,46 @@ class MovieStarredViewController: UIViewController {
         configureCollectionViewDataSource()
     }
 
-    private func createLayout() -> UICollectionViewCompositionalLayout {
+    private func createBasicLayout() -> UICollectionViewCompositionalLayout {
         let layout = UICollectionViewCompositionalLayout { section, layoutEnvironment in
 
             let movieItemSize = NSCollectionLayoutSize(
                 widthDimension: .fractionalWidth(1/3),
+                heightDimension: .fractionalHeight(1)
+            )
+
+            let movieItem = NSCollectionLayoutItem(layoutSize: movieItemSize)
+
+            movieItem.contentInsets = NSDirectionalEdgeInsets(
+                top: 10,
+                leading: 5,
+                bottom: 5,
+                trailing: 5
+            )
+
+            let movieGroupSize = NSCollectionLayoutSize(
+                widthDimension: .fractionalWidth(1),
+                heightDimension: .fractionalHeight(1/3.6)
+            )
+
+            let movieGroup = NSCollectionLayoutGroup.horizontal(
+                layoutSize: movieGroupSize,
+                subitems: [movieItem, movieItem, movieItem]
+            )
+
+            let movieSection = NSCollectionLayoutSection(group: movieGroup)
+
+            return movieSection
+        }
+
+        return layout
+    }
+
+    private func createDeleteModeLayout() -> UICollectionViewCompositionalLayout {
+        let layout = UICollectionViewCompositionalLayout { section, layoutEnvironment in
+
+            let movieItemSize = NSCollectionLayoutSize(
+                widthDimension: .fractionalWidth(1/2),
                 heightDimension: .fractionalHeight(1)
             )
 
@@ -115,11 +150,14 @@ class MovieStarredViewController: UIViewController {
 
     @objc private func deleteButtonTapped() {
         isDeleteButtonTapped.toggle()
+
         switch isDeleteButtonTapped {
         case true:
-            deleteBarButtonItem.title = "선택 삭제"
+            deleteBarButtonItem.title = "삭제 완료"
+            starredCollectionView.setCollectionViewLayout(createDeleteModeLayout(), animated: true)
         case false:
             deleteBarButtonItem.title = "영화 선택"
+            starredCollectionView.setCollectionViewLayout(createBasicLayout(), animated: true)
         }
     }
 
