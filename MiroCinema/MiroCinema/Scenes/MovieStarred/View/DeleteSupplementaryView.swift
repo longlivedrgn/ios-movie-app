@@ -9,13 +9,18 @@ import UIKit
 
 class DeleteSupplementaryView: UICollectionReusableView {
 
-    private let minusImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.image = UIImage(systemName: "minus.circle.fill")
-        imageView.tintColor = .gray
+    private let minusButton: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(systemName: "minus.circle.fill"), for: .normal)
+        button.contentVerticalAlignment = .fill
+        button.contentHorizontalAlignment = .fill
 
-        return imageView
+        return button
     }()
+
+    weak var delegate: DeleteSupplementaryViewDelegate?
+
+    var movie: Movie?
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -27,11 +32,16 @@ class DeleteSupplementaryView: UICollectionReusableView {
     }
 
     private func configureView() {
-        addSubview(minusImageView)
-
-        minusImageView.snp.makeConstraints {
+        addSubview(minusButton)
+        minusButton.addTarget(self, action: #selector(minusButtonDidTapped), for: .touchUpInside)
+        minusButton.tintColor = .gray
+        minusButton.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }
+    }
+
+    @objc private func minusButtonDidTapped() {
+        delegate?.deleteSupplementaryView(self, didButtonTapped: minusButton)
     }
 
 }

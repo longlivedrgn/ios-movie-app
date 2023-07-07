@@ -157,13 +157,17 @@ class MovieStarredViewController: UIViewController {
         }
 
         datasource?.supplementaryViewProvider = {
-            (collectionView, kind, indexPath) in
+            [weak self] (collectionView, kind, indexPath) in
 
             let supplementaryView = collectionView.dequeue(
                 supplementaryView: DeleteSupplementaryView.self,
                 for: indexPath,
                 kind: MovieStarredViewController.movieStarredSupplementaryKind
             )
+
+            guard let movie = self?.datasource?.itemIdentifier(for: indexPath) else { return UICollectionViewCell()}
+            supplementaryView.movie = movie
+            supplementaryView.delegate = self
             return supplementaryView
         }
     }
@@ -201,4 +205,18 @@ class MovieStarredViewController: UIViewController {
     }
 
 }
+
+extension MovieStarredViewController: DeleteSupplementaryViewDelegate {
+
+    func deleteSupplementaryView(_ deleteSupplementaryView: DeleteSupplementaryView, didButtonTapped sender: UIButton) {
+        guard let deletedMovie = deleteSupplementaryView.movie else { return }
+        guard let deleteMovieIndex = movieStarredModel.movies.firstIndex(of: deletedMovie) else { return }
+
+        movieStarredModel.movies.remove(at: deleteMovieIndex)
+        PersistenceManager.shared.delete(movie: deletedMovie)
+        applySnapShot()
+    }
+
+}
+
 
