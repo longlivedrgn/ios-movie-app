@@ -15,15 +15,27 @@ class MovieStarredViewController: UIViewController {
 
     private let movieStarredModel = MovieStarredModel()
 
+    static private let movieStarredSupplementaryKind = "movieStarredSupplementaryKind"
+
     private lazy var starredCollectionView: UICollectionView = {
         let collectionview = UICollectionView(frame: .zero, collectionViewLayout: createBasicLayout())
         collectionview.backgroundColor = .black
         collectionview.register(cell: MovieListViewCell.self)
+        collectionview.register(
+            supplementaryView: DeleteSupplementaryView.self,
+            kind: MovieStarredViewController.movieStarredSupplementaryKind
+        )
 
         return collectionview
     }()
+
     private lazy var deleteBarButtonItem: UIBarButtonItem = {
-        let buttonItem = UIBarButtonItem(title: "영화 선택", style: .plain, target: self, action: #selector(deleteButtonTapped))
+        let buttonItem = UIBarButtonItem(
+            title: "영화 선택",
+            style: .plain,
+            target: self,
+            action: #selector(deleteButtonTapped)
+        )
 
         return buttonItem
     }()
@@ -73,7 +85,7 @@ class MovieStarredViewController: UIViewController {
 
             let movieGroup = NSCollectionLayoutGroup.horizontal(
                 layoutSize: movieGroupSize,
-                subitems: [movieItem, movieItem, movieItem]
+                subitems: [movieItem]
             )
 
             let movieSection = NSCollectionLayoutSection(group: movieGroup)
@@ -87,12 +99,28 @@ class MovieStarredViewController: UIViewController {
     private func createDeleteModeLayout() -> UICollectionViewCompositionalLayout {
         let layout = UICollectionViewCompositionalLayout { section, layoutEnvironment in
 
+            let badgeAnchor = NSCollectionLayoutAnchor(
+                edges: [.top, .trailing],
+                fractionalOffset: CGPoint(x: 0.0, y: 0.0)
+            )
+
+            let badgeSize = NSCollectionLayoutSize(
+                widthDimension: .absolute(30),
+                heightDimension: .absolute(30)
+            )
+
+            let badge = NSCollectionLayoutSupplementaryItem(
+                layoutSize: badgeSize,
+                elementKind: MovieStarredViewController.movieStarredSupplementaryKind,
+                containerAnchor: badgeAnchor
+            )
+
             let movieItemSize = NSCollectionLayoutSize(
-                widthDimension: .fractionalWidth(1/2),
+                widthDimension: .fractionalWidth(1/3),
                 heightDimension: .fractionalHeight(1)
             )
 
-            let movieItem = NSCollectionLayoutItem(layoutSize: movieItemSize)
+            let movieItem = NSCollectionLayoutItem(layoutSize: movieItemSize, supplementaryItems: [badge])
 
             movieItem.contentInsets = NSDirectionalEdgeInsets(
                 top: 10,
@@ -108,7 +136,7 @@ class MovieStarredViewController: UIViewController {
 
             let movieGroup = NSCollectionLayoutGroup.horizontal(
                 layoutSize: movieGroupSize,
-                subitems: [movieItem, movieItem, movieItem]
+                subitems: [movieItem]
             )
 
             let movieSection = NSCollectionLayoutSection(group: movieGroup)
@@ -126,6 +154,17 @@ class MovieStarredViewController: UIViewController {
             let cell = collectionView.dequeue(cell: MovieListViewCell.self, for: indexPath)
             cell.configure(with: movie)
             return cell
+        }
+
+        datasource?.supplementaryViewProvider = {
+            (collectionView, kind, indexPath) in
+
+            let supplementaryView = collectionView.dequeue(
+                supplementaryView: DeleteSupplementaryView.self,
+                for: indexPath,
+                kind: MovieStarredViewController.movieStarredSupplementaryKind
+            )
+            return supplementaryView
         }
     }
 

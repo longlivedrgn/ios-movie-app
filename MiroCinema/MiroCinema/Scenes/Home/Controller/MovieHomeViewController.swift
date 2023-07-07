@@ -244,7 +244,7 @@ final class MovieHomeViewController: UIViewController {
 
         let movieGenresGroup = NSCollectionLayoutGroup.horizontal(
             layoutSize: movieGenresGroupSize,
-            subitems: [movieGenreItem, movieGenreItem, movieGenreItem]
+            subitems: [movieGenreItem]
         )
 
         movieGenresGroup.contentInsets = NSDirectionalEdgeInsets(

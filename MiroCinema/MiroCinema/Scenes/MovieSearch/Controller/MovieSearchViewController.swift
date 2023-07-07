@@ -87,7 +87,7 @@ class MovieSearchViewController: UIViewController {
 
             let movieGroup = NSCollectionLayoutGroup.horizontal(
                 layoutSize: movieGroupSize,
-                subitems: [movieItem, movieItem, movieItem]
+                subitems: [movieItem]
             )
 
             let movieSection = NSCollectionLayoutSection(group: movieGroup)

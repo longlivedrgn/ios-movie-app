@@ -171,7 +171,7 @@ final class MovieDetailViewController: UIViewController {
         )
         let group = NSCollectionLayoutGroup.vertical(
             layoutSize: groupSize,
-            subitems: [item, item]
+            subitems: [item]
         )
         group.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 15, bottom: 0, trailing: 0)
 
