@@ -9,12 +9,12 @@ import UIKit
 
 class DeleteSupplementaryView: UICollectionReusableView {
 
-    private let minusLabel: UILabel = {
-        let label = UILabel()
-        label.text = "-"
-        label.textColor = .gray
+    private let minusImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.image = UIImage(systemName: "minus.circle.fill")
+        imageView.tintColor = .gray
 
-        return label
+        return imageView
     }()
 
     override init(frame: CGRect) {
@@ -27,18 +27,11 @@ class DeleteSupplementaryView: UICollectionReusableView {
     }
 
     private func configureView() {
-        backgroundColor = .darkGray
-        addSubview(minusLabel)
-        minusLabel.snp.makeConstraints {
-            $0.centerX.centerY.equalToSuperview()
-        }
-        configureBorder()
-    }
+        addSubview(minusImageView)
 
-    private func configureBorder() {
-        let radius = bounds.width / 2.0
-        layer.cornerRadius = radius
-        layer.borderColor = UIColor.clear.cgColor
+        minusImageView.snp.makeConstraints {
+            $0.edges.equalToSuperview()
+        }
     }
 
 }

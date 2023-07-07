@@ -32,7 +32,7 @@ class MovieStarredViewController: UIViewController {
     private lazy var deleteBarButtonItem: UIBarButtonItem = {
         let buttonItem = UIBarButtonItem(
             title: "영화 선택",
-            style: .plain,
+            style: .done,
             target: self,
             action: #selector(deleteButtonTapped)
         )
@@ -101,7 +101,7 @@ class MovieStarredViewController: UIViewController {
 
             let badgeAnchor = NSCollectionLayoutAnchor(
                 edges: [.top, .trailing],
-                fractionalOffset: CGPoint(x: 0.0, y: 0.0)
+                fractionalOffset: CGPoint(x: 0.25, y: -0.6)
             )
 
             let badgeSize = NSCollectionLayoutSize(
@@ -123,10 +123,10 @@ class MovieStarredViewController: UIViewController {
             let movieItem = NSCollectionLayoutItem(layoutSize: movieItemSize, supplementaryItems: [badge])
 
             movieItem.contentInsets = NSDirectionalEdgeInsets(
-                top: 10,
-                leading: 5,
+                top: 12,
+                leading: 7,
                 bottom: 5,
-                trailing: 5
+                trailing: 7
             )
 
             let movieGroupSize = NSCollectionLayoutSize(
