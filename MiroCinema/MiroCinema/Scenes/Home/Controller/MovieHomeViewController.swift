@@ -44,7 +44,6 @@ final class MovieHomeViewController: UIViewController {
 
     private lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
-        collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.backgroundColor = .black
         collectionView.delegate = self
         collectionView.register(cell: MovieRankCollectionViewCell.self)
