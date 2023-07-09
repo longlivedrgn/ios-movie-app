@@ -6,15 +6,16 @@
 //
 
 import UIKit
+import CoreData
 
-class MovieDetailViewController: UIViewController {
+final class MovieDetailViewController: UIViewController {
 
     private enum Section: Int, CaseIterable {
         case detail = 0
         case credit = 1
     }
 
-    static let movieDetailSectionHeaderKind = "movieDetailSectionHeaderKind"
+    static private let movieDetailSectionHeaderKind = "movieDetailSectionHeaderKind"
 
     private lazy var movieDetailCollectionView: UICollectionView = {
         let collectionview = UICollectionView(frame: .zero, collectionViewLayout: createlayout())
@@ -31,6 +32,13 @@ class MovieDetailViewController: UIViewController {
         collectionview.contentInsetAdjustmentBehavior = .never
 
         return collectionview
+    }()
+
+    private lazy var starButton: StarButton = {
+        let button = StarButton()
+        button.addTarget(self, action: #selector(starButtonTapped), for: .touchUpInside)
+
+        return button
     }()
 
     private let movieDetailModel: MovieDetailModel
@@ -59,9 +67,30 @@ class MovieDetailViewController: UIViewController {
     }
 
     private func configureNavigationBar() {
+        configureRightBarButtonItem()
         let navigationAppearance = UINavigationBarAppearance()
         navigationAppearance.configureWithTransparentBackground()
         navigationController?.navigationBar.standardAppearance = navigationAppearance
+    }
+
+    private func configureRightBarButtonItem() {
+        let starButtonIconItem = UIBarButtonItem(customView: starButton)
+        configureStarButtonColor(movieDetailModel.movie)
+        navigationItem.rightBarButtonItem = starButtonIconItem
+    }
+
+    private func configureStarButtonColor(_ movie: Movie) {
+        guard PersistenceManager.shared.isInPersistentContainer(movie: movie) else { return }
+        starButton.changeStarredState()
+    }
+
+    @objc func starButtonTapped() {
+        if starButton.isStarred {
+            PersistenceManager.shared.delete(movie: movieDetailModel.movie)
+        } else {
+            PersistenceManager.shared.star(movie: movieDetailModel.movie)
+        }
+        starButton.changeStarredState()
     }
 
     private func configureViews() {
@@ -142,7 +171,7 @@ class MovieDetailViewController: UIViewController {
         )
         let group = NSCollectionLayoutGroup.vertical(
             layoutSize: groupSize,
-            subitems: [item, item]
+            subitems: [item]
         )
         group.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 15, bottom: 0, trailing: 0)
 

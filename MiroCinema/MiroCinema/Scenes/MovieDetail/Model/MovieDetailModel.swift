@@ -9,11 +9,11 @@ import UIKit
 
 final class MovieDetailModel {
 
-    private let movie: Movie
     private let movieNetworkAPIManager = NetworkAPIManager()
     private let movieNetworkDispatcher = NetworkDispatcher()
     var movieDetail: MovieDetail?
     var movieCredits = MovieCredit.skeletonModels
+    let movie: Movie
 
     init(movie: Movie) {
         self.movie = movie
@@ -39,8 +39,10 @@ final class MovieDetailModel {
                 )
                 guard let movieCertification = decodedCertificationData as? MovieCertificationDTO else { return }
                 guard let posterPath = movieInformation.posterPath else { return }
-                if ImageCacheManager.shared.isCached(resourceKey: posterPath) {
-                    let cachedImage = ImageCacheManager.shared.value(forResoureceKey: posterPath)
+                let resourceKey = MovieImage.poster(ID: movieInformation.ID).resourceKey
+
+                if ImageCacheManager.shared.isCached(resourceKey: resourceKey) {
+                    let cachedImage = ImageCacheManager.shared.value(forResoureceKey: resourceKey)
                     movieDetail = generateMovieDetail(with: movieInformation, movieCertification, cachedImage)
                 } else {
                     let imageEndPoint = MovieImageAPIEndPoint(imageURL: posterPath)
@@ -50,8 +52,8 @@ final class MovieDetailModel {
                     case .success(let data):
                         guard let posterImage = UIImage(data: data) else { return }
                         movieDetail = generateMovieDetail(with: movieInformation, movieCertification, posterImage)
-                        ImageCacheManager.shared.store(image: posterImage, forResourceKey: posterPath, in: .disk)
-                        ImageCacheManager.shared.store(image: posterImage, forResourceKey: posterPath, in: .memory)
+                        ImageCacheManager.shared.store(image: posterImage, forResourceKey: resourceKey, in: .disk)
+                        ImageCacheManager.shared.store(image: posterImage, forResourceKey: resourceKey, in: .memory)
                     case .failure(let error):
                         print(error)
                     }
@@ -82,9 +84,11 @@ final class MovieDetailModel {
                 for (index, actor) in sortedCredits.prefix(16).enumerated() {
                     let actorName = actor.name
                     let characterName = actor.characterName
+                    let resoureKey = MovieImage.profile(ID: actor.ID).resourceKey
                     let imageProfilePath = actor.profilePath ?? ""
-                    if ImageCacheManager.shared.isCached(resourceKey: imageProfilePath) {
-                        let cachedImage = ImageCacheManager.shared.value(forResoureceKey: imageProfilePath)
+
+                    if ImageCacheManager.shared.isCached(resourceKey: resoureKey) {
+                        let cachedImage = ImageCacheManager.shared.value(forResoureceKey: resoureKey)
                         movieCredits[index].profileImage = cachedImage
                     } else {
                         let imageProfilePathEndPoint = MovieImageAPIEndPoint(imageURL: imageProfilePath)
@@ -94,8 +98,8 @@ final class MovieDetailModel {
                         case .success(let data):
                             guard let profileImage = UIImage(data: data) else { return }
                             movieCredits[index].profileImage = profileImage
-                            ImageCacheManager.shared.store(image: profileImage, forResourceKey: imageProfilePath, in: .disk)
-                            ImageCacheManager.shared.store(image: profileImage, forResourceKey: imageProfilePath, in: .disk)
+                            ImageCacheManager.shared.store(image: profileImage, forResourceKey: resoureKey, in: .disk)
+                            ImageCacheManager.shared.store(image: profileImage, forResourceKey: resoureKey, in: .disk)
                         case .failure:
                             movieCredits[index].profileImage = UIImage(systemName: "person.fill")?
                                 .withTintColor(.gray)

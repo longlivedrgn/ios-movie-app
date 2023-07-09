@@ -12,9 +12,6 @@ class MovieSearchViewController: UIViewController {
     private enum Section {
         case main
     }
-
-    private let movieNetworkAPIManager = NetworkAPIManager()
-    private let movieNetworkDispatcher = NetworkDispatcher()
     private let movieSearchModel = MovieSearchModel()
 
     private let loadingIndicatorView = UIActivityIndicatorView()
@@ -22,7 +19,7 @@ class MovieSearchViewController: UIViewController {
         let collectionview = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
         collectionview.backgroundColor = .black
         collectionview.delegate = self
-        collectionview.register(cell: SearchCollectionViewCell.self)
+        collectionview.register(cell: MovieListViewCell.self)
 
         return collectionview
     }()
@@ -34,16 +31,11 @@ class MovieSearchViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        configureViews()
+        configureCollectionView()
         configureSearchBar()
-        configureCollectionViewDataSource()
         configureNotificationCenter()
         configureBackButton()
         applySnapShot()
-    }
-
-    private func configureViews() {
-        configureCollectionView()
     }
 
     private func configureCollectionView() {
@@ -51,6 +43,7 @@ class MovieSearchViewController: UIViewController {
         searchCollectionView.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }
+        configureCollectionViewDataSource()
     }
 
     private func configureSearchBar() {
@@ -64,7 +57,7 @@ class MovieSearchViewController: UIViewController {
         datasource = UICollectionViewDiffableDataSource(
             collectionView: searchCollectionView
         ) { collectionView, indexPath, movie in
-            let cell = collectionView.dequeue(cell: SearchCollectionViewCell.self, for: indexPath)
+            let cell = collectionView.dequeue(cell: MovieListViewCell.self, for: indexPath)
             cell.configure(with: movie)
             return cell
         }
@@ -94,7 +87,7 @@ class MovieSearchViewController: UIViewController {
 
             let movieGroup = NSCollectionLayoutGroup.horizontal(
                 layoutSize: movieGroupSize,
-                subitems: [movieItem, movieItem, movieItem]
+                subitems: [movieItem]
             )
 
             let movieSection = NSCollectionLayoutSection(group: movieGroup)

@@ -44,7 +44,6 @@ final class MovieHomeViewController: UIViewController {
 
     private lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
-        collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.backgroundColor = .black
         collectionView.delegate = self
         collectionView.register(cell: MovieRankCollectionViewCell.self)
@@ -244,7 +243,7 @@ final class MovieHomeViewController: UIViewController {
 
         let movieGenresGroup = NSCollectionLayoutGroup.horizontal(
             layoutSize: movieGenresGroupSize,
-            subitems: [movieGenreItem, movieGenreItem, movieGenreItem]
+            subitems: [movieGenreItem]
         )
 
         movieGenresGroup.contentInsets = NSDirectionalEdgeInsets(
@@ -311,16 +310,17 @@ final class MovieHomeViewController: UIViewController {
     }
 
     private func configureNavigationButton() {
+        // TODO: 요것도 빼자!
         let buttonColor = UIColor(red: 0.8, green: 0.8, blue: 0.8, alpha: 1)
 
         let magnifyingglassButtonIcon = UIImage(systemName: "magnifyingglass")?.withTintColor(
             buttonColor,
             renderingMode: .alwaysOriginal
         )
-        let button = UIButton(type: .custom)
-        button.setImage(magnifyingglassButtonIcon, for: .normal)
-        button.addTarget(self, action: #selector(magnifyingglassButtonTapped), for: .touchUpInside)
-        let magnifyingglassButtonIconItem = UIBarButtonItem(customView: button)
+        let magnifyingglassButton = UIButton(type: .custom)
+        magnifyingglassButton.setImage(magnifyingglassButtonIcon, for: .normal)
+        magnifyingglassButton.addTarget(self, action: #selector(magnifyingglassButtonTapped), for: .touchUpInside)
+        let magnifyingglassButtonIconItem = UIBarButtonItem(customView: magnifyingglassButton)
 
         let mapButtonIcon = UIImage(systemName: "map")?.withTintColor(
             buttonColor,
@@ -328,18 +328,22 @@ final class MovieHomeViewController: UIViewController {
         )
         let mapButtonIconItem = UIBarButtonItem(customView: UIImageView(image: mapButtonIcon))
 
-        let hamburgerButtonIcon = UIImage(named: "hamburgerButtonIcon")
-        let hamburgerButtonIconItem = UIBarButtonItem(
-            customView: UIImageView(image: hamburgerButtonIcon)
+        let starButtonIcon = UIImage(systemName: "star")?.withTintColor(
+            buttonColor,
+            renderingMode: .alwaysOriginal
         )
+        let starButton = UIButton(type: .custom)
+        starButton.setImage(starButtonIcon, for: .normal)
+        starButton.addTarget(self, action: #selector(starButtonTapped), for: .touchUpInside)
+        let starButtonIconItem = UIBarButtonItem(customView: starButton)
 
         let spacer = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
         spacer.width = 16
 
         self.navigationItem.rightBarButtonItems = [
-            hamburgerButtonIconItem,
-            spacer,
             mapButtonIconItem,
+            spacer,
+            starButtonIconItem,
             spacer,
             magnifyingglassButtonIconItem,
         ]
@@ -359,6 +363,11 @@ final class MovieHomeViewController: UIViewController {
     @objc func magnifyingglassButtonTapped() {
         let movieSearchViewController = MovieSearchViewController()
         navigationController?.pushViewController(movieSearchViewController, animated: true)
+    }
+
+    @objc func starButtonTapped() {
+        let movieStarredViewController = MovieStarredViewController()
+        navigationController?.pushViewController(movieStarredViewController, animated: true)
     }
 
 }

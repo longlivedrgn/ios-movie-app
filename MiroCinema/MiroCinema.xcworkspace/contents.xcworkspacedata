@@ -2,6 +2,12 @@
 <Workspace
    version = "1.0">
    <FileRef
+      location = "group:StarredMovie+CoreDataClass.swift">
+   </FileRef>
+   <FileRef
+      location = "group:StarredMovie+CoreDataProperties.swift">
+   </FileRef>
+   <FileRef
       location = "group:MiroCinema.xcodeproj">
    </FileRef>
    <FileRef

@@ -1,5 +1,5 @@
 //
-//  SearchCollectionViewCell.swift
+//  MovieListViewCell.swift
 //  MiroCinema
 //
 //  Created by 김용재 on 2023/06/09.
@@ -7,7 +7,7 @@
 
 import UIKit
 
-class SearchCollectionViewCell: UICollectionViewCell {
+class MovieListViewCell: UICollectionViewCell {
 
     private let containerView: UIView = {
         let containerView = UIView()
