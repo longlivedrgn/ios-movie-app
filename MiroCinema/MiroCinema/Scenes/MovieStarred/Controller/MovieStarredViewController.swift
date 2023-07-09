@@ -18,7 +18,7 @@ class MovieStarredViewController: UIViewController {
     static private let movieStarredSupplementaryKind = "movieStarredSupplementaryKind"
 
     private lazy var starredCollectionView: UICollectionView = {
-        let collectionview = UICollectionView(frame: .zero, collectionViewLayout: createBasicLayout())
+        let collectionview = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
         collectionview.backgroundColor = .black
         collectionview.register(cell: MovieListViewCell.self)
         collectionview.register(
@@ -61,42 +61,7 @@ class MovieStarredViewController: UIViewController {
         configureCollectionViewDataSource()
     }
 
-    private func createBasicLayout() -> UICollectionViewCompositionalLayout {
-        let layout = UICollectionViewCompositionalLayout { section, layoutEnvironment in
-
-            let movieItemSize = NSCollectionLayoutSize(
-                widthDimension: .fractionalWidth(1/3),
-                heightDimension: .fractionalHeight(1)
-            )
-
-            let movieItem = NSCollectionLayoutItem(layoutSize: movieItemSize)
-
-            movieItem.contentInsets = NSDirectionalEdgeInsets(
-                top: 10,
-                leading: 5,
-                bottom: 5,
-                trailing: 5
-            )
-
-            let movieGroupSize = NSCollectionLayoutSize(
-                widthDimension: .fractionalWidth(1),
-                heightDimension: .fractionalHeight(1/3.6)
-            )
-
-            let movieGroup = NSCollectionLayoutGroup.horizontal(
-                layoutSize: movieGroupSize,
-                subitems: [movieItem]
-            )
-
-            let movieSection = NSCollectionLayoutSection(group: movieGroup)
-
-            return movieSection
-        }
-
-        return layout
-    }
-
-    private func createDeleteModeLayout() -> UICollectionViewCompositionalLayout {
+    private func createLayout() -> UICollectionViewCompositionalLayout {
         let layout = UICollectionViewCompositionalLayout { section, layoutEnvironment in
 
             let badgeAnchor = NSCollectionLayoutAnchor(
@@ -168,6 +133,8 @@ class MovieStarredViewController: UIViewController {
             guard let movie = self?.datasource?.itemIdentifier(for: indexPath) else { return UICollectionViewCell()}
             supplementaryView.movie = movie
             supplementaryView.delegate = self
+            supplementaryView.isHidden = true
+
             return supplementaryView
         }
     }
@@ -197,10 +164,20 @@ class MovieStarredViewController: UIViewController {
         switch isDeleteButtonTapped {
         case true:
             deleteBarButtonItem.title = "삭제 완료"
-            starredCollectionView.setCollectionViewLayout(createDeleteModeLayout(), animated: true)
         case false:
             deleteBarButtonItem.title = "영화 선택"
-            starredCollectionView.setCollectionViewLayout(createBasicLayout(), animated: true)
+        }
+        setBadgeButtonHidden(isDeleteButtonTapped: isDeleteButtonTapped)
+    }
+
+    private func setBadgeButtonHidden(isDeleteButtonTapped: Bool) {
+        let indexPaths = starredCollectionView.indexPathsForVisibleItems
+        for indexPath in indexPaths {
+            guard let badgeView = starredCollectionView.supplementaryView(
+                forElementKind: MovieStarredViewController.movieStarredSupplementaryKind,
+                at: indexPath
+            ) as? DeleteSupplementaryView else { return }
+            badgeView.isHidden = !isDeleteButtonTapped
         }
     }
 
