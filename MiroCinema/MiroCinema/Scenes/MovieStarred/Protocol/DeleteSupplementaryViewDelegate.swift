@@ -9,5 +9,8 @@ import UIKit
 
 protocol DeleteSupplementaryViewDelegate: AnyObject {
 
-    func deleteSupplementaryView(_ deleteSupplementaryView: DeleteSupplementaryView, didButtonTapped sender: UIButton)
+    func deleteSupplementaryView(
+        _ deleteSupplementaryView: DeleteSupplementaryView,
+        didButtonTapped sender: UIButton
+    )
 }
