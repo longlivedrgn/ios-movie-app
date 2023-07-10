@@ -7,32 +7,26 @@
 
 import Foundation
 
-struct MovieGenreAPIEndPoint: TMDBAPIEndPoint {
+struct MovieGenreAPIEndPoint: TMDBAPIEndPointable {
 
     let genre: Genre
+    var URLPath: String = "/3/discover/movie"
+    var endPoint: EndPoint {
+        return EndPoint(
+            baseURL: baseURL,
+            path: URLPath,
+            queryItems: makeQueryItems(),
+            headers: makeHeaders())
+    }
 
     init(genre: Genre) {
         self.genre = genre
-    }
-
-    private enum URLConstants {
-        static let baseURL = "https://api.themoviedb.org"
-        static let URLPath = "/3/discover/movie"
-    }
-
-    var endPoint: EndPoint {
-        return EndPoint(
-            baseURL: URLConstants.baseURL,
-            path: URLConstants.URLPath,
-            queryItems: makeQueryItems(),
-            headers: makeHeaders())
     }
 
     func makeQueryItems() -> [URLQueryItem]? {
         let languageQueryItem = URLQueryItem(name: "language", value: "ko-KR")
         let pageNumberQueryItem = URLQueryItem(name: "sort_by", value: "revenue.desc")
         let genreCodeQueryItem = URLQueryItem(name: "with_genres", value: "\(genre.rawValue)")
-
 
         return [languageQueryItem, pageNumberQueryItem, genreCodeQueryItem]
     }
