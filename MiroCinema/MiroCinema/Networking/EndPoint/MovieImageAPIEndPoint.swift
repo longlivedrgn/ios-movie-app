@@ -8,24 +8,19 @@
 import Foundation
 
 
-struct MovieImageAPIEndPoint: TMDBAPIEndPoint {
+struct MovieImageAPIEndPoint: TMDBAPIEndPointable {
 
     let imageURL: String
+    var URLPath: String = "/t/p/original"
+    var endPoint: EndPoint {
+        return EndPoint(
+            baseURL: baseURL,
+            path: URLPath + imageURL
+            )
+    }
 
     init(imageURL: String) {
         self.imageURL = imageURL
-    }
-
-    private enum URLConstants {
-        static let baseURL = "https://image.tmdb.org"
-        static let URLPath = "/t/p/original"
-    }
-
-    var endPoint: EndPoint {
-        return EndPoint(
-            baseURL: URLConstants.baseURL,
-            path: URLConstants.URLPath + imageURL
-            )
     }
 
     func makeQueryItems() -> [URLQueryItem]? {

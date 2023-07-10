@@ -7,17 +7,13 @@
 
 import Foundation
 
-struct MovieRankAPIEndPoint: TMDBAPIEndPoint {
+struct MovieRankAPIEndPoint: TMDBAPIEndPointable {
 
-    private enum URLConstants {
-        static let baseURL = "https://api.themoviedb.org"
-        static let URLPath = "/3/movie/popular"
-    }
-
+    var URLPath: String = "/3/movie/popular"
     var endPoint: EndPoint {
         return EndPoint(
-            baseURL: URLConstants.baseURL,
-            path: URLConstants.URLPath,
+            baseURL: baseURL,
+            path: URLPath,
             queryItems: makeQueryItems(),
             headers: makeHeaders())
     }

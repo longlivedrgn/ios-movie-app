@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct MovieSearchAPIEndPoint: TMDBAPIEndPoint {
+struct MovieSearchAPIEndPoint: TMDBAPIEndPointable {
 
     let searchQuery: String
 
@@ -15,16 +15,11 @@ struct MovieSearchAPIEndPoint: TMDBAPIEndPoint {
         self.searchQuery = input
     }
 
-    private enum URLConstants {
-        static let baseURL = "https://api.themoviedb.org"
-        static let URLPath = "/3/search/movie"
-    }
-
-
+    var URLPath: String = "/3/search/movie"
     var endPoint: EndPoint {
         return EndPoint(
-            baseURL: URLConstants.baseURL,
-            path: URLConstants.URLPath,
+            baseURL: baseURL,
+            path: URLPath,
             queryItems: makeQueryItems(),
             headers: makeHeaders())
     }

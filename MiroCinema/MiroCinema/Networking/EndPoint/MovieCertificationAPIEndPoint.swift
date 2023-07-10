@@ -7,27 +7,27 @@
 
 import Foundation
 
-struct MovieCertificationAPIEndPoint: TMDBAPIEndPoint {
-
-    let movieCode: String
-
-    init(movieCode: Int) {
-        self.movieCode = String(movieCode)
-    }
+struct MovieCertificationAPIEndPoint: TMDBAPIEndPointable {
 
     private enum URLConstants {
-        static let baseURL = "https://api.themoviedb.org"
         static let URLPathPrefix = "/3/movie/"
         static let URLPathSuffix = "/release_dates"
     }
 
+    let movieCode: String
+    var URLPath: String
     var endPoint: EndPoint {
         return EndPoint(
-            baseURL: URLConstants.baseURL,
-            path: URLConstants.URLPathPrefix + movieCode + URLConstants.URLPathSuffix,
+            baseURL: baseURL,
+            path: URLPath,
             queryItems: makeQueryItems(),
             headers: makeHeaders()
             )
+    }
+
+    init(movieCode: Int) {
+        self.movieCode = String(movieCode)
+        self.URLPath = URLConstants.URLPathPrefix + self.movieCode + URLConstants.URLPathSuffix
     }
 
     func makeQueryItems() -> [URLQueryItem]? {

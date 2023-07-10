@@ -14,7 +14,7 @@ struct NetworkAPIManager {
 
     func fetchData(
         to type: Decodable.Type,
-        endPoint: APIEndpoint
+        endPoint: APIEndpointable
     ) async throws -> Decodable? {
         let urlRequest = endPoint.urlRequest
         let result = try await networkDispatcher.performRequest(urlRequest)

@@ -1,5 +1,5 @@
 //
-//  APIEndPoint.swift
+//  APIEndpointable.swift
 //  MiroCinema
 //
 //  Created by 김용재 on 2023/05/21.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-protocol APIEndpoint {
+protocol APIEndpointable: URLConstantsHavable {
 
     var endPoint: EndPoint { get }
     var urlRequest: URLRequest? { get }
@@ -16,7 +16,7 @@ protocol APIEndpoint {
 
 }
 
-extension APIEndpoint {
+extension APIEndpointable {
 
     var urlRequest: URLRequest? {
         var urlComponents = URLComponents(string: endPoint.baseURL)

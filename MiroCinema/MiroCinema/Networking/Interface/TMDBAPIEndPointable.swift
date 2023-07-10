@@ -1,5 +1,5 @@
 //
-//  MovieAPIEndPoint.swift
+//  TMDBAPIEndPointable.swift
 //  MiroCinema
 //
 //  Created by 김용재 on 2023/05/24.
@@ -7,11 +7,17 @@
 
 import Foundation
 
-protocol TMDBAPIEndPoint: APIEndpoint {
+protocol TMDBAPIEndPointable: APIEndpointable {
 
 }
 
-extension TMDBAPIEndPoint {
+extension TMDBAPIEndPointable {
+
+    var baseURL: String {
+        get {
+            return "https://api.themoviedb.org"
+        }
+    }
 
     func makeHeaders() -> [String : String]? {
         let authorizationHeaderKey = "Authorization"
