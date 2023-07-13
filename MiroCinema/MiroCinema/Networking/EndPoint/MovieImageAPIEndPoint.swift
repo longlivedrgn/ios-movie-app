@@ -12,6 +12,7 @@ struct MovieImageAPIEndPoint: TMDBAPIEndPointable {
 
     let imageURL: String
     var URLPath: String = "/t/p/original"
+    var baseURL: String = "https://image.tmdb.org"
     var endPoint: EndPoint {
         return EndPoint(
             baseURL: baseURL,

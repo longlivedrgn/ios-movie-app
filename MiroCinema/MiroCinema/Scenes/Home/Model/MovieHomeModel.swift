@@ -94,7 +94,6 @@ final class MovieHomeModel {
                     ) as? MoviesDTO else { return }
                     guard let bestMovie = movieItems.movies.first else { return }
                     let backDropImagePath = bestMovie.backDropImagePath ?? ""
-
                     let backgroundImageKey = MovieImage.background(ID: bestMovie.ID).resourceKey
                     try await convertToMovieGenreModel(
                         with: backDropImagePath,
