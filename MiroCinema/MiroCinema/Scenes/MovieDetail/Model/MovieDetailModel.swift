@@ -23,21 +23,11 @@ final class MovieDetailModel {
 
     private func fetchMovieDetails() {
         guard let movieID = movie.ID else { return }
-        let movieDetailEndPoint = MovieDetailsAPIEndPoint(movieCode: movieID)
-        let movieCertificationEndPoint = MovieCertificationAPIEndPoint(movieCode: movieID)
         Task {
             do {
-                let decodedDetailData = try await movieNetworkAPIManager.fetchData(
-                    to: MovieDetailsDTO.self,
-                    endPoint: movieDetailEndPoint
-                )
-                guard let movieInformation = decodedDetailData as? MovieDetailsDTO else { return }
+                guard let movieInformation = try await fetchMovieDetailInformation(movieID: movieID) else { return }
+                guard let movieCertification = try await fetchMovieCertification(movieID: movieID) else { return }
 
-                let decodedCertificationData = try await movieNetworkAPIManager.fetchData(
-                    to: MovieCertificationDTO.self,
-                    endPoint: movieCertificationEndPoint
-                )
-                guard let movieCertification = decodedCertificationData as? MovieCertificationDTO else { return }
                 guard let posterPath = movieInformation.posterPath else { return }
                 let resourceKey = MovieImage.poster(ID: movieInformation.ID).resourceKey
 
@@ -45,18 +35,12 @@ final class MovieDetailModel {
                     let cachedImage = ImageCacheManager.shared.value(forResoureceKey: resourceKey)
                     movieDetail = generateMovieDetail(with: movieInformation, movieCertification, cachedImage)
                 } else {
-                    let imageEndPoint = MovieImageAPIEndPoint(imageURL: posterPath)
-                    let imageResult = try await movieNetworkDispatcher.performRequest(imageEndPoint.urlRequest)
-
-                    switch imageResult {
-                    case .success(let data):
-                        guard let posterImage = UIImage(data: data) else { return }
-                        movieDetail = generateMovieDetail(with: movieInformation, movieCertification, posterImage)
-                        ImageCacheManager.shared.store(image: posterImage, forResourceKey: resourceKey, in: .disk)
-                        ImageCacheManager.shared.store(image: posterImage, forResourceKey: resourceKey, in: .memory)
-                    case .failure(let error):
-                        print(error)
-                    }
+                    movieDetail = try await movieDetail(
+                        with: posterPath,
+                        movieInformation: movieInformation,
+                        movieCertification: movieCertification,
+                        cacheKey: resourceKey
+                    )
                 }
             } catch {
                 print(error)
@@ -68,20 +52,59 @@ final class MovieDetailModel {
         }
     }
 
+    private func fetchMovieCertification(movieID: Int) async throws -> MovieCertificationDTO? {
+        let movieCertificationEndPoint = MovieCertificationAPIEndPoint(movieCode: movieID)
+        let decodedCertificationData = try await movieNetworkAPIManager.fetchData(
+            to: MovieCertificationDTO.self,
+            endPoint: movieCertificationEndPoint
+        )
+        let movieCertification = decodedCertificationData as? MovieCertificationDTO
+
+        return movieCertification
+    }
+
+    private func fetchMovieDetailInformation(movieID: Int) async throws -> MovieDetailsDTO? {
+        let movieDetailEndPoint = MovieDetailsAPIEndPoint(movieCode: movieID)
+        let decodedDetailData = try await movieNetworkAPIManager.fetchData(
+            to: MovieDetailsDTO.self,
+            endPoint: movieDetailEndPoint
+        )
+
+        let movieInformation = decodedDetailData as? MovieDetailsDTO
+
+        return movieInformation
+    }
+
+    private func movieDetail(
+        with posterPath: String,
+        movieInformation: MovieDetailsDTO,
+        movieCertification: MovieCertificationDTO,
+        cacheKey: String
+    ) async throws -> MovieDetail? {
+        let imageEndPoint = MovieImageAPIEndPoint(imageURL: posterPath)
+        let imageResult = try await movieNetworkDispatcher.performRequest(imageEndPoint.urlRequest)
+
+        switch imageResult {
+        case .success(let data):
+            let posterImage = UIImage(data: data) ?? UIImage()
+            let movieDetail = generateMovieDetail(with: movieInformation, movieCertification, posterImage)
+            ImageCacheManager.shared.store(image: posterImage, forResourceKey: cacheKey, in: .disk)
+            ImageCacheManager.shared.store(image: posterImage, forResourceKey: cacheKey, in: .memory)
+            return movieDetail
+        case .failure(let error):
+            print(error)
+            return nil
+        }
+    }
+
     private func fetchMovieCredits() {
         Task {
             do {
                 guard let movieID = movie.ID else { return }
-                let movieCreditsEndPoint = MovieCreditsAPIEndPoint(movieCode: movieID)
-                let decodedData = try await movieNetworkAPIManager.fetchData(
-                    to: MovieCreditsDTO.self,
-                    endPoint: movieCreditsEndPoint
-                )
-                guard let credits = decodedData as? MovieCreditsDTO else { return }
 
-                let sortedCredits = credits.cast.sorted { return $0.popularity > $1.popularity }
-
+                var sortedCredits = try await generateSortedCredits(with: movieID)
                 for (index, actor) in sortedCredits.prefix(16).enumerated() {
+                    guard let actor else { return }
                     let actorName = actor.name
                     let characterName = actor.characterName
                     let resoureKey = MovieImage.profile(ID: actor.ID).resourceKey
@@ -91,20 +114,7 @@ final class MovieDetailModel {
                         let cachedImage = ImageCacheManager.shared.value(forResoureceKey: resoureKey)
                         movieCredits[index].profileImage = cachedImage
                     } else {
-                        let imageProfilePathEndPoint = MovieImageAPIEndPoint(imageURL: imageProfilePath)
-                        let actorImageResult = try await movieNetworkDispatcher.performRequest(imageProfilePathEndPoint.urlRequest)
-
-                        switch actorImageResult {
-                        case .success(let data):
-                            guard let profileImage = UIImage(data: data) else { return }
-                            movieCredits[index].profileImage = profileImage
-                            ImageCacheManager.shared.store(image: profileImage, forResourceKey: resoureKey, in: .disk)
-                            ImageCacheManager.shared.store(image: profileImage, forResourceKey: resoureKey, in: .disk)
-                        case .failure:
-                            movieCredits[index].profileImage = UIImage(systemName: "person.fill")?
-                                .withTintColor(.gray)
-                                .withRenderingMode(.alwaysOriginal)
-                        }
+                        try await setMovieCredits(profilePath: imageProfilePath, with: resoureKey, index: index)
                     }
                     movieCredits[index].name = actorName
                     movieCredits[index].characterName = characterName
@@ -116,6 +126,35 @@ final class MovieDetailModel {
                 name: NSNotification.Name.detailModelDidFetchCreditData,
                 object: nil
             )
+        }
+    }
+
+    private func generateSortedCredits(with movieID: Int) async throws -> [Cast?] {
+        let movieCreditsEndPoint = MovieCreditsAPIEndPoint(movieCode: movieID)
+        let decodedData = try await movieNetworkAPIManager.fetchData(
+            to: MovieCreditsDTO.self,
+            endPoint: movieCreditsEndPoint
+        )
+        guard let credits = decodedData as? MovieCreditsDTO else { return [] }
+        let sortedCredits = credits.cast.sorted { return $0.popularity > $1.popularity }
+
+        return sortedCredits
+    }
+
+    private func setMovieCredits(profilePath: String, with cacheKey: String, index: Int) async throws {
+        let imageProfilePathEndPoint = MovieImageAPIEndPoint(imageURL: profilePath)
+        let actorImageResult = try await movieNetworkDispatcher.performRequest(imageProfilePathEndPoint.urlRequest)
+
+        switch actorImageResult {
+        case .success(let data):
+            guard let profileImage = UIImage(data: data) else { return }
+            movieCredits[index].profileImage = profileImage
+            ImageCacheManager.shared.store(image: profileImage, forResourceKey: cacheKey, in: .disk)
+            ImageCacheManager.shared.store(image: profileImage, forResourceKey: cacheKey, in: .disk)
+        case .failure:
+            movieCredits[index].profileImage = UIImage(systemName: "person.fill")?
+                .withTintColor(.gray)
+                .withRenderingMode(.alwaysOriginal)
         }
     }
 

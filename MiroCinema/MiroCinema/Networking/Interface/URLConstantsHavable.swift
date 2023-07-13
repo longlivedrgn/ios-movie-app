@@ -11,5 +11,5 @@ protocol URLConstantsHavable {
 
     var baseURL: String { get }
     var URLPath: String { get }
-    
+
 }

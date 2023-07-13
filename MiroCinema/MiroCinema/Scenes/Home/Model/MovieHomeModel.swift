@@ -23,7 +23,6 @@ final class MovieHomeModel {
         let movieRankEndPoint = MovieRankAPIEndPoint()
         Task {
             do {
-                // Movielist를 가져오기
                 guard let movieRank = try await self.movieNetworkManager.fetchData(
                     to: MoviesDTO.self,
                     endPoint: movieRankEndPoint
@@ -85,7 +84,6 @@ final class MovieHomeModel {
     }
 
     private func fetchGenresData() {
-
         let allGenresEndPoints = MovieGenreAPIEndPoint.allEndPoints
         Task {
             do {
@@ -95,7 +93,8 @@ final class MovieHomeModel {
                         endPoint: genreEndPoint
                     ) as? MoviesDTO else { return }
                     guard let bestMovie = movieItems.movies.first else { return }
-                    guard let backDropImagePath = bestMovie.backDropImagePath else { return }
+                    let backDropImagePath = bestMovie.backDropImagePath ?? ""
+
                     let backgroundImageKey = MovieImage.background(ID: bestMovie.ID).resourceKey
                     try await convertToMovieGenreModel(
                         with: backDropImagePath,
@@ -154,26 +153,28 @@ final class MovieHomeModel {
         in index: Int
     ) async throws {
         let endPoint = MovieImageAPIEndPoint(imageURL: backDropImagePath)
-
         let imageResult = try await movieNetworkDispatcher.performRequest(endPoint.urlRequest)
+        var backDropImage: UIImage?
 
         switch imageResult {
         case .success(let data):
-            guard let backDropImage = UIImage(data: data) else { return }
-            let genre = MovieGenre(
-                backDropImage: backDropImage,
-                genreTitle: genreEndPoint.genre.description,
-                movies: movies
-            )
-            if (0...5).contains(index){
-                genres[index] = genre
-            } else {
-                genres.append(genre)
-            }
-            ImageCacheManager.shared.store(image: backDropImage, forResourceKey: cacheKey, in: .disk)
-            ImageCacheManager.shared.store(image: backDropImage, forResourceKey: cacheKey, in: .memory)
+            guard let image = UIImage(data: data) else { return }
+            ImageCacheManager.shared.store(image: image, forResourceKey: cacheKey, in: .disk)
+            ImageCacheManager.shared.store(image: image, forResourceKey: cacheKey, in: .memory)
+            backDropImage = image
         case .failure(let error):
-            print(error)
+            backDropImage = nil
+        }
+
+        let genre = MovieGenre(
+            backDropImage: backDropImage,
+            genreTitle: genreEndPoint.genre.description,
+            movies: movies
+        )
+        if (0...5).contains(index){
+            genres[index] = genre
+        } else {
+            genres.append(genre)
         }
     }
 }
