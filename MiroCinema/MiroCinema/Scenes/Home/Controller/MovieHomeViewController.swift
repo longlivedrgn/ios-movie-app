@@ -426,6 +426,12 @@ extension MovieHomeViewController: MovieRankHeaderViewDelegate {
         _ movieRankHeaderView: MovieRankHeaderView,
         didButtonTapped sender: RankSortButton
     ) {
+        guard let tappedButton = sender.sort else { return }
+        guard (
+            tappedButton == .openDate && isRankSortedByOpenDate == false
+        ) || (
+            tappedButton == .reservationRate && isRankSortedByOpenDate == true
+        ) else { return }
         isRankSortedByOpenDate.toggle()
         movieRankHeaderView.changeButtonColor(clickedButton: sender)
         applySnapShot()

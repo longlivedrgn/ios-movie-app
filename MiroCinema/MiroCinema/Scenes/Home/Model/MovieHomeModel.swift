@@ -161,7 +161,7 @@ final class MovieHomeModel {
             ImageCacheManager.shared.store(image: image, forResourceKey: cacheKey, in: .disk)
             ImageCacheManager.shared.store(image: image, forResourceKey: cacheKey, in: .memory)
             backDropImage = image
-        case .failure(let error):
+        case .failure(_):
             backDropImage = nil
         }
 
