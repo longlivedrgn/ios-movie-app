@@ -21,7 +21,7 @@
 
 | 서치 뷰 | 즐겨찾기 뷰 |
 | --- | --- |
-|<img src="https://github.com/longlivedrgn/ios-movie-app/assets/85781941/10e820c3-cbe6-48e2-8cdc-aaf51e34c509" width="250"/>|<img src="https://github.com/longlivedrgn/ios-movie-app/assets/85781941/002b45d7-c5ce-4752-9756-df9404d9b1ae" width="250"/>
+|<img src="https://github.com/longlivedrgn/ios-movie-app/assets/85781941/10e820c3-cbe6-48e2-8cdc-aaf51e34c509" width="250"/>|<img src="https://github.com/longlivedrgn/ios-movie-app/assets/85781941/82d68f0e-31ea-48c4-b695-a77559c55ed0" width="250"/>
 
 # 🏠 프로젝트 구조
 <img width="600" alt="image" src="https://github.com/longlivedrgn/ios-movie-app/assets/85781941/9f2d8bb7-65d6-40af-ab7f-831cbdf5d45a">
