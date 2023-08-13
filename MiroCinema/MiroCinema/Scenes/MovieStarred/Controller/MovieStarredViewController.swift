@@ -167,17 +167,32 @@ class MovieStarredViewController: UIViewController {
         case false:
             deleteBarButtonItem.title = "영화 선택"
         }
-        setBadgeButtonHidden(isDeleteButtonTapped: isDeleteButtonTapped)
+        setMovieCell(isDeleteButtonTapped: isDeleteButtonTapped)
     }
 
-    private func setBadgeButtonHidden(isDeleteButtonTapped: Bool) {
+    private func setMovieCell(isDeleteButtonTapped: Bool) {
         let indexPaths = starredCollectionView.indexPathsForVisibleItems
         for indexPath in indexPaths {
-            guard let badgeView = starredCollectionView.supplementaryView(
-                forElementKind: MovieStarredViewController.movieStarredSupplementaryKind,
-                at: indexPath
-            ) as? DeleteSupplementaryView else { return }
-            badgeView.isHidden = !isDeleteButtonTapped
+            setBadgeView(in: indexPath, isTapped: isDeleteButtonTapped)
+            setCellAnimation(in: indexPath, isTapped: isDeleteButtonTapped)
+        }
+    }
+
+    private func setBadgeView(in indexPath: IndexPath, isTapped: Bool) {
+        guard let badgeView = starredCollectionView.supplementaryView(
+            forElementKind: MovieStarredViewController.movieStarredSupplementaryKind,
+            at: indexPath
+        ) as? DeleteSupplementaryView else { return }
+
+        badgeView.isHidden = !isTapped
+    }
+
+    private func setCellAnimation(in indexPath: IndexPath, isTapped: Bool) {
+        let cell = starredCollectionView.cellForItem(at: indexPath)
+        if isTapped {
+            cell?.layer.add(CAKeyframeAnimation.wobble, forKey: "wobble")
+        } else {
+            cell?.layer.removeAllAnimations()
         }
     }
 
